@@ -38,7 +38,7 @@ $(NAME): $(LIBFT) $(OBJ) tag
 	@echo
 	@echo "\n               $(BGreen)Building target file: $(NAME)"
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LMLX) -o $@ > /dev/null
-	@echo "$(BGreen)                   🕹  LET'S BEGIN!!! 🎮"
+	@echo "$(BGreen)                   🎮  LET'S BEGIN!!! 🎮"
 	@echo
 	@echo
 
