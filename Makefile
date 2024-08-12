@@ -16,6 +16,7 @@ LIBFT_DIR = libft
 
 BGreen=\033[1;32m
 BRed=\033[1;31m
+BFiol=\033[0;35m
 
 # Исходные файлы
 SRC_GNL = get_next_line.c get_next_line_utils.c
@@ -33,9 +34,13 @@ all: tag $(NAME)
 
 # Сборка исполняемого файла
 $(NAME): $(LIBFT) $(OBJ) tag
+	@echo
+	@echo
 	@echo "\n               $(BGreen)Building target file: $(NAME)"
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LMLX) -o $@ > /dev/null
 	@echo "$(BGreen)                   🕹  LET'S BEGIN!!! 🎮"
+	@echo
+	@echo
 
 # Компиляция исходных файлов в объектные
 %.o: %.c
@@ -54,6 +59,8 @@ clean:
 
 # Полная очистка
 fclean: clean
+	@echo
+	@echo
 	@$(MAKE) -C $(LIBFT_DIR) fclean > /dev/null
 	@$(RM) $(NAME)
 
@@ -64,12 +71,12 @@ re: fclean all
 
 tag:
 	@if [ ! -e .tag ]; then \
-		echo "$(BGreen)"; \
-		echo "	██████╗ ██╗   ██╗██████╗ ██████╗ ██████╗"; \
-		echo " 	██╔════╝██║   ██║██╔══██╗╚════██╗██╔══██╗"; \
-		echo "	██║     ██║   ██║██████╔╝ █████╔╝██║  ██║"; \
-		echo "	██║     ██║   ██║██╔══██╗ ╚═══██╗██║  ██║"; \
-		echo "	╚██████╗╚██████╔╝██████╔╝██████╔╝██████╔╝"; \
-		echo "	╚═════╝ ╚═════╝ ╚═════╝ ╚═════╝ ╚═════╝ "; \
+		echo "$(BFiol)"; \
+		echo "	██████╗ ██╗   ██╗██████╗ $(BGreen)██████╗ ██████╗"; \
+		echo " $(BFiol)	██╔════╝██║   ██║██╔══██╗$(BGreen)╚════██╗██╔══██╗"; \
+		echo "	$(BFiol)██║     ██║   ██║██████╔╝$(BGreen) █████╔╝██║  ██║"; \
+		echo "	$(BFiol)██║     ██║   ██║██╔══██╗ $(BGreen)╚═══██╗██║  ██║"; \
+		echo "	$(BFiol)╚██████╗╚██████╔╝██████╔╝$(BGreen)██████╔╝██████╔╝"; \
+		echo "	$(BFiol) ╚═════╝ ╚═════╝ ╚═════╝ $(BGreen)╚═════╝ ╚═════╝ "; \
   		touch .tag; \
 	fi        
