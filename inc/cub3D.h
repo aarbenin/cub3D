@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/12 06:40:33 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/12 13:00:06 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,14 @@ void	check_map(t_text_game *g);
 // utils.c
 /* Atoi for colors (more restrictive than original) */
 int		parse_color_value(const char *nptr, long *value);
+
+
+// update_cub.c
+/*Updates the game state and redraws elements on the window.*/
+int	cub_update(void *param);
+
+/*Redraws an image element onto the game window at specified coordinates.*/
+void	redraw_elem(t_text_game *g, t_img img, int x, int y);
 
 
 
