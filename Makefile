@@ -1,82 +1,103 @@
 CC = gcc
 RM = rm -rf
 CFLAGS = -Wall -Wextra -Werror
-LMLX = -Lminilibx-linux -lmlx -lXext -lX11 -lm
+
+# Пути к библиотекам
+LIBFT_DIR = libs/libft
+MLX_DIR = libs/minilibx-linux
+
+# Линковка с библиотеками
+LMLX = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
+LIBFT = $(LIBFT_DIR)/libft.a
 
 # Имя исполняемого файла
 NAME = cub3D
 
-# Библиотека libft
-LIBFT = libft/libft.a
-
-# Директории исходных файлов
+# Директории исходных файлов и объектных файлов
 SRC_DIR = src
 GNL_DIR = get_next_line
-LIBFT_DIR = libft
+BUILD_DIR = build
 
-BGreen=\033[1;32m
-BRed=\033[1;31m
-BFiol=\033[0;35m
+# Файлы в папке build
+TAG_FILE = $(BUILD_DIR)/.tag
+LOG_FILE = $(BUILD_DIR)/build.log
 
-# Исходные файлы
-SRC_GNL = get_next_line.c get_next_line_utils.c
-SRC = main.c map.c errors.c game_mlx.c map_checking.c \
-color.c game_init.c utils.c end.c update_cub.c
+# Цвета для вывода текста
+BGreen = \033[1;32m
+BRed = \033[1;31m
+BFiol = \033[0;35m
 
-# Все исходные файлы
-ALL_SRC = $(addprefix $(SRC_DIR)/, $(SRC)) $(addprefix $(GNL_DIR)/, $(SRC_GNL))
-
-# Все объектные файлы
-OBJ = $(ALL_SRC:.c=.o)
+# Автоматический поиск всех .c файлов
+SRC_FILES = $(shell find $(SRC_DIR) $(GNL_DIR) -name '*.c')
+OBJ_FILES = $(SRC_FILES:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
+OBJ_FILES := $(OBJ_FILES:$(GNL_DIR)/%.c=$(BUILD_DIR)/%.o)
 
 # Основная цель
 all: tag $(NAME)
 
 # Сборка исполняемого файла
-$(NAME): $(LIBFT) $(OBJ) tag
-	@echo
-	@echo
-	@echo "\n               $(BGreen)Building target file: $(NAME)"
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(LMLX) -o $@ > /dev/null
-	@echo "$(BGreen)                   🎮  LET'S BEGIN!!! 🎮"
-	@echo
-	@echo
+$(NAME): $(LIBFT) $(MLX_DIR)/libmlx.a $(OBJ_FILES)
+	@mkdir -p $(BUILD_DIR)
+	@printf "\n               $(BGreen)Building target file: $(NAME)\n"
+	@$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT) $(LMLX) -o $@ 2>> $(LOG_FILE) 
+	@printf "$(BGreen)                   🎮  LET'S BEGIN!!! 🎮\n\n\n"
 
 # Компиляция исходных файлов в объектные
-%.o: %.c
-	@$(CC) $(CFLAGS) -Iminilibx-linux -Ilibft -c $< -o $@ > /dev/null
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) -I$(MLX_DIR) -I$(LIBFT_DIR) -c $< -o $@ 2>> $(LOG_FILE)
+
+$(BUILD_DIR)/%.o: $(GNL_DIR)/%.c | $(BUILD_DIR)
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) -I$(MLX_DIR) -I$(LIBFT_DIR) -c $< -o $@ 2>> $(LOG_FILE)
+
+# Создание директории для объектных файлов
+$(BUILD_DIR):
+	@mkdir -p $@
 
 # Сборка библиотеки libft
 $(LIBFT):
-	@$(MAKE) -C $(LIBFT_DIR) > /dev/null
+	@mkdir -p $(BUILD_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) -s > /dev/null 2>> $(LOG_FILE)
 
-# Очистка
+# Сборка библиотеки MiniLibX
+$(MLX_DIR)/libmlx.a:
+	@mkdir -p $(BUILD_DIR)
+	@$(MAKE) -C $(MLX_DIR) -s > /dev/null 2>> $(LOG_FILE)
+
+# Очистка объектных файлов и временных файлов
 clean:
-	@echo "$(BRed)Cleaning......"
-	@$(MAKE) -C $(LIBFT_DIR) clean > /dev/null
-	@$(RM) $(OBJ) .tag
-	@echo "              ............ READY"
+	@echo "$(BRed)🤖🧹 Initiating cleanup protocol..."
+	@mkdir -p $(BUILD_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) clean -s > /dev/null 2>> $(LOG_FILE)
+	@$(MAKE) -C $(MLX_DIR) clean -s > /dev/null 2>> $(LOG_FILE)
+	@$(RM) -r $(BUILD_DIR)
+	@echo "$(BGreen)All systems clear, commander! ✨"
 
-# Полная очистка
+# Полная очистка (включая исполняемый файл)
 fclean: clean
-	@echo
-	@echo
-	@$(MAKE) -C $(LIBFT_DIR) fclean > /dev/null
+	@mkdir -p $(BUILD_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) fclean -s > /dev/null 2>> $(LOG_FILE)
 	@$(RM) $(NAME)
+	@echo "$(BGreen)👾 Nothing to see here, just a spotless void...🕳️  Move along!"
+	@$(RM) -r $(BUILD_DIR)
 
-# Пересборка
+# Пересборка всего проекта
 re: fclean all
 
 .PHONY: all clean fclean re
 
+# Дополнительная цель tag для красивого вывода 
 tag:
-	@if [ ! -e .tag ]; then \
-		echo "$(BFiol)"; \
+	@if [ ! -e $(TAG_FILE) ]; then \
+		mkdir -p $(BUILD_DIR); \
+		echo "$(BFiol)\n\n\n"; \
 		echo "	██████╗ ██╗   ██╗██████╗ $(BGreen)██████╗ ██████╗"; \
 		echo " $(BFiol)	██╔════╝██║   ██║██╔══██╗$(BGreen)╚════██╗██╔══██╗"; \
 		echo "	$(BFiol)██║     ██║   ██║██████╔╝$(BGreen) █████╔╝██║  ██║"; \
 		echo "	$(BFiol)██║     ██║   ██║██╔══██╗ $(BGreen)╚═══██╗██║  ██║"; \
 		echo "	$(BFiol)╚██████╗╚██████╔╝██████╔╝$(BGreen)██████╔╝██████╔╝"; \
 		echo "	$(BFiol) ╚═════╝ ╚═════╝ ╚═════╝ $(BGreen)╚═════╝ ╚═════╝ "; \
-  		touch .tag; \
-	fi        
+		echo "$(BFiol)\n"; \
+  		touch $(TAG_FILE); \
+	fi
