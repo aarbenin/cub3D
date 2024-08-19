@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   update_cub.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:33:07 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/12 12:47:33 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/19 11:52:48 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,28 @@
  * is a multiple of the update rate. If so, it redraws the game elements and updates the window.
  * The function also handles the cooldown for the player's door action.
  */
-int	cub_update(void *param)
+int cub_update(void *param)
 {
-	t_text_game	*g;
+    t_text_game *g;
 
-	g = param;
-	if (!(g->frame_count % g->rate))
-	{
-		if (!(g->frame_count % (10 * g->rate)))
-			g->pl.door_cooldown = 0;
-		redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2,
-				WIN_H / 2 - g->scope->height / 2);
-		redraw_elem(g, g->miniview, WIN_W - g->miniview.width - 20,
-				WIN_H - g->miniview.height - 20);
-		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
-	}
-	g->frame_count++;
-	return (0);
+    g = (t_text_game *)param;
+    if (g->frame_count == 0)
+    {
+        init_ray(g);
+    }
+    if (!(g->frame_count % g->rate))
+    {
+        if (!(g->frame_count % (10 * g->rate)))
+            g->pl.door_cooldown = 0;
+        cast_rays(g);
+        redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2 - g->scope->height / 2);
+        redraw_elem(g, g->miniview, WIN_W - g->miniview.width - 20, WIN_H - g->miniview.height - 20);
+        mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
+    }
+    g->frame_count++;
+    return (0);
 }
+
 
 /**
  * Redraws an image element onto the game window at specified coordinates.

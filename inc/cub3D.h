@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/19 08:01:20 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/19 11:16:37 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,18 @@ typedef struct s_player
 {
     float position_x;    // Позиция игрока по оси X
     float position_y;    // Позиция игрока по оси Y
-    char dir;           // Направление игрока
-    float speed;        // Скорость игрока
-    int door_cooldown;  // взаимодействия с дверями
-    t_key keys;         // Состояние клавиш игрока
+    char dir;            // Направление игрока (N, S, E, W)
+    float speed;         // Скорость игрока
+    int door_cooldown;   // Взаимодействие с дверями
+    t_key keys;          // Состояние клавиш игрока
+
+    // Новые поля для Ray-Casting
+    float dir_x;         // Направление взгляда по оси X
+    float dir_y;         // Направление взгляда по оси Y
+    float plane_x;       // Плоскость камеры по оси X
+    float plane_y;       // Плоскость камеры по оси Y
 } t_player;
+
 
 /* Структура для хранения состояния игры */
 typedef struct s_text_game
@@ -234,6 +241,8 @@ void	redraw_elem(t_text_game *g, t_img img, int x, int y);
 // ray_cast.c
 /*Initializes raycasting parameters based on the player's direction.*/
 void init_ray(t_text_game *g);
+void cast_rays(t_text_game *g);
+void draw_vertical_line(t_text_game *g, int x, int draw_start, int draw_end, int color);
 
 
 // /* Checks player surroundings to open/close doors */
