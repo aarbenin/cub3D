@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 11:43:23 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/12 13:01:11 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/19 07:50:40 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ void init_attr(t_text_game *g)
 void game_init(t_text_game *g)
 {
 	init_attr(g);
+	init_ray(g);
 	mlx_hook(g->win_ptr, 02, 1L << 0, cub_keydown, g);
 	mlx_hook(g->win_ptr, 03, 1L << 1, cub_keyup, g);
 	mlx_hook(g->win_ptr, 17, 0, cub_exit, g);

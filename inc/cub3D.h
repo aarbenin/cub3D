@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/12 13:00:06 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/19 08:01:20 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
+# include "ray_cast.h"
 
 # ifndef WIN_H
 #  define WIN_H 480
@@ -112,6 +113,7 @@ typedef struct s_text_game
     t_img miniview;    // Мини-вид
     t_img *scope;      // Целевой прицел
     t_tex tex;         // Текстуры для игры
+    t_ray ray;		    // Данные для лучей
     t_player pl;       // Игрок
     float x;           // Координата X (не используется в коде)
     float y;           // Координата Y (не используется в коде)
@@ -227,6 +229,11 @@ int	cub_update(void *param);
 /*Redraws an image element onto the game window at specified coordinates.*/
 void	redraw_elem(t_text_game *g, t_img img, int x, int y);
 
+
+
+// ray_cast.c
+/*Initializes raycasting parameters based on the player's direction.*/
+void init_ray(t_text_game *g);
 
 
 // /* Checks player surroundings to open/close doors */
