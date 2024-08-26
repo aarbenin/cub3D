@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/26 12:25:22 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:36:55 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -278,6 +278,8 @@ void	draw_background(t_text_game *g);
 void draw_texture_line(t_text_game *g, int x, t_img *texture, t_draw_params *params, t_ray_data *ray);
 void draw_wall_line(t_text_game *g, int x, t_ray_data *ray);
 
+// move
+int	mouse_move(int x, int y, t_text_game *g);
 
 // /* Checks player surroundings to open/close doors */
 // void	action_door(t_text_game *g);

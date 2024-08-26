@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 11:43:23 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/26 10:51:50 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:39:27 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,25 @@ void init_attr(t_text_game *g)
  * 
  * @param g A pointer to the game state.
  */
-void game_init(t_text_game *g)
+void	game_init(t_text_game *g)
 {
-    init_attr(g);
-    init_ray(g);
-    mlx_hook(g->win_ptr, 02, 1L << 0, cub_keydown, g);
-    mlx_hook(g->win_ptr, 03, 1L << 1, cub_keyup, g);
-    mlx_hook(g->win_ptr, 17, 0, cub_exit, g);
-    mlx_loop_hook(g->mlx_ptr, cub_update, g);
-    mlx_loop(g->mlx_ptr);
+	init_attr(g);
+	init_ray(g);
+
+	// Настраиваем обработку клавиш
+	mlx_hook(g->win_ptr, 02, 1L << 0, cub_keydown, g);
+	mlx_hook(g->win_ptr, 03, 1L << 1, cub_keyup, g);
+	mlx_hook(g->win_ptr, 17, 0, cub_exit, g);
+
+	// Добавляем обработку движения мыши
+	mlx_hook(g->win_ptr, 6, 1L << 6, mouse_move, g);
+
+	// Центрируем курсор, передавая и указатель на контекст MiniLibX
+	mlx_mouse_move(g->mlx_ptr, g->win_ptr, WIN_W / 2, WIN_H / 2);
+
+	mlx_loop_hook(g->mlx_ptr, cub_update, g);
+	mlx_loop(g->mlx_ptr);
 }
+
+
+
