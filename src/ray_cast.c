@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 08:29:11 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/19 11:35:35 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/19 13:20:06 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,41 @@
  */
 void init_ray(t_text_game *g)
 {
+    if (g->pl.dir == 'N')
+    {
+        g->pl.dir_x = 0;
+        g->pl.dir_y = -1;
+        g->pl.plane_x = 0.66;
+        g->pl.plane_y = 0;
+    }
+    else if (g->pl.dir == 'S')
+    {
+        g->pl.dir_x = 0;
+        g->pl.dir_y = 1;
+        g->pl.plane_x = -0.66;
+        g->pl.plane_y = 0;
+    }
+    else if (g->pl.dir == 'E')
+    {
+        g->pl.dir_x = 1;
+        g->pl.dir_y = 0;
+        g->pl.plane_x = 0;
+        g->pl.plane_y = 0.66;
+    }
+    else if (g->pl.dir == 'W')
+    {
+        g->pl.dir_x = -1;
+        g->pl.dir_y = 0;
+        g->pl.plane_x = 0;
+        g->pl.plane_y = -0.66;
+    }
+    g->ray.hfov = 30;
+    g->ray.angle_increment = 2 * g->ray.hfov / WIN_W;
+    g->ray.precision = 50;
+    g->ray.max_distance = 10;
 
-	g->ray.current_angle = 0;
-	if (g->pl.dir == 'S')
-		g->ray.current_angle = 90;
-	else if (g->pl.dir == 'W')
-		g->ray.current_angle = 180;
-	else if (g->pl.dir == 'N')
-		g->ray.current_angle = 270;
-    g->ray.hfov = 30; //горизонтальное поле зрения (hfov) на 30 градусов.
-    g->ray.angle_increment = 2 * g->ray.hfov / WIN_W; // приращение угла на пиксель в зависимости от ширины окна и hfov.
-    g->ray.precision = 50; // точность рэйкастинга (частота запуска лучей).
-    g->ray.max_distance = 10;  // максимальное расстояние для рэйкастинга.
+    printf("Initial Direction: dir_x = %f, dir_y = %f\n", g->pl.dir_x, g->pl.dir_y);
+    printf("Initial Plane: plane_x = %f, plane_y = %f\n", g->pl.plane_x, g->pl.plane_y);
 }
 
 

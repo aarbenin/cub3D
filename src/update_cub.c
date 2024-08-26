@@ -6,11 +6,23 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:33:07 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/19 11:52:48 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/19 13:06:13 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
+static void clear_image(t_img *img, int color)
+{
+    int x, y;
+
+    for (y = 0; y < WIN_H; y++)
+    {
+        for (x = 0; x < WIN_W; x++)
+        {
+            put_pixel(img, x, y, color);
+        }
+    }
+}
 
 /**
  * Updates the game state and redraws elements on the window.
@@ -27,22 +39,28 @@ int cub_update(void *param)
     t_text_game *g;
 
     g = (t_text_game *)param;
-    if (g->frame_count == 0)
-    {
-        init_ray(g);
-    }
-    if (!(g->frame_count % g->rate))
-    {
-        if (!(g->frame_count % (10 * g->rate)))
-            g->pl.door_cooldown = 0;
-        cast_rays(g);
-        redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2 - g->scope->height / 2);
-        redraw_elem(g, g->miniview, WIN_W - g->miniview.width - 20, WIN_H - g->miniview.height - 20);
-        mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
-    }
+
+    // Очистка экрана перед рендерингом
+    clear_image(&g->win_img, 0x000000); // Заполнение черным цветом
+
+    // Обновляем положение и поворот игрока
+    move_player(g);
+    rotate_player(g);
+
+    // Выполняем Ray-Casting и рендерим сцену
+    cast_rays(g);
+
+    // Отображаем новое изображение
+    mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
+
     g->frame_count++;
     return (0);
 }
+
+
+
+
+
 
 
 /**
