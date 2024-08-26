@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/26 08:35:57 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/26 12:25:22 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,25 @@ typedef struct s_draw_params
     int line_height;   // Высота линии на экране.
 } t_draw_params;
 
+typedef struct s_move_data
+{
+	double	new_x;
+	double	new_y;
+}				t_move_data;
+
+typedef struct	s_texture_params
+{
+	t_img		*texture;
+	t_draw_params	*params;
+	t_ray_data	*ray;
+}				t_texture_params;
+
+typedef struct s_wall_params
+{
+	t_draw_params	params;
+	t_img			*texture;
+	float			wall_x;
+}				t_wall_params;
 
 
 // colors.c
