@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/19 12:08:42 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/26 08:35:57 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,14 @@ typedef struct s_text_game
     float y;           // Координата Y (не используется в коде)
 } t_text_game;
 
+typedef struct s_draw_params
+{
+    int draw_start;    // Начальная координата 
+    int draw_end;      // Конечная координата 
+    float wall_x;      // Точное положение попадания луча в стену.
+    int line_height;   // Высота линии на экране.
+} t_draw_params;
+
 
 
 // colors.c
@@ -242,9 +250,15 @@ void	redraw_elem(t_text_game *g, t_img img, int x, int y);
 /*Initializes raycasting parameters based on the player's direction.*/
 void init_ray(t_text_game *g);
 void cast_rays(t_text_game *g);
-void draw_vertical_line(t_text_game *g, int x, int draw_start, int draw_end, int color);
+//void draw_vertical_line(t_text_game *g, int x, int draw_start, int draw_end, int color);
 void rotate_player(t_text_game *g);
 void move_player(t_text_game *g);
+void	draw_background(t_text_game *g);
+
+//tew_test
+void draw_texture_line(t_text_game *g, int x, t_img *texture, t_draw_params *params, t_ray_data *ray);
+void draw_wall_line(t_text_game *g, int x, t_ray_data *ray);
+
 
 // /* Checks player surroundings to open/close doors */
 // void	action_door(t_text_game *g);

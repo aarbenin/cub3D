@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:33:07 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/19 13:06:13 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/26 08:37:21 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int cub_update(void *param)
     move_player(g);
     rotate_player(g);
 
+    draw_background(g);
     // Выполняем Ray-Casting и рендерим сцену
     cast_rays(g);
 

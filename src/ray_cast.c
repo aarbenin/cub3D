@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 08:29:11 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/19 13:20:06 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/26 08:35:47 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,13 @@ void init_ray(t_text_game *g)
 }
 
 
-void draw_vertical_line(t_text_game *g, int x, int draw_start, int draw_end, int color)
-{
-    if (draw_start > draw_end || draw_start >= WIN_H || draw_end < 0)
-        return ;
-    put_pixel(&g->win_img, x, draw_start, color);
-    draw_vertical_line(g, x, draw_start + 1, draw_end, color);
-}
+// void draw_vertical_line(t_text_game *g, int x, int draw_start, int draw_end, int color)
+// {
+//     if (draw_start > draw_end || draw_start >= WIN_H || draw_end < 0)
+//         return ;
+//     put_pixel(&g->win_img, x, draw_start, color);
+//     draw_vertical_line(g, x, draw_start + 1, draw_end, color);
+// }
 
 
 static void init_ray_data(t_text_game *g, t_ray_data *ray, int x)
@@ -143,26 +143,26 @@ static void calculate_perp_wall_dist(t_text_game *g, t_ray_data *ray)
         ray->perp_wall_dist = (ray->map_y - g->pl.position_y + (1 - ray->step_y) / 2) / ray->ray_dir_y;
 }
 
-static void draw_wall_line(t_text_game *g, int x, t_ray_data *ray)
-{
-    int line_height;
-    int draw_start;
-    int draw_end;
-    int color;
+// static void draw_wall_line(t_text_game *g, int x, t_ray_data *ray)
+// {
+//     int line_height;
+//     int draw_start;
+//     int draw_end;
+//     int color;
 
-    line_height = (int)(WIN_H / ray->perp_wall_dist);
-    draw_start = -line_height / 2 + WIN_H / 2;
-    if (draw_start < 0)
-        draw_start = 0;
-    draw_end = line_height / 2 + WIN_H / 2;
-    if (draw_end >= WIN_H)
-        draw_end = WIN_H - 1;
+//     line_height = (int)(WIN_H / ray->perp_wall_dist);
+//     draw_start = -line_height / 2 + WIN_H / 2;
+//     if (draw_start < 0)
+//         draw_start = 0;
+//     draw_end = line_height / 2 + WIN_H / 2;
+//     if (draw_end >= WIN_H)
+//         draw_end = WIN_H - 1;
 
-    color = 0xFFFFFF;
-    if (ray->side == 1)
-        color /= 2;
-    draw_vertical_line(g, x, draw_start, draw_end, color);
-}
+//     color = 0xFFFFFF;
+//     if (ray->side == 1)
+//         color /= 2;
+//     draw_vertical_line(g, x, draw_start, draw_end, color);
+// }
 
 static void cast_single_ray(t_text_game *g, t_ray_data *ray, int x)
 {
@@ -188,3 +188,30 @@ void cast_rays(t_text_game *g)
     cast_rays_recursive(g, 0);
 }
 
+void	draw_background(t_text_game *g)
+{
+	int x, y;
+	y = 0;
+	// Отрисовка потолка
+	while (y < WIN_H / 2)
+	{
+		x = 0;
+		while (x < WIN_W)
+		{
+			put_pixel(&g->win_img, x, y, g->tex.ceiling);
+			x++;
+		}
+		y++;
+	}
+	// Отрисовка пола
+	while (y < WIN_H)
+	{
+		x = 0;
+		while (x < WIN_W)
+		{
+			put_pixel(&g->win_img, x, y, g->tex.floor);
+			x++;
+		}
+		y++;
+	}
+}
