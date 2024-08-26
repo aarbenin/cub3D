@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 11:43:23 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/19 13:33:48 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/26 10:51:50 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int cub_keydown(int k, t_text_game *g)
 {
     if (k == KEY_Q || k == KEY_ESC)
         handle_error(ERR_END, g, NULL, 1);
-    else if (k == KEY_LEFT)
+    else if (k == KEY_LEFT) // Обработка нажатия стрелки влево
         g->pl.keys.left_pressed = 1;
-    else if (k == KEY_RIGHT)
+    else if (k == KEY_RIGHT) // Обработка нажатия стрелки вправо
         g->pl.keys.right_pressed = 1;
     else if (k == KEY_W)
         g->pl.keys.w_pressed = 1;
@@ -41,9 +41,9 @@ int cub_keydown(int k, t_text_game *g)
 
 int cub_keyup(int k, t_text_game *g)
 {
-    if (k == KEY_LEFT)
+    if (k == KEY_LEFT) // Обработка отпускания стрелки влево
         g->pl.keys.left_pressed = 0;
-    else if (k == KEY_RIGHT)
+    else if (k == KEY_RIGHT) // Обработка отпускания стрелки вправо
         g->pl.keys.right_pressed = 0;
     else if (k == KEY_W)
         g->pl.keys.w_pressed = 0;
