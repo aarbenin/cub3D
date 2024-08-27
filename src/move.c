@@ -78,6 +78,7 @@ static void	rotate_right(t_player *pl, double rotation_speed)
 		+ pl->plane_y * cos(rotation_speed);
 }
 
+
 void	rotate_player(t_text_game *g)
 {
 	double	rotation_speed;
@@ -92,3 +93,29 @@ void	rotate_player(t_text_game *g)
 	printf("Rotated Plane: plane_x = %f, plane_y = %f\n",
 		g->pl.plane_x, g->pl.plane_y);
 }
+//_____________________mouse_move.c__________________________
+
+int	mouse_move(int x, int y, t_text_game *g)
+{
+	int		center_x;
+	double	rotation_speed_factor;
+
+	(void)y;
+	center_x = WIN_W / 2;
+	rotation_speed_factor = 0.005;
+
+	// проверяем, насколько сильно отклонился от центра курсор прежде, чем произойдет вызов функции
+	if (abs(center_x - x) > 1) // пока установила значение в 1 пиксель, нужно будет подобрать оптимальное.
+	{
+		if (x < center_x)
+			rotate_left(&g->pl, (center_x - x) * rotation_speed_factor);
+		else if (x > center_x)
+			rotate_right(&g->pl, (x - center_x) * rotation_speed_factor);
+
+		// Сбрасываем курсор в центр окна
+		mlx_mouse_move(g->mlx_ptr, g->win_ptr, center_x, WIN_H / 2);
+	}
+
+	return (0);
+}
+
