@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 08:29:11 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/26 13:11:27 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/27 11:54:13 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,25 +281,25 @@ static void cast_single_ray(t_text_game *g, t_ray_data *ray, int x)
 	draw_wall_line(g, x, ray);
 }
 
-void cast_rays_recursive(t_text_game *g, int x)
-{
-	t_ray_data ray;
-
-	if (x >= WIN_W)
-		return ;
-	cast_single_ray(g, &ray, x);
-	cast_rays_recursive(g, x + 1);
-}
-
 void cast_rays(t_text_game *g)
 {
-	cast_rays_recursive(g, 0);
+	t_ray_data ray;
+	int x;
+
+	x = 0;
+	while (x < WIN_W)
+	{
+		cast_single_ray(g, &ray, x);
+		x++;
+	}
 }
 
 //_______________________scene.c_______________________________
 void	draw_background(t_text_game *g)
 {
-	int x, y;
+	int	x;
+	int	y;
+	
 	y = 0;
 	// Отрисовка потолка
 	while (y < WIN_H / 2)
