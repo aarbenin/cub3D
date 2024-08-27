@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 11:43:23 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/27 10:56:11 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/27 13:59:05 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,73 +21,126 @@
  */
 int cub_keydown(int k, t_text_game *g)
 {
-    if (k == KEY_Q || k == KEY_ESC)
-        handle_error(ERR_END, g, NULL, 1);
-    else if (k == KEY_LEFT) // Обработка нажатия стрелки влево
-        g->pl.keys.left_pressed = 1;
-    else if (k == KEY_RIGHT) // Обработка нажатия стрелки вправо
-        g->pl.keys.right_pressed = 1;
-    else if (k == KEY_W)
-        g->pl.keys.w_pressed = 1;
-    else if (k == KEY_A)
-        g->pl.keys.a_pressed = 1;
-    else if (k == KEY_S)
-        g->pl.keys.s_pressed = 1;
-    else if (k == KEY_D)
-        g->pl.keys.d_pressed = 1;
+	if (k == KEY_Q || k == KEY_ESC)
+		handle_error(ERR_END, g, NULL, 1);
+	else if (k == KEY_LEFT) // Обработка нажатия стрелки влево
+		g->pl.keys.left_pressed = 1;
+	else if (k == KEY_RIGHT) // Обработка нажатия стрелки вправо
+		g->pl.keys.right_pressed = 1;
+	else if (k == KEY_W)
+		g->pl.keys.w_pressed = 1;
+	else if (k == KEY_A)
+		g->pl.keys.a_pressed = 1;
+	else if (k == KEY_S)
+		g->pl.keys.s_pressed = 1;
+	else if (k == KEY_D)
+		g->pl.keys.d_pressed = 1;
 
-    return (0);
+	return (0);
 }
 
 int cub_keyup(int k, t_text_game *g)
 {
-    if (k == KEY_E)
+	if (k == KEY_E)
 		action_door(g);
-    else if (k == KEY_LEFT) // Обработка отпускания стрелки влево
-        g->pl.keys.left_pressed = 0;
-    else if (k == KEY_RIGHT) // Обработка отпускания стрелки вправо
-        g->pl.keys.right_pressed = 0;
-    else if (k == KEY_W)
-        g->pl.keys.w_pressed = 0;
-    else if (k == KEY_A)
-        g->pl.keys.a_pressed = 0;
-    else if (k == KEY_S)
-        g->pl.keys.s_pressed = 0;
-    else if (k == KEY_D)
-        g->pl.keys.d_pressed = 0;
+	else if (k == KEY_LEFT) // Обработка отпускания стрелки влево
+		g->pl.keys.left_pressed = 0;
+	else if (k == KEY_RIGHT) // Обработка отпускания стрелки вправо
+		g->pl.keys.right_pressed = 0;
+	else if (k == KEY_W)
+		g->pl.keys.w_pressed = 0;
+	else if (k == KEY_A)
+		g->pl.keys.a_pressed = 0;
+	else if (k == KEY_S)
+		g->pl.keys.s_pressed = 0;
+	else if (k == KEY_D)
+		g->pl.keys.d_pressed = 0;
 
-    return (0);
+	return (0);
 }
+
 
 /**
  * Initializes attributes for the game window and images.
  * 
  * @param g A pointer to the game state.
  */
+// void init_attr(t_text_game *g)
+// {
+// 	g->win_ptr = mlx_new_window(g->mlx_ptr, WIN_W, WIN_H, "Cub3D");
+// 	g->win_img.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
+// 	g->win_img.addr = mlx_get_data_addr(g->win_img.i, &g->win_img.bpp,
+// 										&g->win_img.line_len, &g->win_img.endian);
+// 	g->minimap.i = mlx_new_image(g->mlx_ptr, g->width * SIZE,
+// 								 g->height * SIZE);
+// 	if (!g->minimap.i)
+// 	{
+// 		printf("Error: Minimap image creation failed!\n");
+// 		return;
+// 	}
+// 	g->win_g.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
+// 	g->win_g.addr = mlx_get_data_addr(g->win_g.i, &g->win_g.bpp,
+// 		&g->win_g.line_len, &g->win_g.endian);
+// 	g->win_r.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
+// 	g->win_r.addr = mlx_get_data_addr(g->win_r.i, &g->win_r.bpp,
+// 		&g->win_r.line_len, &g->win_r.endian);
+
+// 	g->minimap.addr = mlx_get_data_addr(g->minimap.i, &g->minimap.bpp,
+// 										&g->minimap.line_len, &g->minimap.endian);
+// 	g->miniview.i = mlx_new_image(g->mlx_ptr, 30 * SIZE, 15 * SIZE);
+// 	g->miniview.addr = mlx_get_data_addr(g->miniview.i, &g->miniview.bpp,
+// 										 &g->miniview.line_len, &g->miniview.endian);
+// 	g->miniview.width = 30 * SIZE;
+// 	g->miniview.height = 15 * SIZE;
+
+// 	g->pl.speed = 0.02;  
+
+// }
+
+void init_minimap(t_text_game *g)
+{
+	int minimap_scale = 5; // Масштаб одного элемента карты в пикселях
+
+	g->minimap.width = g->width * minimap_scale;
+	g->minimap.height = g->height * minimap_scale;
+
+	g->minimap.i = mlx_new_image(g->mlx_ptr, g->minimap.width, g->minimap.height);
+	if (!g->minimap.i)
+	{
+		printf("Error: Minimap image creation failed!\n");
+		return;
+	}
+	g->minimap.addr = mlx_get_data_addr(g->minimap.i, &g->minimap.bpp,
+										&g->minimap.line_len, &g->minimap.endian);
+}
+
+
+
 void init_attr(t_text_game *g)
 {
 	g->win_ptr = mlx_new_window(g->mlx_ptr, WIN_W, WIN_H, "Cub3D");
 	g->win_img.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
 	g->win_img.addr = mlx_get_data_addr(g->win_img.i, &g->win_img.bpp,
 										&g->win_img.line_len, &g->win_img.endian);
-	g->minimap.i = mlx_new_image(g->mlx_ptr, g->width * SIZE,
-								 g->height * SIZE);
-    g->win_g.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
-    g->win_g.addr = mlx_get_data_addr(g->win_g.i, &g->win_g.bpp,
-		&g->win_g.line_len, &g->win_g.endian);
-    g->win_r.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
+
+	init_minimap(g);
+
+	g->win_g.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
+	g->win_g.addr = mlx_get_data_addr(g->win_g.i, &g->win_g.bpp,
+									  &g->win_g.line_len, &g->win_g.endian);
+	g->win_r.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
 	g->win_r.addr = mlx_get_data_addr(g->win_r.i, &g->win_r.bpp,
-		&g->win_r.line_len, &g->win_r.endian);
-	g->minimap.addr = mlx_get_data_addr(g->minimap.i, &g->minimap.bpp,
-										&g->minimap.line_len, &g->minimap.endian);
+									  &g->win_r.line_len, &g->win_r.endian);
+
 	g->miniview.i = mlx_new_image(g->mlx_ptr, 30 * SIZE, 15 * SIZE);
 	g->miniview.addr = mlx_get_data_addr(g->miniview.i, &g->miniview.bpp,
 										 &g->miniview.line_len, &g->miniview.endian);
 	g->miniview.width = 30 * SIZE;
 	g->miniview.height = 15 * SIZE;
-	g->pl.speed = 0.02;  
 
+	g->pl.speed = 0.02;
 }
+
 
 /**
  * Initializes the game by setting up attributes, raycasting, and event hooks.
@@ -125,37 +178,37 @@ void	game_init(t_text_game *g)
 
 void action_door(t_text_game *g)
 {
-    float d;       // Расстояние до двери
-    float pos_x;   // Координата X
-    float pos_y;   // Координата Y
-    float x;       // Временная переменная для расчета
-    float y;       // Временная переменная для расчета
+	float d;       // Расстояние до двери
+	float pos_x;   // Координата X
+	float pos_y;   // Координата Y
+	float x;       // Временная переменная для расчета
+	float y;       // Временная переменная для расчета
 
-    // Получаем текущие координаты игрока
-    pos_x = g->pl.position_x;
-    pos_y = g->pl.position_y;
+	// Получаем текущие координаты игрока
+	pos_x = g->pl.position_x;
+	pos_y = g->pl.position_y;
 
-    // Проверяем, есть ли возможность взаимодействия с дверью
-    if (g->pl.door_cooldown || ft_strchr("oc", g->map[(int)(pos_y + 0.5)][(int)(pos_x + 0.5)]))
-        return;
+	// Проверяем, есть ли возможность взаимодействия с дверью
+	if (g->pl.door_cooldown || ft_strchr("oc", g->map[(int)(pos_y + 0.5)][(int)(pos_x + 0.5)]))
+		return;
 
-    // Вычисляем расстояние до двери и получаем координаты
-    d = distance_to_door(g, g->ray.current_angle, &x, &y);
+	// Вычисляем расстояние до двери и получаем координаты
+	d = distance_to_door(g, g->ray.current_angle, &x, &y);
 
-    // Обрабатываем открытие двери
-    if (d < g->ray.max_distance && g->map[(int)pos_y][(int)pos_x] == 'c')
-    {
-        g->pl.door_cooldown = 1;
-        g->map[(int)pos_y][(int)pos_x] = 'o';
-        mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_g.i, 0, 0);
-    }
-    // Обрабатываем закрытие двери
-    else if (d < g->ray.max_distance && g->map[(int)pos_y][(int)pos_x] == 'o')
-    {
-        g->pl.door_cooldown = 1;
-        g->map[(int)pos_y][(int)pos_x] = 'c';
-        mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_r.i, 0, 0);
-    }
+	// Обрабатываем открытие двери
+	if (d < g->ray.max_distance && g->map[(int)pos_y][(int)pos_x] == 'c')
+	{
+		g->pl.door_cooldown = 1;
+		g->map[(int)pos_y][(int)pos_x] = 'o';
+		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_g.i, 0, 0);
+	}
+	// Обрабатываем закрытие двери
+	else if (d < g->ray.max_distance && g->map[(int)pos_y][(int)pos_x] == 'o')
+	{
+		g->pl.door_cooldown = 1;
+		g->map[(int)pos_y][(int)pos_x] = 'c';
+		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_r.i, 0, 0);
+	}
 }
 
 /**
@@ -172,34 +225,34 @@ void action_door(t_text_game *g)
 
 float distance_to_door(t_text_game *g, float ray_angle, float *pos_x, float *pos_y)
 {
-    float d;             // Расстояние до двери
-    float ray_cos;       // Косинус угла луча
-    float ray_sin;       // Синус угла луча
+	float d;             // Расстояние до двери
+	float ray_cos;       // Косинус угла луча
+	float ray_sin;       // Синус угла луча
 
-    // Вычисляем косинус и синус угла луча с учетом точности
-    ray_cos = cos(degree_to_radians(ray_angle)) / g->ray.precision;
-    ray_sin = sin(degree_to_radians(ray_angle)) / g->ray.precision;
+	// Вычисляем косинус и синус угла луча с учетом точности
+	ray_cos = cos(degree_to_radians(ray_angle)) / g->ray.precision;
+	ray_sin = sin(degree_to_radians(ray_angle)) / g->ray.precision;
 
-    // Начальные координаты для поиска двери
-    *pos_x = g->pl.position_x + 0.5;
-    *pos_y = g->pl.position_y + 0.5;
+	// Начальные координаты для поиска двери
+	*pos_x = g->pl.position_x + 0.5;
+	*pos_y = g->pl.position_y + 0.5;
 
-    // Цикл поиска двери на карте
-    while (!ft_strchr("1oc", g->map[(int)*pos_y][(int)*pos_x]) && \
-           sqrt(powf(*pos_x - g->pl.position_x - 0.5, 2.) + \
-           powf(*pos_y - g->pl.position_y - 0.5, 2.)) < g->ray.max_distance)
-    {
-        *pos_x += ray_cos;
-        *pos_y += ray_sin;
-    }
+	// Цикл поиска двери на карте
+	while (!ft_strchr("1oc", g->map[(int)*pos_y][(int)*pos_x]) && \
+		   sqrt(powf(*pos_x - g->pl.position_x - 0.5, 2.) + \
+		   powf(*pos_y - g->pl.position_y - 0.5, 2.)) < g->ray.max_distance)
+	{
+		*pos_x += ray_cos;
+		*pos_y += ray_sin;
+	}
 
-    // Вычисление расстояния до двери
-    d = sqrt(powf(*pos_x - g->pl.position_x - 0.5, 2.) + \
-             powf(*pos_y - g->pl.position_y - 0.5, 2.));
+	// Вычисление расстояния до двери
+	d = sqrt(powf(*pos_x - g->pl.position_x - 0.5, 2.) + \
+			 powf(*pos_y - g->pl.position_y - 0.5, 2.));
 
-    // Коррекция расстояния с учетом угла луча
-    d *= cos(degree_to_radians(ray_angle - g->ray.current_angle));
-    return d;
+	// Коррекция расстояния с учетом угла луча
+	d *= cos(degree_to_radians(ray_angle - g->ray.current_angle));
+	return d;
 }
 
 /**
