@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/27 13:53:55 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:13:24 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,14 @@
 # include <math.h>
 # include "ray_cast.h"
 
-# ifndef WIN_H
-#  define WIN_H 480
-# endif
 
-# ifndef WIN_W
-#  define WIN_W 640
-# endif
+# define WIN_H 480
+# define WIN_W 640
+# define SIZE 7
 
-# ifndef SIZE
-#  define SIZE 7
-# endif
+# define M_PI 3.14159265358979323846
+# define M_PI_2 1.57079632679489661923
+
 
 /* Перечисление для обработки различных сообщений об ошибках */
 typedef enum e_cub_err
