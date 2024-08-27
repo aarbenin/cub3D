@@ -88,10 +88,10 @@ void	rotate_player(t_text_game *g)
 		rotate_left(&g->pl, rotation_speed);
 	if (g->pl.keys.right_pressed)
 		rotate_right(&g->pl, rotation_speed);
-	printf("Rotated Direction: dir_x = %f, dir_y = %f\n",
-		g->pl.dir_x, g->pl.dir_y);
-	printf("Rotated Plane: plane_x = %f, plane_y = %f\n",
-		g->pl.plane_x, g->pl.plane_y);
+	// printf("Rotated Direction: dir_x = %f, dir_y = %f\n",
+	// 	g->pl.dir_x, g->pl.dir_y);
+	// printf("Rotated Plane: plane_x = %f, plane_y = %f\n",
+	// 	g->pl.plane_x, g->pl.plane_y);
 }
 //_____________________mouse_move.c__________________________
 

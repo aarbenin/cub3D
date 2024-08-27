@@ -3,25 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   update_cub.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:33:07 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/27 10:27:18 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/27 11:45:04 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
-static void clear_image(t_img *img, int color)
-{
-    int x, y;
 
-    for (y = 0; y < WIN_H; y++)
-    {
-        for (x = 0; x < WIN_W; x++)
-        {
-            put_pixel(img, x, y, color);
-        }
-    }
+
+static void	clear_image(t_img *img, int color)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < WIN_H)
+	{
+		x = 0;
+		while (x < WIN_W)
+		{
+			put_pixel(img, x, y, color);
+			x++;
+		}
+		y++;
+	}
 }
 
 /**
@@ -36,34 +43,38 @@ static void clear_image(t_img *img, int color)
  */
 int cub_update(void *param)
 {
-    t_text_game *g;
+	t_text_game *g;
 
-    g = (t_text_game *)param;
+	g = (t_text_game *)param;
 
-    if (!(g->nframes % g->rate))
-    {
-        if (!(g->nframes % (2 * g->rate)))
+	if (!(g->nframes % g->rate))
+	{
+		if (!(g->nframes % (2 * g->rate)))
 			update_anim(g);
 		if (!(g->nframes % (10 * g->rate)))
 			g->pl.door_cooldown = 0;
-    
-        // Очистка экрана перед рендерингом
-        clear_image(&g->win_img, 0x000000); // Заполнение черным цветом
+	
+		// Очистка экрана перед рендерингом
+		clear_image(&g->win_img, 0x000000); // Заполнение черным цветом
 
-        // Обновляем положение и поворот игрока
-        move_player(g);
-        rotate_player(g);
+	if (g->pl.keys.w_pressed || g->pl.keys.a_pressed || 
+		g->pl.keys.s_pressed || g->pl.keys.d_pressed ||
+		g->pl.keys.left_pressed || g->pl.keys.right_pressed)
+	{
+		move_player(g);
+		rotate_player(g);
+	};
 
-        draw_background(g);
-        // Выполняем Ray-Casting и рендерим сцену
-        cast_rays(g);
-        redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2 - g->scope->height / 2);
+		draw_background(g);
+		// Выполняем Ray-Casting и рендерим сцену
+		cast_rays(g);
+		redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2 - g->scope->height / 2);
 
-        // Отображаем новое изображение
-        mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
-    }
-    g->frame_count++;
-    return (0);
+		// Отображаем новое изображение
+		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
+	}
+	g->frame_count++;
+	return (0);
 }
 
 
