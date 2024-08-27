@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:35:56 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/12 06:38:46 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/27 10:31:34 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,20 @@ void	free_animation(t_text_game *g, t_list *start)
 
 void	destroy_images(t_text_game *g)
 {
-	free_animation(g, g->tex.n);
-	free_animation(g, g->tex.s);
-	free_animation(g, g->tex.e);
-	free_animation(g, g->tex.w);
+	free_animation(g, g->tex.n_bak);
+	free_animation(g, g->tex.s_bak);
+	free_animation(g, g->tex.e_bak);
+	free_animation(g, g->tex.w_bak);
 	if (g->tex.b && g->tex.b->i)
 		mlx_destroy_image(g->mlx_ptr, g->tex.b->i);
 	if (g->win_img.i)
 		mlx_destroy_image(g->mlx_ptr, g->win_img.i);
 	if (g->scope && g->scope->i)
 		mlx_destroy_image(g->mlx_ptr, g->scope->i);
+	if (g->win_g.i)
+		mlx_destroy_image(g->mlx_ptr, g->win_g.i);
+	if (g->win_r.i)
+		mlx_destroy_image(g->mlx_ptr, g->win_r.i);
 	if (g->win_ptr)
 		mlx_destroy_window(g->mlx_ptr, g->win_ptr);
 	if (g->minimap.i)

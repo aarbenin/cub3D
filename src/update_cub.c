@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   update_cub.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:33:07 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/26 10:36:19 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/27 10:27:18 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,28 @@ int cub_update(void *param)
 
     g = (t_text_game *)param;
 
-    // Очистка экрана перед рендерингом
-    clear_image(&g->win_img, 0x000000); // Заполнение черным цветом
+    if (!(g->nframes % g->rate))
+    {
+        if (!(g->nframes % (2 * g->rate)))
+			update_anim(g);
+		if (!(g->nframes % (10 * g->rate)))
+			g->pl.door_cooldown = 0;
+    
+        // Очистка экрана перед рендерингом
+        clear_image(&g->win_img, 0x000000); // Заполнение черным цветом
 
-    // Обновляем положение и поворот игрока
-    move_player(g);
-    rotate_player(g);
+        // Обновляем положение и поворот игрока
+        move_player(g);
+        rotate_player(g);
 
-    draw_background(g);
-    // Выполняем Ray-Casting и рендерим сцену
-    cast_rays(g);
-    redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2 - g->scope->height / 2);
+        draw_background(g);
+        // Выполняем Ray-Casting и рендерим сцену
+        cast_rays(g);
+        redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2 - g->scope->height / 2);
 
-    // Отображаем новое изображение
-    mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
-
+        // Отображаем новое изображение
+        mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
+    }
     g->frame_count++;
     return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 11:47:08 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/11 11:56:22 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/27 10:32:17 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,16 @@ void init_sprites(t_text_game *g)
     g->win_img.i = NULL;    // Указатель на изображение окна
     g->minimap.i = NULL;    // Указатель на миникарту
     g->miniview.i = NULL;   // Указатель на минивид
-    g->tex.n = NULL;        // Указатель на текстуру севера
-    g->tex.s = NULL;        // Указатель на текстуру юга
-    g->tex.e = NULL;        // Указатель на текстуру востока
-    g->tex.w = NULL;        // Указатель на текстуру запада
+	g->tex.n = NULL;
+	g->tex.n_bak = NULL;
+	g->tex.s = NULL;
+	g->tex.s_bak = NULL;
+	g->tex.e = NULL;
+	g->tex.e_bak = NULL;
+	g->tex.w = NULL;
+	g->tex.w_bak = NULL;
+    g->win_g.i = NULL;
+    g->win_r.i = NULL;
 
     // Функция load_img загружает изображения из файлов и возвращает указатели на них.
     g->tex.b = load_img(g->mlx_ptr, "textures/black.xpm"); // Загрузка текстуры черного цвета
@@ -82,7 +88,9 @@ void init_sprites(t_text_game *g)
 static t_text_game cub_init(void)
 {
 	t_text_game g;
-
+    
+    g.rate = 30;
+    g.nframes = 0;
 	g.width = 0;						 // Ширина окна, инициализируется нулём
 	g.height = 0;						 // Высота окна, инициализируется нулём
 	g.fd = -1;							 // Дескриптор файла, -1 означает, что файл ещё не открыт

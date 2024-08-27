@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 11:34:27 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/11 12:22:44 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/27 10:33:08 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ void	check_textures(char *trim, t_text_game *g, int (*n)[2])
 		handle_error(ERR_OUT_OF_MEMORY, g, NULL, 1);
 	}
 	if (!ft_strncmp(dir[0], "NO", 3))
-        g->tex.n = get_anim(load_img(g->mlx_ptr, dir[1]), &g->tex.n, n);
+        g->tex.n_bak = get_anim(load_img(g->mlx_ptr, dir[1]), &g->tex.n, n);
 	else if (!ft_strncmp(dir[0], "SO", 3))
-		g->tex.s = get_anim(load_img(g->mlx_ptr, dir[1]), &g->tex.s, n);
+		g->tex.s_bak = get_anim(load_img(g->mlx_ptr, dir[1]), &g->tex.s, n);
 	else if (!ft_strncmp(dir[0], "EA", 3))
-		g->tex.e = get_anim(load_img(g->mlx_ptr, dir[1]), &g->tex.e, n);
+		g->tex.e_bak = get_anim(load_img(g->mlx_ptr, dir[1]), &g->tex.e, n);
 	else if (!ft_strncmp(dir[0], "WE", 3))
-        g->tex.w = get_anim(load_img(g->mlx_ptr, dir[1]), &g->tex.w, n);
+        g->tex.w_bak = get_anim(load_img(g->mlx_ptr, dir[1]), &g->tex.w, n);
 	else if ((!ft_strncmp(dir[0], "F", 2) && g->tex.floor == -1)
             || (!ft_strncmp(dir[0], "C", 2) && g->tex.ceiling == -1))
 		get_cf_color(dir, g);

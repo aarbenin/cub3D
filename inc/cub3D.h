@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/26 13:36:55 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/27 10:44:12 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,10 @@ typedef struct s_color
 /* Структура для хранения текстур стен, пола и потолка */
 typedef struct s_tex
 {
+    t_list	*n_bak; //Буферные списки текстур для сторон света
+    t_list	*s_bak; //Буферные списки текстур для сторон света
+    t_list	*w_bak; //Буферные списки текстур для сторон света
+    t_list	*e_bak; //Буферные списки текстур для сторон света
     t_list *n;       // Список текстур для северной стены
     t_list *s;       // Список текстур для южной стены
     t_list *w;       // Список текстур для западной стены
@@ -118,6 +122,9 @@ typedef struct s_text_game
     t_img win_img;     // Изображение окна
     t_img minimap;     // Миникарта
     t_img miniview;    // Мини-вид
+    t_img win_g;
+    t_img win_r;
+    long nframes;       //Количество кадров
     t_img *scope;      // Целевой прицел
     t_tex tex;         // Текстуры для игры
     t_ray ray;		    // Данные для лучей
@@ -209,6 +216,16 @@ void init_attr(t_text_game *g);
 
 /* Initializes game */
 void	game_init(t_text_game *g);
+
+/*door action*/
+void	action_door(t_text_game *g);
+
+float	degree_to_radians(float degree);
+
+float	distance_to_door(t_text_game *g, float ray_angle, float *pos_x, float *pos_y);
+
+void	update_anim(t_text_game *g);
+
 
 
 
