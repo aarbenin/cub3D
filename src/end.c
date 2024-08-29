@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   end.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:35:56 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/27 10:31:34 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/29 08:03:33 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  * @param g A pointer to the game structure, used to access the MiniLibX context.
  * @param start A pointer to the head of the linked list of animations.
  */
-void	free_animation(t_text_game *g, t_list *start)
+void	free_animation(t_game *g, t_list *start)
 {
 	t_list	*temp;
 
@@ -40,7 +40,7 @@ void	free_animation(t_text_game *g, t_list *start)
  * @param g A pointer to the game structure, used to access the MiniLibX context and graphical resources.
  */
 
-void	destroy_images(t_text_game *g)
+void	destroy_images(t_game *g)
 {
 	free_animation(g, g->tex.n_bak);
 	free_animation(g, g->tex.s_bak);
@@ -71,7 +71,7 @@ void	destroy_images(t_text_game *g)
  * 
  * @param g A pointer to the game structure, used to access and free various resources.
  */
-void	cleanup_game(t_text_game *g)
+void	cleanup_game(t_game *g)
 {
 	if (!g)
 		return ;

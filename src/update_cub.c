@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:33:07 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/27 14:09:19 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/29 08:03:33 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ void	clear_image(t_img *img, int color)
 
 int cub_update(void *param)
 {
-	t_text_game *g;
+	t_game *g;
 
-	g = (t_text_game *)param;
+	g = (t_game *)param;
 
 	if (!(g->nframes % g->rate))
 	{
@@ -125,7 +125,7 @@ int cub_update(void *param)
  * combining it with the existing window image. It uses a blending color of 0xFF000000
  * to ensure proper overlay.
  */
-void	redraw_elem(t_text_game *g, t_img img, int x, int y)
+void	redraw_elem(t_game *g, t_img img, int x, int y)
 {
 	int		p[2];
 	t_img	images[2];

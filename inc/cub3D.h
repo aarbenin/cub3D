@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/27 14:13:24 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/29 08:26:25 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ typedef struct s_text_game
     t_player pl;       // Игрок
     float x;           // Координата X (не используется в коде)
     float y;           // Координата Y (не используется в коде)
-} t_text_game;
+} t_game;
 
 typedef struct s_draw_params
 {
@@ -170,28 +170,28 @@ t_color color_from_argb(int color_value);
 int		get_dist_color(int color, float ds, int tr);
 
 /* Inverts color of window-sized image */
-void	cub_invert_color(t_text_game *g);
+void	cub_invert_color(t_game *g);
 
 /* Fills color int for floor and ceiling */
-void	get_cf_color(char **dir, t_text_game *g);
+void	get_cf_color(char **dir, t_game *g);
 
 
 
 // end.c
 /*Frees allocated memory for animations starting from `start`.*/
-void	free_animation(t_text_game *g, t_list *start);
+void	free_animation(t_game *g, t_list *start);
 
 /*Frees and destroys all images used in the game.*/
-void	destroy_images(t_text_game *g);
+void	destroy_images(t_game *g);
 
 /*Performs cleanup and frees all resources associated with the game.*/
-void	cleanup_game(t_text_game *g);
+void	cleanup_game(t_game *g);
 
 
 
 // errors.c
 /* Prints appropriate error message and exits, freeing everything */
-int		handle_error(t_cub_err err, t_text_game *g, char *param, int c);
+int		handle_error(t_cub_err err, t_game *g, char *param, int c);
 
 /* Prints usage for the cub3D program */
 void	show_usage(int errno);
@@ -201,52 +201,44 @@ int		cub_exit(void *param);
 
 
 
-// game_init.c
-/*Handles the event when a key is released.*/
-int cub_keyup(int k, t_text_game *g);
-
-/*Handles the event when a key is pressed.*/
-int cub_keydown(int k, t_text_game *g);
+// setup_game.c
 
 /*Initializes attributes and settings for the game.*/
-void init_attr(t_text_game *g);
-
+void init_attr(t_game *g);
 /* Initializes game */
-void	game_init(t_text_game *g);
-
+void	setup_game(t_game *g);
 /*door action*/
-void	action_door(t_text_game *g);
-
+void	action_door(t_game *g);
 float	degree_to_radians(float degree);
+float	distance_to_door(t_game *g, float ray_angle, float *pos_x, float *pos_y);
+void	update_anim(t_game *g);
+t_game cub_init(void);
+void init_game(t_game *g, char *filename);
 
-float	distance_to_door(t_text_game *g, float ray_angle, float *pos_x, float *pos_y);
 
-void	update_anim(t_text_game *g);
-
-
-
+// key_events.c
+/*Handles the event when a key is released.*/
+int cub_keyup(int k, t_game *g);
+/*Handles the event when a key is pressed.*/
+int cub_keydown(int k, t_game *g);
 
 // main.c
-/*Initializes the pointers to various sprite images and loads texture images.*/
-void	init_sprites(t_text_game *g);
-
-/*Main entry point of the program.*/
 int		main(int ac, char **av);
 
 
 
 // map_checking.c
 /* Check every element of the map: spaces + characters */
-void	check_elements(t_text_game *g);
+void	check_elements(t_game *g);
 
 /* Adds spaces to end of all lines to ensure all lines have the same width */
-char	**alight_map_rows(t_text_game *g);
+char	**alight_map_rows(t_game *g);
 
 /*Checks for valid characters in the map and assigns player information.*/
-void	check_characters(t_text_game *g, char **map, int i, int j);
+void	check_characters(t_game *g, char **map, int i, int j);
 
 /*Checks the adjacent cells around the current position in the map for '0' characters.*/
-void check_walls(t_text_game *g, char **map, int i, int j);
+void check_walls(t_game *g, char **map, int i, int j);
 
 
 
@@ -255,13 +247,13 @@ void check_walls(t_text_game *g, char **map, int i, int j);
 t_list *get_anim(t_img *img, t_list **anim, int (*n)[2]);
 
 /*Processes texture definitions and assigns them to the game structure.*/
-void	check_textures(char *trim, t_text_game *g, int (*n)[2]);
+void	check_textures(char *trim, t_game *g, int (*n)[2]);
 
 /* Reads file with gnl */
-void	read_map(char *file, t_text_game *g);
+void	read_map(char *file, t_game *g);
 
 /* Check possible map errors */
-void	check_map(t_text_game *g);
+void	check_map(t_game *g);
 
 
 
@@ -275,29 +267,45 @@ int		parse_color_value(const char *nptr, long *value);
 int	cub_update(void *param);
 
 /*Redraws an image element onto the game window at specified coordinates.*/
-void	redraw_elem(t_text_game *g, t_img img, int x, int y);
+void	redraw_elem(t_game *g, t_img img, int x, int y);
 void	clear_image(t_img *img, int color);
 
 
 // ray_cast.c
 /*Initializes raycasting parameters based on the player's direction.*/
-void init_ray(t_text_game *g);
-void cast_rays(t_text_game *g);
+void init_ray(t_game *g);
+void cast_rays(t_game *g);
 //void draw_vertical_line(t_text_game *g, int x, int draw_start, int draw_end, int color);
-void rotate_player(t_text_game *g);
-void move_player(t_text_game *g);
-void	draw_background(t_text_game *g);
+void rotate_player(t_game *g);
+void move_player(t_game *g);
+void	draw_background(t_game *g);
 
 //tew_test
-void draw_texture_line(t_text_game *g, int x, t_img *texture, t_draw_params *params, t_ray_data *ray);
-void draw_wall_line(t_text_game *g, int x, t_ray_data *ray);
+void draw_texture_line(t_game *g, int x, t_img *texture, t_draw_params *params, t_ray_data *ray);
+void draw_wall_line(t_game *g, int x, t_ray_data *ray);
 
 // move
-int	mouse_move(int x, int y, t_text_game *g);
+int	mouse_move(int x, int y, t_game *g);
 
 // /* Checks player surroundings to open/close doors */
-// void	action_door(t_text_game *g);
+// void	action_door(t_game *g);
 
 // minimap.c
-void draw_minimap(t_text_game *g);
+void draw_minimap(t_game *g);
+
+
+// validations.c
+void validate_textures(t_game *g);
+void validate_colors(t_game *g);
+void check_file(int ac, char **av);
+
+// sprites.c
+/*Initializes the pointers to various sprite images and loads texture images.*/
+void	init_sprites(t_game *g);
+
+// doors.c
+void action_door(t_game *g);
+float distance_to_door(t_game *g, float ray_angle, float *pos_x, float *pos_y);
+float	degree_to_radians(float degree);
+
 #endif

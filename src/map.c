@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 11:34:27 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/27 10:33:08 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/29 08:03:33 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_list *get_anim(t_img *img, t_list **anim, int (*n)[2])
  * @param n Pointer to an array of two integers used for managing texture count and flags.
  */
 
-void	check_textures(char *trim, t_text_game *g, int (*n)[2])
+void	check_textures(char *trim, t_game *g, int (*n)[2])
 {
 	char	**dir;
 
@@ -99,7 +99,7 @@ void	check_textures(char *trim, t_text_game *g, int (*n)[2])
  * @param g Pointer to the game structure to be populated with map and texture data.
  */
 
-void	read_map(char *file, t_text_game *g)
+void	read_map(char *file, t_game *g)
 {
 	char	*line[2];
 	int		n[2];
@@ -141,7 +141,7 @@ void	read_map(char *file, t_text_game *g)
  * @param col_end The ending column index of the row, after trimming spaces.
  */
 
-static void validate_walls(t_text_game *g, int row, int col_start, int col_end)
+static void validate_walls(t_game *g, int row, int col_start, int col_end)
 {
     if (row == 0 || row == g->height - 1)
     {
@@ -170,7 +170,7 @@ static void validate_walls(t_text_game *g, int row, int col_start, int col_end)
  * 
  * @param g Pointer to the game structure containing the map data.
  */
-void check_map(t_text_game *g)
+void check_map(t_game *g)
 {
     int row;
     int col_start, col_end;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 10:10:29 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/11 12:31:16 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/29 08:03:33 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ t_color color_from_argb(int color_value)
  * Updates the floor or ceiling color in the game structure based on the provided color string.
  * 
  * @param dir An array of strings containing the color type (floor or ceiling) and the color components.
- * @param g A pointer to the t_text_game structure that contains texture data.
+ * @param g A pointer to the t_game structure that contains texture data.
  */
 
-void get_cf_color(char **dir, t_text_game *g)
+void get_cf_color(char **dir, t_game *g)
 {
 	char **fc;				 // Массив строк с компонентами цвета
 	int floor_or_ceiling[2]; // Индикаторы для пола и потолка
@@ -80,10 +80,10 @@ void get_cf_color(char **dir, t_text_game *g)
 /**
  * Inverts the colors of the image in the window.
  * 
- * @param g A pointer to the t_text_game structure containing the window image data.
+ * @param g A pointer to the t_game structure containing the window image data.
  */
 
-void cub_invert_color(t_text_game *g)
+void cub_invert_color(t_game *g)
 {
 	int xy[2];  // Координаты пикселя
 

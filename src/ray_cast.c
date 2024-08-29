@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 08:29:11 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/27 11:54:13 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/29 08:03:33 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	set_ray_params(t_ray *ray)
 	ray->max_distance = 10;
 }
 
-void	init_ray(t_text_game *g)
+void	init_ray(t_game *g)
 {
 	set_player_direction(&g->pl, g->pl.dir);
 	set_ray_params(&g->ray);
@@ -78,7 +78,7 @@ void	init_ray(t_text_game *g)
 }
 
 
-static void	init_ray_data(t_text_game *g, t_ray_data *ray, int x)
+static void	init_ray_data(t_game *g, t_ray_data *ray, int x)
 {
 	double	camera_x;
 
@@ -91,7 +91,7 @@ static void	init_ray_data(t_text_game *g, t_ray_data *ray, int x)
 
 //____________________________raycast______________________________
 
-static void calculate_step_and_side_dist(t_text_game *g, t_ray_data *ray)
+static void calculate_step_and_side_dist(t_game *g, t_ray_data *ray)
 {
 	double delta_dist_x;
 	double delta_dist_y;
@@ -121,7 +121,7 @@ static void calculate_step_and_side_dist(t_text_game *g, t_ray_data *ray)
 }
 
 
-static void perform_dda(t_text_game *g, t_ray_data *ray)
+static void perform_dda(t_game *g, t_ray_data *ray)
 {
 	double delta_dist_x = fabs(1 / ray->ray_dir_x);
 	double delta_dist_y = fabs(1 / ray->ray_dir_y);
@@ -149,7 +149,7 @@ static void perform_dda(t_text_game *g, t_ray_data *ray)
 	}
 }
 
-static void	calculate_perp_wall_dist(t_text_game *g, t_ray_data *ray)
+static void	calculate_perp_wall_dist(t_game *g, t_ray_data *ray)
 {
 	if (ray->side == 0)
 		ray->perp_wall_dist = (ray->map_x - g->pl.position_x 
@@ -174,7 +174,7 @@ static int	calculate_tex_x(t_texture_params *tex_params)
 }
 
 // Отрисовывает вертикальную линию текстуры на экране
-static void	draw_vertical_texture_line(t_text_game *g, int x,
+static void	draw_vertical_texture_line(t_game *g, int x,
 					t_texture_params *tex_params, int tex_x)
 {
 	int		y;
@@ -201,7 +201,7 @@ static void	draw_vertical_texture_line(t_text_game *g, int x,
 	}
 }
 
-void	draw_texture_line(t_text_game *g, int x, t_img *texture,
+void	draw_texture_line(t_game *g, int x, t_img *texture,
 					t_draw_params *params, t_ray_data *ray)
 {
 	int					tex_x;
@@ -229,7 +229,7 @@ static void	calculate_line_height(t_ray_data *ray, t_wall_params *wall_params)
 }
 
 // Определяет текстуру в зависимости от направления удара луча
-static t_img	*select_texture(t_text_game *g, t_ray_data *ray)
+static t_img	*select_texture(t_game *g, t_ray_data *ray)
 {
 	if (ray->side == 0)
 	{
@@ -248,7 +248,7 @@ static t_img	*select_texture(t_text_game *g, t_ray_data *ray)
 }
 
 // Вычисляет точную координату пересечения стены в текстуре
-static void	calculate_wall_hit_x(t_text_game *g, t_ray_data *ray, t_wall_params *wall_params)
+static void	calculate_wall_hit_x(t_game *g, t_ray_data *ray, t_wall_params *wall_params)
 {
 	if (ray->side == 0)
 		wall_params->wall_x = g->pl.position_y + ray->perp_wall_dist * ray->ray_dir_y;
@@ -257,7 +257,7 @@ static void	calculate_wall_hit_x(t_text_game *g, t_ray_data *ray, t_wall_params 
 	wall_params->wall_x -= floor(wall_params->wall_x); // Убираем целую часть
 }
 
-void	draw_wall_line(t_text_game *g, int x, t_ray_data *ray)
+void	draw_wall_line(t_game *g, int x, t_ray_data *ray)
 {
 	t_wall_params	wall_params;
 
@@ -272,7 +272,7 @@ void	draw_wall_line(t_text_game *g, int x, t_ray_data *ray)
 //_____________________ray_cast.c__________________________________________
 
 
-static void cast_single_ray(t_text_game *g, t_ray_data *ray, int x)
+static void cast_single_ray(t_game *g, t_ray_data *ray, int x)
 {
 	init_ray_data(g, ray, x);
 	calculate_step_and_side_dist(g, ray);
@@ -281,7 +281,7 @@ static void cast_single_ray(t_text_game *g, t_ray_data *ray, int x)
 	draw_wall_line(g, x, ray);
 }
 
-void cast_rays(t_text_game *g)
+void cast_rays(t_game *g)
 {
 	t_ray_data ray;
 	int x;
@@ -295,7 +295,7 @@ void cast_rays(t_text_game *g)
 }
 
 //_______________________scene.c_______________________________
-void	draw_background(t_text_game *g)
+void	draw_background(t_game *g)
 {
 	int	x;
 	int	y;
