@@ -103,8 +103,9 @@ void init_game(t_game *g, char *filename)
 
 void init_minimap(t_game *g)
 {
-	int minimap_scale = 5; // Масштаб одного элемента карты в пикселях
+	int minimap_scale; // Масштаб одного элемента карты в пикселях
 
+	minimap_scale = 5;
 	g->minimap.width = g->width * minimap_scale;
 	g->minimap.height = g->height * minimap_scale;
 
@@ -112,12 +113,12 @@ void init_minimap(t_game *g)
 	if (!g->minimap.i)
 	{
 		printf("Error: Minimap image creation failed!\n");
-		return;
+		return ;
 	}
 	g->minimap.addr = mlx_get_data_addr(g->minimap.i, &g->minimap.bpp,
 										&g->minimap.line_len, &g->minimap.endian);
-}
 
+}
 
 
 void init_attr(t_game *g)
@@ -126,12 +127,16 @@ void init_attr(t_game *g)
 	g->win_img.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
 	g->win_img.addr = mlx_get_data_addr(g->win_img.i, &g->win_img.bpp,
 										&g->win_img.line_len, &g->win_img.endian);
+	printf("Main image initialized: width=%d, height=%d\n", WIN_W, WIN_H);
+	printf("Map size before minimap init: width=%d, height=%d\n", g->width, g->height);
 
 	init_minimap(g);
+	printf("Minimap initialized: width=%d, height=%d\n", g->minimap.width, g->minimap.height);
 
 	g->win_g.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
 	g->win_g.addr = mlx_get_data_addr(g->win_g.i, &g->win_g.bpp,
 									  &g->win_g.line_len, &g->win_g.endian);
+
 	g->win_r.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
 	g->win_r.addr = mlx_get_data_addr(g->win_r.i, &g->win_r.bpp,
 									  &g->win_r.line_len, &g->win_r.endian);
@@ -143,6 +148,10 @@ void init_attr(t_game *g)
 	g->miniview.height = 15 * SIZE;
 
 	g->pl.speed = 0.02;
+
+	printf("Final map size: width=%d, height=%d\n", g->width, g->height);
+	printf("Final minimap size: width=%d, height=%d\n", g->minimap.width, g->minimap.height);
+	printf("Final miniview size: width=%d, height=%d\n", g->miniview.width, g->miniview.height);
 }
 
 
