@@ -18,7 +18,7 @@ static void draw_rect(t_img *img, t_vector position, t_vector dimensions, int co
 	}
 };
 
-static void	set_minimap_color(t_text_game *g, int x, int y, int *color)
+static void	set_minimap_color(t_game *g, int x, int y, int *color)
 {
 	if (g->map[y][x] == '1')
 		*color = 0xFFFFFF; // Белый для стен
@@ -29,7 +29,7 @@ static void	set_minimap_color(t_text_game *g, int x, int y, int *color)
 }
 
 
-void	draw_minimap(t_text_game *g)
+void	draw_minimap(t_game *g)
 {
 	int	x;
 	int	y;

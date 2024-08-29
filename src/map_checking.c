@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_checking.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 10:16:02 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/11 09:13:35 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/08/29 08:03:33 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  * @param i The column index of the current position.
  * @param j The row index of the current position.
  */
-static void check_adjacent_walls(t_text_game *g, char **map, int i, int j)
+static void check_adjacent_walls(t_game *g, char **map, int i, int j)
 {
     if (i - 1 >= 0 && i - 1 < (int)ft_strlen(map[j]))
         handle_error(ERR_INV_WALL, g, NULL, map[j][i - 1] == '0');
@@ -39,7 +39,7 @@ static void check_adjacent_walls(t_text_game *g, char **map, int i, int j)
  * @param i The column index of the current position.
  * @param j The row index of the current position.
  */
-static void check_surrounding_walls(t_text_game *g, char **map, int i, int j)
+static void check_surrounding_walls(t_game *g, char **map, int i, int j)
 {
     if (j - 1 >= 0 && j - 1 < g->height)
     {
@@ -68,7 +68,7 @@ static void check_surrounding_walls(t_text_game *g, char **map, int i, int j)
  * @param i The column index of the current position.
  * @param j The row index of the current position.
  */
-void check_walls(t_text_game *g, char **map, int i, int j)
+void check_walls(t_game *g, char **map, int i, int j)
 {
     check_surrounding_walls(g, map, i, j);
 }
@@ -82,7 +82,7 @@ void check_walls(t_text_game *g, char **map, int i, int j)
  * @param i The column index of the player character.
  * @param j The row index of the player character.
  */
-static void handle_player_direction(t_text_game *g, char character, int i, int j)
+static void handle_player_direction(t_game *g, char character, int i, int j)
 {
     if (!g->pl.dir)
     {
@@ -104,7 +104,7 @@ static void handle_player_direction(t_text_game *g, char character, int i, int j
  * @param character The character to check.
  * @param g Pointer to the game structure for error reporting.
  */
-static void check_invalid_character(char character, t_text_game *g)
+static void check_invalid_character(char character, t_game *g)
 {
     if (!ft_strchr("01oc", character))
         handle_error(ERR_INV_CHARAC, g, NULL, 1);
@@ -123,7 +123,7 @@ static void check_invalid_character(char character, t_text_game *g)
  * @param i The column index of the current position.
  * @param j The row index of the current position.
  */
-void check_characters(t_text_game *g, char **map, int i, int j)
+void check_characters(t_game *g, char **map, int i, int j)
 {
     char character = map[j][i];
 
@@ -167,7 +167,7 @@ static void fill_row(char *dest, char *src, int width)
  * @param g Pointer to the game structure containing map data.
  * @return A new align_map_rows map represented as a 2D array of characters.
  */
-char **alight_map_rows(t_text_game *g)
+char **alight_map_rows(t_game *g)
 {
     char **updated_map = malloc(sizeof(char *) * (g->height + 1));
     int j = 0;
@@ -189,7 +189,7 @@ char **alight_map_rows(t_text_game *g)
  * 
  * @param g Pointer to the game structure containing map data.
  */
-void check_elements(t_text_game *g)
+void check_elements(t_game *g)
 {
     int i, j;
 

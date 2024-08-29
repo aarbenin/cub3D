@@ -14,7 +14,7 @@ static void	move_forward_backward(t_player *pl, double move_speed, int direction
 	move_data->new_y += direction * pl->dir_y * move_speed;
 }
 
-void	move_player(t_text_game *g)
+void	move_player(t_game *g)
 {
 	double		move_speed;
 	t_move_data	move_data;
@@ -79,7 +79,7 @@ static void	rotate_right(t_player *pl, double rotation_speed)
 }
 
 
-void	rotate_player(t_text_game *g)
+void	rotate_player(t_game *g)
 {
 	double	rotation_speed;
 
@@ -95,7 +95,7 @@ void	rotate_player(t_text_game *g)
 }
 //_____________________mouse_move.c__________________________
 
-int	mouse_move(int x, int y, t_text_game *g)
+int	mouse_move(int x, int y, t_game *g)
 {
 	int		center_x;
 	double	rotation_speed_factor;

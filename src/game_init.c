@@ -1,71 +1,75 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   game_init.c                                        :+:      :+:    :+:   */
+/*   setup_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 11:43:23 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/27 13:59:05 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/29 08:12:10 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
+
+
 /**
- * Handles key release events. Updates the game state based on the key released.
+ * Initializes the game structure with default values.
  * 
- * @param key The key that was released.
- * @param g A pointer to the game state.
- * @return Always returns 0.
+ * Sets initial values for various game parameters, including window dimensions, file descriptor, 
+ * frame count, player direction and position, and MLX pointers. Also initializes the sprites and 
+ * clears player key structure.
+ * 
+ * @return An initialized `t_game` structure with default values.
  */
-int cub_keydown(int k, t_text_game *g)
+t_game cub_init(void)
 {
-	if (k == KEY_Q || k == KEY_ESC)
-		handle_error(ERR_END, g, NULL, 1);
-	else if (k == KEY_LEFT) // Обработка нажатия стрелки влево
-		g->pl.keys.left_pressed = 1;
-	else if (k == KEY_RIGHT) // Обработка нажатия стрелки вправо
-		g->pl.keys.right_pressed = 1;
-	else if (k == KEY_W)
-		g->pl.keys.w_pressed = 1;
-	else if (k == KEY_A)
-		g->pl.keys.a_pressed = 1;
-	else if (k == KEY_S)
-		g->pl.keys.s_pressed = 1;
-	else if (k == KEY_D)
-		g->pl.keys.d_pressed = 1;
-
-	return (0);
+	t_game g;
+    
+    g.rate = 30;
+    g.nframes = 0;
+	g.width = 0;						 // Ширина окна, инициализируется нулём
+	g.height = 0;						 // Высота окна, инициализируется нулём
+	g.fd = -1;							 // Дескриптор файла, -1 означает, что файл ещё не открыт
+	g.frame_count = 0;					 // Счетчик кадров, инициализируется нулём
+	g.pl.dir = 0;						 // Направление игрока, инициализируется нулём
+	g.map = NULL;						 // Указатель на карту, инициализируется NULL (пусто)
+	g.mlx_ptr = NULL;					 // Указатель на MLX (MiniLibX), инициализируется NULL
+	g.win_ptr = NULL;					 // Указатель на окно, инициализируется NULL
+	g.mlx_ptr = mlx_init();				 // Инициализация MLX
+	g.tex.floor = -1;					 // Цвет пола, -1 указывает на неинициализированное значение
+	g.tex.ceiling = -1;					 // Цвет потолка, -1 указывает на неинициализированное значение
+	g.pl.position_x = -1;				 // Позиция игрока по X, -1 означает, что позиция не задана
+	g.pl.position_y = -1;				 // Позиция игрока по Y, -1 означает, что позиция не задана
+	g.pl.speed = 0.10;					 // Скорость игрока, инициализирована значением 0.10
+	g.pl.door_cooldown = 0;				 // Охлаждение двери, инициализируется нулём
+	g.rate = 30;						 // Частота кадров или обновления, инициализируется значением 30
+	init_sprites(&g);					 // Инициализация спрайтов
+	ft_bzero(&g.pl.keys, sizeof(t_key)); // Обнуление структуры клавиш игрока
+	return (g); // Возвращает инициализированную структуру игры
 }
-
-int cub_keyup(int k, t_text_game *g)
+/**
+ * Initializes the game environment by setting up the game structure and reading the map.
+ * 
+ * Calls the `cub_init` function to initialize the game structure and then reads the map file 
+ * specified by the filename argument. Sets up the game with the necessary map and texture data.
+ * 
+ * @param g Pointer to the game structure to be initialized.
+ * @param filename The path to the map file.
+ */
+void init_game(t_game *g, char *filename)
 {
-	if (k == KEY_E)
-		action_door(g);
-	else if (k == KEY_LEFT) // Обработка отпускания стрелки влево
-		g->pl.keys.left_pressed = 0;
-	else if (k == KEY_RIGHT) // Обработка отпускания стрелки вправо
-		g->pl.keys.right_pressed = 0;
-	else if (k == KEY_W)
-		g->pl.keys.w_pressed = 0;
-	else if (k == KEY_A)
-		g->pl.keys.a_pressed = 0;
-	else if (k == KEY_S)
-		g->pl.keys.s_pressed = 0;
-	else if (k == KEY_D)
-		g->pl.keys.d_pressed = 0;
-
-	return (0);
+    *g = cub_init();
+    read_map(filename, g);
 }
-
 
 /**
  * Initializes attributes for the game window and images.
  * 
  * @param g A pointer to the game state.
  */
-// void init_attr(t_text_game *g)
+// void init_attr(t_game *g)
 // {
 // 	g->win_ptr = mlx_new_window(g->mlx_ptr, WIN_W, WIN_H, "Cub3D");
 // 	g->win_img.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
@@ -97,7 +101,7 @@ int cub_keyup(int k, t_text_game *g)
 
 // }
 
-void init_minimap(t_text_game *g)
+void init_minimap(t_game *g)
 {
 	int minimap_scale = 5; // Масштаб одного элемента карты в пикселях
 
@@ -116,7 +120,7 @@ void init_minimap(t_text_game *g)
 
 
 
-void init_attr(t_text_game *g)
+void init_attr(t_game *g)
 {
 	g->win_ptr = mlx_new_window(g->mlx_ptr, WIN_W, WIN_H, "Cub3D");
 	g->win_img.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
@@ -147,7 +151,7 @@ void init_attr(t_text_game *g)
  * 
  * @param g A pointer to the game state.
  */
-void	game_init(t_text_game *g)
+void	setup_game(t_game *g)
 {
 	init_attr(g);
 	init_ray(g);
@@ -167,108 +171,6 @@ void	game_init(t_text_game *g)
 	mlx_loop(g->mlx_ptr);
 }
 
-
-/**
- * Handles the player's interaction with doors in the game.
- * If the player is near a door and presses the interaction key,
- * this function will either open or close the door, depending on its current state.
- *
- * @param g A pointer to the game state containing the player, map, and other game data.
- */
-
-void action_door(t_text_game *g)
-{
-	float d;       // Расстояние до двери
-	float pos_x;   // Координата X
-	float pos_y;   // Координата Y
-	float x;       // Временная переменная для расчета
-	float y;       // Временная переменная для расчета
-
-	// Получаем текущие координаты игрока
-	pos_x = g->pl.position_x;
-	pos_y = g->pl.position_y;
-
-	// Проверяем, есть ли возможность взаимодействия с дверью
-	if (g->pl.door_cooldown || ft_strchr("oc", g->map[(int)(pos_y + 0.5)][(int)(pos_x + 0.5)]))
-		return;
-
-	// Вычисляем расстояние до двери и получаем координаты
-	d = distance_to_door(g, g->ray.current_angle, &x, &y);
-
-	// Обрабатываем открытие двери
-	if (d < g->ray.max_distance && g->map[(int)pos_y][(int)pos_x] == 'c')
-	{
-		g->pl.door_cooldown = 1;
-		g->map[(int)pos_y][(int)pos_x] = 'o';
-		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_g.i, 0, 0);
-	}
-	// Обрабатываем закрытие двери
-	else if (d < g->ray.max_distance && g->map[(int)pos_y][(int)pos_x] == 'o')
-	{
-		g->pl.door_cooldown = 1;
-		g->map[(int)pos_y][(int)pos_x] = 'c';
-		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_r.i, 0, 0);
-	}
-}
-
-/**
- * Calculates the distance from the player to the nearest door along the given ray angle.
- * This function uses raycasting principles to detect the nearest door
- * in the direction the player is facing.
- *
- * @param g A pointer to the game state containing the player, map, and raycasting data.
- * @param ray_angle The angle at which the ray is cast to detect the door.
- * @param pos_x A pointer to store the X coordinate of the detected door.
- * @param pos_y A pointer to store the Y coordinate of the detected door.
- * @return The distance from the player to the nearest door.
- */
-
-float distance_to_door(t_text_game *g, float ray_angle, float *pos_x, float *pos_y)
-{
-	float d;             // Расстояние до двери
-	float ray_cos;       // Косинус угла луча
-	float ray_sin;       // Синус угла луча
-
-	// Вычисляем косинус и синус угла луча с учетом точности
-	ray_cos = cos(degree_to_radians(ray_angle)) / g->ray.precision;
-	ray_sin = sin(degree_to_radians(ray_angle)) / g->ray.precision;
-
-	// Начальные координаты для поиска двери
-	*pos_x = g->pl.position_x + 0.5;
-	*pos_y = g->pl.position_y + 0.5;
-
-	// Цикл поиска двери на карте
-	while (!ft_strchr("1oc", g->map[(int)*pos_y][(int)*pos_x]) && \
-		   sqrt(powf(*pos_x - g->pl.position_x - 0.5, 2.) + \
-		   powf(*pos_y - g->pl.position_y - 0.5, 2.)) < g->ray.max_distance)
-	{
-		*pos_x += ray_cos;
-		*pos_y += ray_sin;
-	}
-
-	// Вычисление расстояния до двери
-	d = sqrt(powf(*pos_x - g->pl.position_x - 0.5, 2.) + \
-			 powf(*pos_y - g->pl.position_y - 0.5, 2.));
-
-	// Коррекция расстояния с учетом угла луча
-	d *= cos(degree_to_radians(ray_angle - g->ray.current_angle));
-	return d;
-}
-
-/**
- * Converts an angle from degrees to radians.
- * This is necessary for trigonometric calculations,
- * as most math functions in C use radians.
- *
- * @param degree The angle in degrees.
- * @return The equivalent angle in radians.
- */
-
-float	degree_to_radians(float degree)
-{
-	return (degree * M_PI / 180);
-}
-
 /**
  * Updates the textures for the game's animations.
  * This function cycles through the available textures for each wall direction (N, S, E, W),
@@ -277,7 +179,7 @@ float	degree_to_radians(float degree)
  * @param g A pointer to the game state containing the textures.
  */
 
-void	update_anim(t_text_game *g)
+void	update_anim(t_game *g)
 {
 	g->tex.n = g->tex.n->next;
 	if (!g->tex.n)
