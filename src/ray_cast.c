@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/14 08:29:11 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/29 08:03:33 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/29 15:43:05 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,31 +123,32 @@ static void calculate_step_and_side_dist(t_game *g, t_ray_data *ray)
 
 static void perform_dda(t_game *g, t_ray_data *ray)
 {
-	double delta_dist_x = fabs(1 / ray->ray_dir_x);
-	double delta_dist_y = fabs(1 / ray->ray_dir_y);
-	int hit = 0;
-	
-	delta_dist_x = fabs(1 / ray->ray_dir_x);
-	delta_dist_y = fabs(1 / ray->ray_dir_y);
-	hit = 0;
-	while (hit == 0)
-	{
-		if (ray->side_dist_x < ray->side_dist_y)
-		{
-			ray->side_dist_x += delta_dist_x;
-			ray->map_x += ray->step_x;
-			ray->side = 0;
-		}
-		else
-		{
-			ray->side_dist_y += delta_dist_y;
-			ray->map_y += ray->step_y;
-			ray->side = 1;
-		}
-		if (g->map[ray->map_y][ray->map_x] == '1')
-			hit = 1;
-	}
+    double delta_dist_x = fabs(1 / ray->ray_dir_x);
+    double delta_dist_y = fabs(1 / ray->ray_dir_y);
+    int hit = 0;
+
+    while (hit == 0)
+    {
+        if (ray->side_dist_x < ray->side_dist_y)
+        {
+            ray->side_dist_x += delta_dist_x;
+            ray->map_x += ray->step_x;
+            ray->side = 0;
+        }
+        else
+        {
+            ray->side_dist_y += delta_dist_y;
+            ray->map_y += ray->step_y;
+            ray->side = 1;
+        }
+        char cell = g->map[ray->map_y][ray->map_x];
+        if (cell == '1' || cell == 'D' || cell == 'O') {
+            hit = 1;
+            printf("Ray hit at map position (%d, %d) with cell type '%c'\n", ray->map_x, ray->map_y, cell);
+        }
+    }
 }
+
 
 static void	calculate_perp_wall_dist(t_game *g, t_ray_data *ray)
 {
@@ -228,24 +229,30 @@ static void	calculate_line_height(t_ray_data *ray, t_wall_params *wall_params)
 		wall_params->params.draw_end = WIN_H - 1;
 }
 
-// Определяет текстуру в зависимости от направления удара луча
-static t_img	*select_texture(t_game *g, t_ray_data *ray)
+static t_img *select_texture(t_game *g, t_ray_data *ray)
 {
-	if (ray->side == 0)
-	{
-		if (ray->ray_dir_x > 0)
-			return ((t_img *)g->tex.e->content); // Восточная стена
-		else
-			return ((t_img *)g->tex.w->content); // Западная стена
-	}
-	else
-	{
-		if (ray->ray_dir_y > 0)
-			return ((t_img *)g->tex.s->content); // Южная стена
-		else
-			return ((t_img *)g->tex.n->content); // Северная стена
-	}
+    char cell = g->map[ray->map_y][ray->map_x];
+    t_img *selected_texture = NULL;
+
+    if (cell == 'D') {
+        selected_texture = g->tex.door_closed;
+        printf("Selected closed door texture at (%d, %d)\n", ray->map_x, ray->map_y);
+    }
+    else if (cell == 'O') {
+        selected_texture = g->tex.door_open;
+        printf("Selected open door texture at (%d, %d)\n", ray->map_x, ray->map_y);
+    }
+    else if (ray->side == 0) {
+        selected_texture = (ray->ray_dir_x > 0) ? (t_img *)g->tex.e->content : (t_img *)g->tex.w->content;
+    }
+    else {
+        selected_texture = (ray->ray_dir_y > 0) ? (t_img *)g->tex.s->content : (t_img *)g->tex.n->content;
+    }
+
+    return selected_texture;
 }
+
+
 
 // Вычисляет точную координату пересечения стены в текстуре
 static void	calculate_wall_hit_x(t_game *g, t_ray_data *ray, t_wall_params *wall_params)
