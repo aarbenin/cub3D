@@ -120,34 +120,49 @@ static void calculate_step_and_side_dist(t_game *g, t_ray_data *ray)
 	}
 }
 
-
-static void perform_dda(t_game *g, t_ray_data *ray)
+static void	check_hit(t_game *g, t_ray_data *ray, int *hit)
 {
-    double delta_dist_x = fabs(1 / ray->ray_dir_x);
-    double delta_dist_y = fabs(1 / ray->ray_dir_y);
-    int hit = 0;
+	char	cell;
 
-    while (hit == 0)
-    {
-        if (ray->side_dist_x < ray->side_dist_y)
-        {
-            ray->side_dist_x += delta_dist_x;
-            ray->map_x += ray->step_x;
-            ray->side = 0;
-        }
-        else
-        {
-            ray->side_dist_y += delta_dist_y;
-            ray->map_y += ray->step_y;
-            ray->side = 1;
-        }
-        char cell = g->map[ray->map_y][ray->map_x];
-        if (cell == '1' || cell == 'D' || cell == 'O') {
-            hit = 1;
-            printf("Ray hit at map position (%d, %d) with cell type '%c'\n", ray->map_x, ray->map_y, cell);
-        }
-    }
+	cell = g->map[ray->map_y][ray->map_x];
+	if (cell == '1' || cell == 'D' || cell == 'O')
+		*hit = 1;
 }
+
+static void	update_ray(t_ray_data *ray, double delta_x, double delta_y)
+{
+	if (ray->side_dist_x < ray->side_dist_y)
+	{
+		ray->side_dist_x += delta_x;
+		ray->map_x += ray->step_x;
+		ray->side = 0;
+	}
+	else
+	{
+		ray->side_dist_y += delta_y;
+		ray->map_y += ray->step_y;
+		ray->side = 1;
+	}
+}
+
+static void	perform_dda(t_game *g, t_ray_data *ray)
+{
+	int		hit;
+	double	delta_x;
+	double	delta_y;
+
+	hit = 0;
+	delta_x = fabs(1 / ray->ray_dir_x);
+	delta_y = fabs(1 / ray->ray_dir_y);
+	while (!hit)
+	{
+		update_ray(ray, delta_x, delta_y);
+		check_hit(g, ray, &hit);
+	}
+}
+
+
+
 
 
 static void	calculate_perp_wall_dist(t_game *g, t_ray_data *ray)
@@ -229,29 +244,30 @@ static void	calculate_line_height(t_ray_data *ray, t_wall_params *wall_params)
 		wall_params->params.draw_end = WIN_H - 1;
 }
 
-static t_img *select_texture(t_game *g, t_ray_data *ray)
+static t_img	*select_texture(t_game *g, t_ray_data *ray)
 {
-    char cell = g->map[ray->map_y][ray->map_x];
-    t_img *selected_texture = NULL;
+	char	cell;
 
-    if (cell == 'D') {
-        selected_texture = g->tex.door_closed;
-        printf("Selected closed door texture at (%d, %d)\n", ray->map_x, ray->map_y);
-    }
-    else if (cell == 'O') {
-        selected_texture = g->tex.door_open;
-        printf("Selected open door texture at (%d, %d)\n", ray->map_x, ray->map_y);
-    }
-    else if (ray->side == 0) {
-        selected_texture = (ray->ray_dir_x > 0) ? (t_img *)g->tex.e->content : (t_img *)g->tex.w->content;
-    }
-    else {
-        selected_texture = (ray->ray_dir_y > 0) ? (t_img *)g->tex.s->content : (t_img *)g->tex.n->content;
-    }
-
-    return selected_texture;
+	cell = g->map[ray->map_y][ray->map_x];
+	if (cell == 'D')
+		return (g->tex.door_closed);
+	else if (cell == 'O')
+		return (g->tex.door_open);
+	else if (ray->side == 0)
+	{
+		if (ray->ray_dir_x > 0)
+			return ((t_img *)g->tex.e->content);
+		else
+			return ((t_img *)g->tex.w->content);
+	}
+	else
+	{
+		if (ray->ray_dir_y > 0)
+			return ((t_img *)g->tex.s->content);
+		else
+			return ((t_img *)g->tex.n->content);
+	}
 }
-
 
 
 // Вычисляет точную координату пересечения стены в текстуре

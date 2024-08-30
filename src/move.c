@@ -14,7 +14,7 @@ static void	move_forward_backward(t_player *pl, double move_speed, int direction
 	move_data->new_y += direction * pl->dir_y * move_speed;
 }
 
-void	move_player(t_game *g)
+void move_player(t_game *g)
 {
 	double		move_speed;
 	t_move_data	move_data;
@@ -32,8 +32,9 @@ void	move_player(t_game *g)
 	if (g->pl.keys.s_pressed) // Move backward
 		move_forward_backward(&g->pl, move_speed, -1, &move_data);
 
-	// Проверка на столкновение со стеной
-	if (g->map[(int)move_data.new_y][(int)move_data.new_x] != '1')
+	// Проверка на столкновение со стеной или закрытой дверью
+	if (g->map[(int)move_data.new_y][(int)move_data.new_x] != '1' &&
+	    g->map[(int)move_data.new_y][(int)move_data.new_x] != 'D')
 	{
 		g->pl.position_x = move_data.new_x;
 		g->pl.position_y = move_data.new_y;

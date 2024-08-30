@@ -1,27 +1,47 @@
 
 #include "../inc/cub3D.h"
 
-void action_door(t_game *g)
+static int	check_door(t_game *g, int door_x, int door_y)
 {
-    int door_x;
-    int door_y;
+	if (door_x >= 0 && door_x < g->width && door_y >= 0 && door_y < g->height)
+	{
+		if (g->map[door_y][door_x] == 'D')
+		{
+			g->map[door_y][door_x] = 'O';
+			return (1);
+		}
+		else if (g->map[door_y][door_x] == 'O')
+		{
+			g->map[door_y][door_x] = 'D';
+			return (1);
+		}
+	}
+	return (0);
+}
 
-    // Определяем координаты клетки перед игроком
-    door_x = (int)(g->pl.position_x + g->pl.dir_x);
-    door_y = (int)(g->pl.position_y + g->pl.dir_y);
+static void	find_and_toggle_door(t_game *g)
+{
+	double	check_distance;
+	double	step;
+	double	current_distance;
+	int		door_x;
+	int		door_y;
 
-    // Проверяем, находится ли перед игроком дверь и находимся ли мы в пределах карты
-    if (door_x >= 0 && door_x < g->width && door_y >= 0 && door_y < g->height)
-    {
-        if (g->map[door_y][door_x] == 'D')  // Закрытая дверь
-        {
-            g->map[door_y][door_x] = 'O';  // Открываем дверь
-            printf("Door opened at (%d, %d)\n", door_x, door_y);
-        }
-        else if (g->map[door_y][door_x] == 'O')  // Открытая дверь
-        {
-            g->map[door_y][door_x] = 'D';  // Закрываем дверь
-            printf("Door closed at (%d, %d)\n", door_x, door_y);
-        }
-    }
+	check_distance = 4.5;
+	step = 0.2;
+	current_distance = 0.0;
+	while (current_distance <= check_distance)
+	{
+		door_x = (int)(g->pl.position_x + g->pl.dir_x * current_distance);
+		door_y = (int)(g->pl.position_y + g->pl.dir_y * current_distance);
+		if (check_door(g, door_x, door_y))
+			break ;
+		current_distance += step;
+	}
+}
+
+void	action_door(t_game *g)
+{
+	find_and_toggle_door(g);
+	//cub_update(g);
 }

@@ -23,20 +23,17 @@ int cub_keydown(int keycode, t_game *g)
 		g->pl.keys.s_pressed = 1;
 	else if (keycode == KEY_D)
 		g->pl.keys.d_pressed = 1;
-	else if (keycode == KEY_E) 
+	else if (keycode == KEY_E)
 		action_door(g);
 
 	return (0);
 }
 
-
 int cub_keyup(int k, t_game *g)
 {
-	if (k == KEY_E)
-		action_door(g);
-	else if (k == KEY_LEFT) // Обработка отпускания стрелки влево
+	if (k == KEY_LEFT) 
 		g->pl.keys.left_pressed = 0;
-	else if (k == KEY_RIGHT) // Обработка отпускания стрелки вправо
+	else if (k == KEY_RIGHT) 
 		g->pl.keys.right_pressed = 0;
 	else if (k == KEY_W)
 		g->pl.keys.w_pressed = 0;
