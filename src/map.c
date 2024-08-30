@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 11:34:27 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/29 08:03:33 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/29 15:33:45 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,10 @@ void	check_textures(char *trim, t_game *g, int (*n)[2])
 	else if ((!ft_strncmp(dir[0], "F", 2) && g->tex.floor == -1)
             || (!ft_strncmp(dir[0], "C", 2) && g->tex.ceiling == -1))
 		get_cf_color(dir, g);
+     else if (!ft_strncmp(dir[0], "DOOR_CLOSED", 12))
+        g->tex.door_closed = load_img(g->mlx_ptr, dir[1]);
+    else if (!ft_strncmp(dir[0], "DOOR_OPEN", 10))
+        g->tex.door_open = load_img(g->mlx_ptr, dir[1]);
 	else
 	{
 		ft_free_matrix(&dir);
@@ -88,24 +92,16 @@ void	check_textures(char *trim, t_game *g, int (*n)[2])
 	ft_free_matrix(&dir);
 }
 
-/**
- * Reads a map file and populates the game structure with texture and map data.
- * 
- * Opens the specified map file and reads it line by line. The function distinguishes between 
- * texture definitions and map data, updates the map and texture information, and handles errors 
- * for missing or invalid textures and empty files.
- * 
- * @param file The path to the map file.
- * @param g Pointer to the game structure to be populated with map and texture data.
- */
 
 void	read_map(char *file, t_game *g)
 {
 	char	*line[2];
 	int		n[2];
+	int		texture_limit;
 
-	n[0] = -1; //  для подсчета строк карты
+	n[0] = -1; // для подсчета строк карты
 	n[1] = -1; // для отслеживания текстур
+	texture_limit = 6; // базовый лимит текстур
 	g->fd = open(file, O_RDONLY);
 	handle_error(ERR_INV_FILE, g, file, g->fd < 0);
 	while (1)
@@ -113,20 +109,28 @@ void	read_map(char *file, t_game *g)
 		line[0] = get_next_line(g->fd);
 		if (!line[0])
 			break ;
-		line[1] = ft_strtrim(line[0], "\n"); //udaljaet simvol \n s nachalo i konca stroki
+		line[1] = ft_strtrim(line[0], "\n"); // Удаляет символ \n с начала и конца строки
 		free(line[0]);
-		if (line[1] && line[1][0] && ++n[0] < 6)
+		if (ft_strncmp(line[1], "DOOR_CLOSED", 11) == 0 || ft_strncmp(line[1], "DOOR_OPEN", 9) == 0)
+			texture_limit = 8; // если есть дверные текстуры, увеличиваем лимит
+		if (line[1] && line[1][0] && ++n[0] < texture_limit)
 			check_textures(line[1], g, &n);
-		else if ((line[1] && line[1][0]) || n[0] >= 6)
+		else if ((line[1] && line[1][0]) || n[0] >= texture_limit)
 			g->map = ft_extend_matrix(g->map, line[1]);
 		if ((int)ft_strlen(line[1]) > g->width)
+		{
 			g->width = ft_strlen(line[1]);
+		}
 		free(line[1]);
 	}
-	handle_error(ERR_EMPTY_FILE, g, NULL, !n[0]); //если не было прочитано ни одной строки карты
+	handle_error(ERR_EMPTY_FILE, g, NULL, !n[0]); // если не было прочитано ни одной строки карты
 	handle_error(ERR_INV_TEX, g, NULL, !n[1]); // не было найдено ни одной текстуры
 	g->height = ft_matrixlen(g->map); // Высота карты
 }
+
+
+
+
 
 
 /**

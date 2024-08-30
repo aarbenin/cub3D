@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/29 08:26:25 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/29 14:47:06 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,12 @@ typedef struct s_tex
     t_img *b;        // Текстура для пола или потолка
     int floor;       // Цвет пола в формате RGB (например, 0xRRGGBB)
     int ceiling;     // Цвет потолка в формате RGB
+
+    // Новые поля для текстур дверей
+    t_img *door_closed; // Текстура для закрытой двери
+    t_img *door_open;   // Текстура для открытой двери
 } t_tex;
+
 
 /* Структура для хранения состояний клавиш */
 typedef struct s_key
@@ -106,7 +111,7 @@ typedef struct s_player
 
 
 /* Структура для хранения состояния игры */
-typedef struct s_text_game
+typedef struct s_game
 {
     int fd;             // Дескриптор файла карты
     char **map;         // Двумерный массив карты

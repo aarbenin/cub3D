@@ -46,6 +46,9 @@ t_game cub_init(void)
 	g.pl.door_cooldown = 0;				 // Охлаждение двери, инициализируется нулём
 	g.rate = 30;						 // Частота кадров или обновления, инициализируется значением 30
 	init_sprites(&g);					 // Инициализация спрайтов
+	 // Инициализация текстур дверей
+    g.tex.door_closed = NULL;
+    g.tex.door_open = NULL;
 	ft_bzero(&g.pl.keys, sizeof(t_key)); // Обнуление структуры клавиш игрока
 	return (g); // Возвращает инициализированную структуру игры
 }
@@ -103,8 +106,9 @@ void init_game(t_game *g, char *filename)
 
 void init_minimap(t_game *g)
 {
-	int minimap_scale = 5; // Масштаб одного элемента карты в пикселях
+	int minimap_scale; // Масштаб одного элемента карты в пикселях
 
+	minimap_scale = 5;
 	g->minimap.width = g->width * minimap_scale;
 	g->minimap.height = g->height * minimap_scale;
 
@@ -112,12 +116,12 @@ void init_minimap(t_game *g)
 	if (!g->minimap.i)
 	{
 		printf("Error: Minimap image creation failed!\n");
-		return;
+		return ;
 	}
 	g->minimap.addr = mlx_get_data_addr(g->minimap.i, &g->minimap.bpp,
 										&g->minimap.line_len, &g->minimap.endian);
-}
 
+}
 
 
 void init_attr(t_game *g)
@@ -126,12 +130,16 @@ void init_attr(t_game *g)
 	g->win_img.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
 	g->win_img.addr = mlx_get_data_addr(g->win_img.i, &g->win_img.bpp,
 										&g->win_img.line_len, &g->win_img.endian);
+	printf("Main image initialized: width=%d, height=%d\n", WIN_W, WIN_H);
+	printf("Map size before minimap init: width=%d, height=%d\n", g->width, g->height);
 
 	init_minimap(g);
+	printf("Minimap initialized: width=%d, height=%d\n", g->minimap.width, g->minimap.height);
 
 	g->win_g.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
 	g->win_g.addr = mlx_get_data_addr(g->win_g.i, &g->win_g.bpp,
 									  &g->win_g.line_len, &g->win_g.endian);
+
 	g->win_r.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
 	g->win_r.addr = mlx_get_data_addr(g->win_r.i, &g->win_r.bpp,
 									  &g->win_r.line_len, &g->win_r.endian);
@@ -143,6 +151,10 @@ void init_attr(t_game *g)
 	g->miniview.height = 15 * SIZE;
 
 	g->pl.speed = 0.02;
+
+	printf("Final map size: width=%d, height=%d\n", g->width, g->height);
+	printf("Final minimap size: width=%d, height=%d\n", g->minimap.width, g->minimap.height);
+	printf("Final miniview size: width=%d, height=%d\n", g->miniview.width, g->miniview.height);
 }
 
 
@@ -156,12 +168,11 @@ void	setup_game(t_game *g)
 	init_attr(g);
 	init_ray(g);
 
-	// Настраиваем обработку клавиш
+	// 
 	mlx_hook(g->win_ptr, 02, 1L << 0, cub_keydown, g);
 	mlx_hook(g->win_ptr, 03, 1L << 1, cub_keyup, g);
 	mlx_hook(g->win_ptr, 17, 0, cub_exit, g);
 
-	// Добавляем обработку движения мыши
 	mlx_hook(g->win_ptr, 6, 1L << 6, mouse_move, g);
 
 	// Центрируем курсор, передавая и указатель на контекст MiniLibX

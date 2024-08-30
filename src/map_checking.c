@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 10:16:02 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/29 08:03:33 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/08/29 14:24:19 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ static void handle_player_direction(t_game *g, char character, int i, int j)
  */
 static void check_invalid_character(char character, t_game *g)
 {
-    if (!ft_strchr("01oc", character))
+    if (!ft_strchr("01ocDO", character))
         handle_error(ERR_INV_CHARAC, g, NULL, 1);
 }
 
