@@ -93,28 +93,15 @@ void	check_textures(char *trim, t_game *g, int (*n)[2])
 }
 
 
-
-
-
-
-/**
- * Reads a map file and populates the game structure with texture and map data.
- * 
- * Opens the specified map file and reads it line by line. The function distinguishes between 
- * texture definitions and map data, updates the map and texture information, and handles errors 
- * for missing or invalid textures and empty files.
- * 
- * @param file The path to the map file.
- * @param g Pointer to the game structure to be populated with map and texture data.
- */
-
 void	read_map(char *file, t_game *g)
 {
 	char	*line[2];
 	int		n[2];
+	int		texture_limit;
 
-	n[0] = -1; //  для подсчета строк карты
+	n[0] = -1; // для подсчета строк карты
 	n[1] = -1; // для отслеживания текстур
+	texture_limit = 6; // базовый лимит текстур
 	g->fd = open(file, O_RDONLY);
 	handle_error(ERR_INV_FILE, g, file, g->fd < 0);
 	while (1)
@@ -124,18 +111,25 @@ void	read_map(char *file, t_game *g)
 			break ;
 		line[1] = ft_strtrim(line[0], "\n"); // Удаляет символ \n с начала и конца строки
 		free(line[0]);
-		if (line[1] && line[1][0] && ++n[0] < 8) // Увеличила лимит до 8 для обработки новых текстур дверей
+		if (ft_strncmp(line[1], "DOOR_CLOSED", 11) == 0 || ft_strncmp(line[1], "DOOR_OPEN", 9) == 0)
+			texture_limit = 8; // если есть дверные текстуры, увеличиваем лимит
+		if (line[1] && line[1][0] && ++n[0] < texture_limit)
 			check_textures(line[1], g, &n);
-		else if ((line[1] && line[1][0]) || n[0] >= 8)
+		else if ((line[1] && line[1][0]) || n[0] >= texture_limit)
 			g->map = ft_extend_matrix(g->map, line[1]);
 		if ((int)ft_strlen(line[1]) > g->width)
+		{
 			g->width = ft_strlen(line[1]);
+		}
 		free(line[1]);
 	}
-	handle_error(ERR_EMPTY_FILE, g, NULL, !n[0]); //если не было прочитано ни одной строки карты
+	handle_error(ERR_EMPTY_FILE, g, NULL, !n[0]); // если не было прочитано ни одной строки карты
 	handle_error(ERR_INV_TEX, g, NULL, !n[1]); // не было найдено ни одной текстуры
 	g->height = ft_matrixlen(g->map); // Высота карты
 }
+
+
+
 
 
 

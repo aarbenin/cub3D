@@ -19,7 +19,7 @@ static int	check_door(t_game *g, int door_x, int door_y)
 	return (0);
 }
 
-static void	find_and_toggle_door(t_game *g)
+void	action_door(t_game *g)
 {
 	double	check_distance;
 	double	step;
@@ -38,10 +38,4 @@ static void	find_and_toggle_door(t_game *g)
 			break ;
 		current_distance += step;
 	}
-}
-
-void	action_door(t_game *g)
-{
-	find_and_toggle_door(g);
-	//cub_update(g);
 }

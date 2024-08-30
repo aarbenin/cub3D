@@ -6,8 +6,8 @@ WE textures/klown_&_wall_64.xpm
 EA textures/torch/torch1_wall_3.xpm
 EA textures/torch/torch2_wall_3.xpm
 EA textures/torch/torch3_wall_3.xpm
-DOOR_CLOSED textures/door1.xpm
-DOOR_OPEN textures/door10.xpm
+DOOR_CLOSED textures/close_128.xpm
+DOOR_OPEN textures/open_128.xpm
 
 
 C 169,177,180
