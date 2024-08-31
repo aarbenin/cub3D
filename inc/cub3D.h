@@ -214,8 +214,7 @@ void init_attr(t_game *g);
 void	setup_game(t_game *g);
 /*door action*/
 void	action_door(t_game *g);
-float	degree_to_radians(float degree);
-float	distance_to_door(t_game *g, float ray_angle, float *pos_x, float *pos_y);
+
 void	update_anim(t_game *g);
 t_game cub_init(void);
 void init_game(t_game *g, char *filename);
@@ -311,7 +310,5 @@ void	init_sprites(t_game *g);
 
 // doors.c
 void action_door(t_game *g);
-float distance_to_door(t_game *g, float ray_angle, float *pos_x, float *pos_y);
-float	degree_to_radians(float degree);
 
 #endif

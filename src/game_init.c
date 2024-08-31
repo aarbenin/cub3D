@@ -26,9 +26,9 @@
 t_game cub_init(void)
 {
 	t_game g;
-    
-    g.rate = 30;
-    g.nframes = 0;
+	
+	g.rate = 30;
+	g.nframes = 0;
 	g.width = 0;						 // Ширина окна, инициализируется нулём
 	g.height = 0;						 // Высота окна, инициализируется нулём
 	g.fd = -1;							 // Дескриптор файла, -1 означает, что файл ещё не открыт
@@ -47,8 +47,8 @@ t_game cub_init(void)
 	g.rate = 30;						 // Частота кадров или обновления, инициализируется значением 30
 	init_sprites(&g);					 // Инициализация спрайтов
 	 // Инициализация текстур дверей
-    g.tex.door_closed = NULL;
-    g.tex.door_open = NULL;
+	g.tex.door_closed = NULL;
+	g.tex.door_open = NULL;
 	ft_bzero(&g.pl.keys, sizeof(t_key)); // Обнуление структуры клавиш игрока
 	return (g); // Возвращает инициализированную структуру игры
 }
@@ -63,46 +63,10 @@ t_game cub_init(void)
  */
 void init_game(t_game *g, char *filename)
 {
-    *g = cub_init();
-    read_map(filename, g);
+	*g = cub_init();
+	read_map(filename, g);
 }
 
-/**
- * Initializes attributes for the game window and images.
- * 
- * @param g A pointer to the game state.
- */
-// void init_attr(t_game *g)
-// {
-// 	g->win_ptr = mlx_new_window(g->mlx_ptr, WIN_W, WIN_H, "Cub3D");
-// 	g->win_img.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
-// 	g->win_img.addr = mlx_get_data_addr(g->win_img.i, &g->win_img.bpp,
-// 										&g->win_img.line_len, &g->win_img.endian);
-// 	g->minimap.i = mlx_new_image(g->mlx_ptr, g->width * SIZE,
-// 								 g->height * SIZE);
-// 	if (!g->minimap.i)
-// 	{
-// 		printf("Error: Minimap image creation failed!\n");
-// 		return;
-// 	}
-// 	g->win_g.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
-// 	g->win_g.addr = mlx_get_data_addr(g->win_g.i, &g->win_g.bpp,
-// 		&g->win_g.line_len, &g->win_g.endian);
-// 	g->win_r.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
-// 	g->win_r.addr = mlx_get_data_addr(g->win_r.i, &g->win_r.bpp,
-// 		&g->win_r.line_len, &g->win_r.endian);
-
-// 	g->minimap.addr = mlx_get_data_addr(g->minimap.i, &g->minimap.bpp,
-// 										&g->minimap.line_len, &g->minimap.endian);
-// 	g->miniview.i = mlx_new_image(g->mlx_ptr, 30 * SIZE, 15 * SIZE);
-// 	g->miniview.addr = mlx_get_data_addr(g->miniview.i, &g->miniview.bpp,
-// 										 &g->miniview.line_len, &g->miniview.endian);
-// 	g->miniview.width = 30 * SIZE;
-// 	g->miniview.height = 15 * SIZE;
-
-// 	g->pl.speed = 0.02;  
-
-// }
 
 void init_minimap(t_game *g)
 {
