@@ -318,32 +318,82 @@ void cast_rays(t_game *g)
 }
 
 //_______________________scene.c_______________________________
+// void	draw_background(t_game *g)
+// {
+// 	int	x;
+// 	int	y;
+	
+// 	y = 0;
+// 	// Отрисовка потолка
+// 	while (y < WIN_H / 2)
+// 	{
+// 		x = 0;
+// 		while (x < WIN_W)
+// 		{
+// 			put_pixel(&g->win_img, x, y, g->tex.ceiling);
+// 			x++;
+// 		}
+// 		y++;
+// 	}
+// 	// Отрисовка пола
+// 	while (y < WIN_H)
+// 	{
+// 		x = 0;
+// 		while (x < WIN_W)
+// 		{
+// 			put_pixel(&g->win_img, x, y, g->tex.floor);
+// 			x++;
+// 		}
+// 		y++;
+// 	}
+// }
+
+// with gradient
 void	draw_background(t_game *g)
 {
-	int	x;
-	int	y;
-	
+	int		x;
+	int		y;
+	int		ceiling_color;
+	int		floor_color;
+	double	distance_factor;
+
 	y = 0;
-	// Отрисовка потолка
 	while (y < WIN_H / 2)
 	{
 		x = 0;
+		distance_factor = 0.5 + 0.5 * (1.0 - ((double)y / (WIN_H / 2)));
+		ceiling_color = adjust_brightness(g->tex.ceiling, 
+				(int)(distance_factor * 255));
 		while (x < WIN_W)
 		{
-			put_pixel(&g->win_img, x, y, g->tex.ceiling);
+			put_pixel(&g->win_img, x, y, ceiling_color);
 			x++;
 		}
 		y++;
 	}
-	// Отрисовка пола
 	while (y < WIN_H)
 	{
 		x = 0;
+		distance_factor = 0.5 + 0.5 * (((double)(y - WIN_H / 2)) / (WIN_H / 2));
+		floor_color = adjust_brightness(g->tex.floor, 
+				(int)(distance_factor * 255));
 		while (x < WIN_W)
 		{
-			put_pixel(&g->win_img, x, y, g->tex.floor);
+			put_pixel(&g->win_img, x, y, floor_color);
 			x++;
 		}
 		y++;
 	}
+}
+
+int	adjust_brightness(int color, int factor)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = ((color >> 16) & 0xFF) * factor / 255;
+	g = ((color >> 8) & 0xFF) * factor / 255;
+	b = (color & 0xFF) * factor / 255;
+	return ((r << 16) | (g << 8) | b);
 }

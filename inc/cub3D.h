@@ -284,6 +284,7 @@ void cast_rays(t_game *g);
 void rotate_player(t_game *g);
 void move_player(t_game *g);
 void	draw_background(t_game *g);
+int adjust_brightness(int color, int factor);
 
 //tew_test
 void draw_texture_line(t_game *g, int x, t_img *texture, t_draw_params *params, t_ray_data *ray);
