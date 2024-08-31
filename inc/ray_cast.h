@@ -29,16 +29,16 @@ typedef struct s_ray
 
 typedef struct s_ray_data
 {
-    double ray_dir_x;
-    double ray_dir_y;
-    int map_x;
-    int map_y;
-    double side_dist_x;
-    double side_dist_y;
-    int step_x;
-    int step_y;
-    int side;
-    double perp_wall_dist;
+	double	ray_dir_x;
+	double	ray_dir_y;
+	int		map_x;
+	int		map_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	int		step_x;
+	int		step_y;
+	int		side;
+	double	perp_wall_dist;
 } t_ray_data;
 
 #endif

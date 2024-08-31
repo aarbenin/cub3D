@@ -15,18 +15,18 @@
 
 int main(int ac, char **av)
 {
-    t_game g;
+	t_game	g;
 
-    // Проверка количества аргументов и расширения файла
-    check_file(ac, av);
-    init_game(&g, av[1]);
-    validate_textures(&g);
-    validate_colors(&g);
-    // Преобразование карты и проверка карты
-    char **updated_map = alight_map_rows(&g);
-    ft_free_matrix(&g.map);
-    g.map = updated_map;
-    check_map(&g);
-    setup_game(&g);
-    return (0);
+	// Проверка количества аргументов и расширения файла
+	check_file(ac, av);
+	init_game(&g, av[1]);
+	validate_textures(&g);
+	validate_colors(&g);
+	// Преобразование карты и проверка карты
+	char **updated_map = alight_map_rows(&g);
+	ft_free_matrix(&g.map);
+	g.map = updated_map;
+	check_map(&g);
+	setup_game(&g);
+	return (0);
 }

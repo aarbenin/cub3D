@@ -18,15 +18,23 @@ static void draw_rect(t_img *img, t_vector position, t_vector dimensions, int co
 	}
 };
 
-static void	set_minimap_color(t_game *g, int x, int y, int *color)
+static void set_minimap_color(t_game *g, int x, int y, int *color)
 {
-	if (g->map[y][x] == '1')
+	char	cell;
+	
+	cell = g->map[y][x];
+	if (cell == '1')
 		*color = 0xFFFFFF; // Белый для стен
+	else if (cell == 'D')
+		*color = 0xFF0000; // Красный для закрытых дверей
+	else if (cell == 'O')
+		*color = 0x00FF00; // Зеленый для открытых дверей
 	else if (y == (int)g->pl.position_y && x == (int)g->pl.position_x)
-		*color = 0x00FF00; // Зеленый для игрока
+		*color = 0xFFFF00; // Жёлтый для игрока
 	else
-		*color = 0x000000; // Чёрный для пустых клеток
+		*color = 0x000000; // Черный для пустых клеток
 }
+
 
 
 void	draw_minimap(t_game *g)
