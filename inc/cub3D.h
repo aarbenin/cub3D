@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/29 14:47:06 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/02 11:35:01 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # include "ray_cast.h"
 
 
-# define WIN_H 480
-# define WIN_W 640
+# define WIN_H 600
+# define WIN_W 800
 # define SIZE 7
 
 # define M_PI 3.14159265358979323846
@@ -36,111 +36,112 @@
 /* Перечисление для обработки различных сообщений об ошибках */
 typedef enum e_cub_err
 {
-    ERR_END,          // Конец программы
-    ERR_INV_AC,       // Неверный доступ
-    ERR_INV_EXT,      // Неверное расширение файла
-    ERR_INV_FILE,     // Неверный файл
-    ERR_EMPTY_FILE,   // Пустой файл
-    ERR_OUT_OF_MEMORY,    // Нет памяти
-    ERR_INV_COLOR,    // Неверный цвет
-    ERR_INV_WALL,     // Неверная стена
-    ERR_INV_MAP,      // Неверная карта
-    ERR_INV_CHARAC,   // Неверный символ
-    ERR_INV_PLAYER,   // Неверный игрок
-    ERR_INV_TEX,      // Неверная текстура
-    ERR_INV_PATH       // Неверный путь
+	ERR_END,          // Конец программы
+	ERR_INV_AC,       // Неверный доступ
+	ERR_INV_EXT,      // Неверное расширение файла
+	ERR_INV_FILE,     // Неверный файл
+	ERR_EMPTY_FILE,   // Пустой файл
+	ERR_OUT_OF_MEMORY,    // Нет памяти
+	ERR_INV_COLOR,    // Неверный цвет
+	ERR_INV_WALL,     // Неверная стена
+	ERR_INV_MAP,      // Неверная карта
+	ERR_INV_CHARAC,   // Неверный символ
+	ERR_INV_PLAYER,   // Неверный игрок
+	ERR_INV_TEX,      // Неверная текстура
+	ERR_INV_PATH       // Неверный путь
 } t_cub_err;
 
 /* Структура для хранения цветов с прозрачностью */
 typedef struct s_color
 {
-    long alpha; // Прозрачность
-    long red; // Красный цвет
-    long green; // Зеленый цвет
-    long blue; // Синий цвет
+	long alpha; // Прозрачность
+	long red; // Красный цвет
+	long green; // Зеленый цвет
+	long blue; // Синий цвет
 } t_color;
 
 /* Структура для хранения текстур стен, пола и потолка */
 typedef struct s_tex
 {
-    t_list	*n_bak; //Буферные списки текстур для сторон света
-    t_list	*s_bak; //Буферные списки текстур для сторон света
-    t_list	*w_bak; //Буферные списки текстур для сторон света
-    t_list	*e_bak; //Буферные списки текстур для сторон света
-    t_list *n;       // Список текстур для северной стены
-    t_list *s;       // Список текстур для южной стены
-    t_list *w;       // Список текстур для западной стены
-    t_list *e;       // Список текстур для восточной стены
-    t_img *b;        // Текстура для пола или потолка
-    int floor;       // Цвет пола в формате RGB (например, 0xRRGGBB)
-    int ceiling;     // Цвет потолка в формате RGB
+	t_list	*n_bak; //Буферные списки текстур для сторон света
+	t_list	*s_bak; //Буферные списки текстур для сторон света
+	t_list	*w_bak; //Буферные списки текстур для сторон света
+	t_list	*e_bak; //Буферные списки текстур для сторон света
+	t_list *n;       // Список текстур для северной стены
+	t_list *s;       // Список текстур для южной стены
+	t_list *w;       // Список текстур для западной стены
+	t_list *e;       // Список текстур для восточной стены
+	t_img *b;        // Текстура для пола или потолка
+	int floor;       // Цвет пола в формате RGB (например, 0xRRGGBB)
+	int ceiling;     // Цвет потолка в формате RGB
 
-    // Новые поля для текстур дверей
-    t_img *door_closed; // Текстура для закрытой двери
-    t_img *door_open;   // Текстура для открытой двери
+	// Новые поля для текстур дверей
+	t_img *door_closed; // Текстура для закрытой двери
+	t_img *door_open;   // Текстура для открытой двери
 } t_tex;
 
 
 /* Структура для хранения состояний клавиш */
 typedef struct s_key
 {
-    int w_pressed;      // Клавиша W нажата
-    int a_pressed;      // Клавиша A нажата
-    int s_pressed;      // Клавиша S нажата
-    int d_pressed;      // Клавиша D нажата
-    int left_pressed;   // Клавиша влево нажата
-    int right_pressed;  // Клавиша вправо нажата
+	int w_pressed;      // Клавиша W нажата
+	int a_pressed;      // Клавиша A нажата
+	int s_pressed;      // Клавиша S нажата
+	int d_pressed;      // Клавиша D нажата
+	int left_pressed;   // Клавиша влево нажата
+	int right_pressed;  // Клавиша вправо нажата
 } t_key;
 
 /* Структура для хранения атрибутов игрока */
 typedef struct s_player
 {
-    float position_x;    // Позиция игрока по оси X
-    float position_y;    // Позиция игрока по оси Y
-    char dir;            // Направление игрока (N, S, E, W)
-    float speed;         // Скорость игрока
-    int door_cooldown;   // Взаимодействие с дверями
-    t_key keys;          // Состояние клавиш игрока
+	float position_x;    // Позиция игрока по оси X
+	float position_y;    // Позиция игрока по оси Y
+	char dir;            // Направление игрока (N, S, E, W)
+	float speed;         // Скорость игрока
+	int door_cooldown;   // Взаимодействие с дверями
+	t_key keys;          // Состояние клавиш игрока
 
-    // Новые поля для Ray-Casting
-    float dir_x;         // Направление взгляда по оси X
-    float dir_y;         // Направление взгляда по оси Y
-    float plane_x;       // Плоскость камеры по оси X
-    float plane_y;       // Плоскость камеры по оси Y
+	// Новые поля для Ray-Casting
+	float dir_x;         // Направление взгляда по оси X
+	float dir_y;         // Направление взгляда по оси Y
+	float plane_x;       // Плоскость камеры по оси X
+	float plane_y;       // Плоскость камеры по оси Y
 } t_player;
 
 
 /* Структура для хранения состояния игры */
 typedef struct s_game
 {
-    int fd;             // Дескриптор файла карты
-    char **map;         // Двумерный массив карты
-    int height;        // Высота карты
-    int width;         // Ширина карты
-    int rate;          // Частота обновления
-    long frame_count;      // Количество кадров
-    void *mlx_ptr;     // Указатель на MiniLibX
-    void *win_ptr;     // Указатель на окно
-    t_img win_img;     // Изображение окна
-    t_img minimap;     // Миникарта
-    t_img miniview;    // Мини-вид
-    t_img win_g;
-    t_img win_r;
-    long nframes;       //Количество кадров
-    t_img *scope;      // Целевой прицел
-    t_tex tex;         // Текстуры для игры
-    t_ray ray;		    // Данные для лучей
-    t_player pl;       // Игрок
-    float x;           // Координата X (не используется в коде)
-    float y;           // Координата Y (не используется в коде)
+	int fd;             // Дескриптор файла карты
+	char **map;         // Двумерный массив карты
+	int height;        // Высота карты
+	int width;         // Ширина карты
+	int rate;          // Частота обновления
+	long frame_count;      // Количество кадров
+	void *mlx_ptr;     // Указатель на MiniLibX
+	void *win_ptr;     // Указатель на окно
+	t_img win_img;     // Изображение окна
+	t_img minimap;     // Миникарта
+	t_img miniview;    // Мини-вид
+	int minimap_scale; // Масштаб одного элемента карты в пикселях
+	t_img win_g;
+	t_img win_r;
+	long nframes;       //Количество кадров
+	t_img *scope;      // Целевой прицел
+	t_tex tex;         // Текстуры для игры
+	t_ray ray;		    // Данные для лучей
+	t_player pl;       // Игрок
+	float x;           // Координата X (не используется в коде)
+	float y;           // Координата Y (не используется в коде)
 } t_game;
 
 typedef struct s_draw_params
 {
-    int draw_start;    // Начальная координата 
-    int draw_end;      // Конечная координата 
-    float wall_x;      // Точное положение попадания луча в стену.
-    int line_height;   // Высота линии на экране.
+	int draw_start;    // Начальная координата 
+	int draw_end;      // Конечная координата 
+	float wall_x;      // Точное положение попадания луча в стену.
+	int line_height;   // Высота линии на экране.
 } t_draw_params;
 
 typedef struct s_move_data

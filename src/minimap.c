@@ -1,28 +1,84 @@
 #include "../inc/cub3D.h"
 
-int blend_colors(int color1, int color2, float alpha)
+typedef struct s_minimap_params
 {
-	int r = (int)(((color1 >> 16) & 0xFF) * alpha + ((color2 >> 16) & 0xFF) * (1.0 - alpha));
-	int g = (int)(((color1 >> 8) & 0xFF) * alpha + ((color2 >> 8) & 0xFF) * (1.0 - alpha));
-	int b = (int)((color1 & 0xFF) * alpha + (color2 & 0xFF) * (1.0 - alpha));
-	return (r << 16) | (g << 8) | b;
+	int	width;
+	int	height;
+	int	color;
+	int	size;
+}				t_minimap_params;
+
+typedef struct	s_point
+{
+	int	x;
+	int	y;
+	int	color;
+}				t_point;
+
+typedef struct	s_bresenham
+{
+	int	dx;
+	int	sx;
+	int	dy;
+	int	sy;
+	int	err;
+}				t_bresenham;
+
+typedef struct	s_rect_params
+{
+	t_vector	position;
+	t_vector	dimensions;
+	int			color;
+}				t_rect_params;
+
+typedef struct s_fov_params
+{
+	int		fov_length;
+	int		fov_angle;
+	int		minimap_scale;
+	int		player_size;
+	int		center_x;
+	int		center_y;
+	int		color;
+	double	angle_start;
+	double	angle_end;
+}				t_fov_params;
+
+
+int	blend_colors(int color1, int color2, float alpha)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = (int)(((color1 >> 16) & 0xFF) * alpha +
+			((color2 >> 16) & 0xFF) * (1.0 - alpha));
+	g = (int)(((color1 >> 8) & 0xFF) * alpha +
+			((color2 >> 8) & 0xFF) * (1.0 - alpha));
+	b = (int)((color1 & 0xFF) * alpha +
+			(color2 & 0xFF) * (1.0 - alpha));
+	return ((r << 16) | (g << 8) | b);
 }
 
 
-static void draw_rect(t_img *img, t_vector position, t_vector dimensions, int color, t_img *background_img)
+static void	draw_rect(t_img *img, t_rect_params params, t_img *background_img)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
+	int	bg_color;
+	int	blended_color;
 
 	y = 0;
-	while (y < dimensions.y)
+	while (y < params.dimensions.y)
 	{
 		x = 0;
-		while (x < dimensions.x)
+		while (x < params.dimensions.x)
 		{
-			int bg_color = get_pixel_color(background_img, position.x + x, position.y + y);
-			int blended_color = blend_colors(color, bg_color, 0.6); // 0.5 - полупрозрачность
-			put_pixel(img, position.x + x, position.y + y, blended_color);
+			bg_color = get_pixel_color(background_img, 
+				params.position.x + x, params.position.y + y);
+			blended_color = blend_colors(params.color, bg_color, 0.6);
+			put_pixel(img, params.position.x + x, 
+				params.position.y + y, blended_color);
 			x++;
 		}
 		y++;
@@ -30,7 +86,8 @@ static void draw_rect(t_img *img, t_vector position, t_vector dimensions, int co
 }
 
 
-static void set_minimap_color(t_game *g, int x, int y, int *color)
+
+static void	set_minimap_color(t_game *g, int x, int y, int *color)
 {
 	char	cell;
 	
@@ -47,20 +104,39 @@ static void set_minimap_color(t_game *g, int x, int y, int *color)
 		*color = 0x000000; // Черный для пустых клеток
 }
 
-static void draw_minimap_border(t_game *g)
+static void	draw_corners(t_img *minimap, t_minimap_params params)
 {
-	int x;
-	int y;
 	int i;
 	int j;
-	int border_color;
-	int corner_color;
-	int corner_size;
+
+	i = 0;
+	while (i < params.size)
+	{
+		j = 0;
+		while (j < params.size)
+		{
+			put_pixel(minimap, i, j, params.color);
+			put_pixel(minimap, params.width - 1 - i, j, params.color);
+			put_pixel(minimap, i, params.height - 1 - j, params.color);
+			put_pixel(minimap, params.width - 1 - i, params.height - 1 - j, params.color);
+			j++;
+		}
+		i++;
+	}
+}
+
+static void	draw_minimap_border(t_game *g)
+{
+	int					x;
+	int					y;
+	int					border_color;
+	t_minimap_params	params;
 
 	border_color = 0xFFFFFF;
-	corner_color = 0xCCCCCC;
-	corner_size = 3;
-	
+	params.color = 0xCCCCCC;
+	params.size = 3;
+	params.width = g->minimap.width;
+	params.height = g->minimap.height;
 	x = 0;
 	while (x < g->minimap.width)
 	{
@@ -75,122 +151,145 @@ static void draw_minimap_border(t_game *g)
 		put_pixel(&g->minimap, g->minimap.width - 1, y, border_color);
 		y++;
 	}
-
-	// Углы
-	i = 0;
-	while (i < corner_size)
-	{
-		j = 0;
-		while (j < corner_size)
-		{
-			put_pixel(&g->minimap, i, j, corner_color);
-			put_pixel(&g->minimap, g->minimap.width - 1 - i, j, corner_color);
-			put_pixel(&g->minimap, i, g->minimap.height - 1 - j, corner_color);
-			put_pixel(&g->minimap, g->minimap.width - 1 - i, 
-					  g->minimap.height - 1 - j, corner_color);
-			j++;
-		}
-		i++;
-	}
+	draw_corners(&g->minimap, params);
 }
 
 
-static void mlx_draw_line(t_img *img, int x0, int y0, int x1, int y1, int color)
-{
-	int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-	int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-	int err = dx + dy, e2;
 
+
+//_________to game_mlx.c_______________________
+
+
+static t_bresenham	init_bresenham(t_point start, t_point end)
+{
+	t_bresenham b;
+
+	b.dx = abs(end.x - start.x);
+	if (start.x < end.x)
+		b.sx = 1;
+	else
+		b.sx = -1;
+	b.dy = -abs(end.y - start.y);
+	if (start.y < end.y)
+		b.sy = 1;
+	else
+		b.sy = -1;
+	b.err = b.dx + b.dy;
+	return (b);
+}
+
+static void	mlx_draw_line(t_img *img, t_point start, t_point end)
+{
+	t_bresenham	b;
+	int			e2;
+
+	b = init_bresenham(start, end);
 	while (1)
 	{
-		put_pixel(img, x0, y0, color);
-		if (x0 == x1 && y0 == y1)
-			break;
-		e2 = 2 * err;
-		if (e2 >= dy)
+		put_pixel(img, start.x, start.y, start.color);
+		if (start.x == end.x && start.y == end.y)
+			break ;
+		e2 = b.err << 1; //вместо умножения на 2, пытаюсь экономить ресурсы
+		if (e2 >= b.dy)
 		{
-			err += dy;
-			x0 += sx;
+			b.err += b.dy;
+			start.x += b.sx;
 		}
-		if (e2 <= dx)
+		if (e2 <= b.dx)
 		{
-			err += dx;
-			y0 += sy;
+			b.err += b.dx;
+			start.y += b.sy;
 		}
 	}
 }
+
+//___________________minimap_fov.c
+
+static t_fov_params	init_fov_params(t_game *g)
+{
+	t_fov_params	params;
+
+	params.fov_length = 20;
+	params.fov_angle = 30;
+	params.minimap_scale = 5;
+	params.player_size = params.minimap_scale;
+	params.center_x = (int)(g->pl.position_x * params.minimap_scale + 
+					(g->minimap.width - g->width * params.minimap_scale) / 2);
+	params.center_y = (int)(g->pl.position_y * params.minimap_scale + 
+					(g->minimap.height - g->height * params.minimap_scale) / 2);
+	params.color = 0x7F7F4C;
+	params.angle_start = atan2(g->pl.dir_y, g->pl.dir_x) - 
+					(params.fov_angle * M_PI / 180.0);
+	params.angle_end = atan2(g->pl.dir_y, g->pl.dir_x) + 
+					(params.fov_angle * M_PI / 180.0);
+	return (params);
+}
+
+static void draw_fov_line(t_game *g, t_fov_params params, t_point start, double angle)
+{
+	t_point	end;
+	int		length;
+
+	length = 0;
+	while (length < params.fov_length)
+	{
+		end.x = params.center_x + (int)(cos(angle) * length);
+		end.y = params.center_y + (int)(sin(angle) * length);
+		if (end.x < 0 || end.y < 0 || end.x >= g->minimap.width ||
+			end.y >= g->minimap.height || 
+			g->map[end.y / params.minimap_scale]
+				[end.x / params.minimap_scale] == '1' ||
+			g->map[end.y / params.minimap_scale]
+				[end.x / params.minimap_scale] == 'D')
+			break ;
+		end.color = params.color;
+		mlx_draw_line(&g->minimap, start, end);
+		length++;
+	}
+}
+
 
 static void draw_fov(t_game *g)
 {
-	int     fov_length;
-	int     fov_angle;
-	int     minimap_scale;
-	int     player_size;
-	int     center_x;
-	int     center_y;
-	int     color;
-	double  angle_start;
-	double  angle_end;
-	double  angle;
-	int     x;
-	int     y;
-	int     length;
+	t_fov_params	params;
+	t_point			start;
+	double			angle;
 
-	fov_length = 20;
-	fov_angle = 30;
-	minimap_scale = 5;
-	player_size = minimap_scale;
-	center_x = (int)(g->pl.position_x * minimap_scale + 
-					 (g->minimap.width - g->width * minimap_scale) / 2);
-	center_y = (int)(g->pl.position_y * minimap_scale + 
-					 (g->minimap.height - g->height * minimap_scale) / 2);
-	color = 0x7F7F4C;
+	params = init_fov_params(g);
+	start.x = params.center_x + params.player_size / 2;
+	start.y = params.center_y + params.player_size / 2;
+	start.color = params.color;
 
-	angle_start = atan2(g->pl.dir_y, g->pl.dir_x) - (fov_angle * M_PI / 180.0);
-	angle_end = atan2(g->pl.dir_y, g->pl.dir_x) + (fov_angle * M_PI / 180.0);
-
-	angle = angle_start;
-	while (angle <= angle_end)
+	angle = params.angle_start;
+	while (angle <= params.angle_end)
 	{
-		x = center_x;
-		y = center_y;
-		length = 0;
-
-		while (length < fov_length)
-		{
-			x = center_x + (int)(cos(angle) * length);
-			y = center_y + (int)(sin(angle) * length);
-
-			if (x < 0 || y < 0 || x >= g->minimap.width ||
-				y >= g->minimap.height || g->map[y / minimap_scale][x / minimap_scale] == '1' ||
-				g->map[y / minimap_scale][x / minimap_scale] == 'D')
-			{
-				break;
-			}
-
-			mlx_draw_line(&g->minimap, center_x + player_size / 2,
-						  center_y + player_size / 2, x, y, color);
-			length++;
-		}
+		draw_fov_line(g, params, start, angle);
 		angle += 0.01;
 	}
 }
 
-
-
-
-
-void draw_minimap(t_game *g)
+//_____________________draw_minimap.c_________________________-
+static void	set_minimap_params(t_game *g, t_rect_params *params, int x, int y)
 {
-	int x;
-	int y;
-	int minimap_scale;
-	int offset[2];
-	int color;
+	int	offset_x;
+	int	offset_y;
 
-	minimap_scale = 5;
-	offset[0] = (g->minimap.width - g->width * minimap_scale) / 2;
-	offset[1] = (g->minimap.height - g->height * minimap_scale) / 2;
+	offset_x = (g->minimap.width - g->width * g->minimap_scale) / 2;
+	offset_y = (g->minimap.height - g->height * g->minimap_scale) / 2;
+
+	params->position.x = offset_x + x * g->minimap_scale;
+	params->position.y = offset_y + y * g->minimap_scale;
+	params->dimensions.x = g->minimap_scale;
+	params->dimensions.y = g->minimap_scale;
+}
+
+void	draw_minimap(t_game *g)
+{
+	int				x;
+	int				y;
+	int				color;
+	t_rect_params	params;
+
 	y = 0;
 	while (y < g->height)
 	{
@@ -198,15 +297,14 @@ void draw_minimap(t_game *g)
 		while (x < g->width)
 		{
 			set_minimap_color(g, x, y, &color);
-			draw_rect(&g->minimap, 
-					  (t_vector){offset[0] + x * minimap_scale, offset[1] + y * minimap_scale},
-					  (t_vector){minimap_scale, minimap_scale}, color, &g->win_img); // передаем фон
+			set_minimap_params(g, &params, x, y);
+			params.color = color;
+			draw_rect(&g->minimap, params, &g->win_img);
 			x++;
 		}
 		y++;
 	}
 	draw_fov(g);
-
 	draw_minimap_border(g);
-}	
+}
 

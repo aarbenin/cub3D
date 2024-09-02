@@ -70,11 +70,9 @@ void init_game(t_game *g, char *filename)
 
 void init_minimap(t_game *g)
 {
-	int minimap_scale; // Масштаб одного элемента карты в пикселях
-
-	minimap_scale = 5;
-	g->minimap.width = g->width * minimap_scale;
-	g->minimap.height = g->height * minimap_scale;
+	g->minimap_scale = 5;
+	g->minimap.width = g->width * g->minimap_scale;
+	g->minimap.height = g->height * g->minimap_scale;
 
 	g->minimap.i = mlx_new_image(g->mlx_ptr, g->minimap.width, g->minimap.height);
 	if (!g->minimap.i)
@@ -84,8 +82,8 @@ void init_minimap(t_game *g)
 	}
 	g->minimap.addr = mlx_get_data_addr(g->minimap.i, &g->minimap.bpp,
 										&g->minimap.line_len, &g->minimap.endian);
-
 }
+
 
 
 void init_attr(t_game *g)
