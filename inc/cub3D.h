@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/02 11:35:01 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/02 13:00:57 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,24 @@ typedef struct s_color
 	long green; // Зеленый цвет
 	long blue; // Синий цвет
 } t_color;
+
+// drawing structs
+typedef struct	s_point
+{
+	int	x;
+	int	y;
+	int	color;
+}				t_point;
+
+typedef struct	s_bresenham
+{
+	int	dx;
+	int	sx;
+	int	dy;
+	int	sy;
+	int	err;
+}				t_bresenham;
+
 
 /* Структура для хранения текстур стен, пола и потолка */
 typedef struct s_tex

@@ -8,21 +8,6 @@ typedef struct s_minimap_params
 	int	size;
 }				t_minimap_params;
 
-typedef struct	s_point
-{
-	int	x;
-	int	y;
-	int	color;
-}				t_point;
-
-typedef struct	s_bresenham
-{
-	int	dx;
-	int	sx;
-	int	dy;
-	int	sy;
-	int	err;
-}				t_bresenham;
 
 typedef struct	s_rect_params
 {
@@ -45,65 +30,7 @@ typedef struct s_fov_params
 }				t_fov_params;
 
 
-int	blend_colors(int color1, int color2, float alpha)
-{
-	int	r;
-	int	g;
-	int	b;
-
-	r = (int)(((color1 >> 16) & 0xFF) * alpha +
-			((color2 >> 16) & 0xFF) * (1.0 - alpha));
-	g = (int)(((color1 >> 8) & 0xFF) * alpha +
-			((color2 >> 8) & 0xFF) * (1.0 - alpha));
-	b = (int)((color1 & 0xFF) * alpha +
-			(color2 & 0xFF) * (1.0 - alpha));
-	return ((r << 16) | (g << 8) | b);
-}
-
-
-static void	draw_rect(t_img *img, t_rect_params params, t_img *background_img)
-{
-	int	x;
-	int	y;
-	int	bg_color;
-	int	blended_color;
-
-	y = 0;
-	while (y < params.dimensions.y)
-	{
-		x = 0;
-		while (x < params.dimensions.x)
-		{
-			bg_color = get_pixel_color(background_img, 
-				params.position.x + x, params.position.y + y);
-			blended_color = blend_colors(params.color, bg_color, 0.6);
-			put_pixel(img, params.position.x + x, 
-				params.position.y + y, blended_color);
-			x++;
-		}
-		y++;
-	}
-}
-
-
-
-static void	set_minimap_color(t_game *g, int x, int y, int *color)
-{
-	char	cell;
-	
-	cell = g->map[y][x];
-	if (cell == '1')
-		*color = 0xFFFFFF; // Белый для стен
-	else if (cell == 'D')
-		*color = 0xFF0000; // Красный для закрытых дверей
-	else if (cell == 'O')
-		*color = 0x00FF00; // Зеленый для открытых дверей
-	else if (y == (int)g->pl.position_y && x == (int)g->pl.position_x)
-		*color = 0xFFFF00; // Жёлтый для игрока
-	else
-		*color = 0x000000; // Черный для пустых клеток
-}
-
+//_________________minimap_border.c_____________________
 static void	draw_corners(t_img *minimap, t_minimap_params params)
 {
 	int i;
@@ -203,7 +130,7 @@ static void	mlx_draw_line(t_img *img, t_point start, t_point end)
 	}
 }
 
-//___________________minimap_fov.c
+//___________________minimap_fov.c________________________
 
 static t_fov_params	init_fov_params(t_game *g)
 {
@@ -268,7 +195,43 @@ static void draw_fov(t_game *g)
 	}
 }
 
-//_____________________draw_minimap.c_________________________-
+//_____________________color.c_________________________
+
+int	blend_colors(int color1, int color2, float alpha)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = (int)(((color1 >> 16) & 0xFF) * alpha +
+			((color2 >> 16) & 0xFF) * (1.0 - alpha));
+	g = (int)(((color1 >> 8) & 0xFF) * alpha +
+			((color2 >> 8) & 0xFF) * (1.0 - alpha));
+	b = (int)((color1 & 0xFF) * alpha +
+			(color2 & 0xFF) * (1.0 - alpha));
+	return ((r << 16) | (g << 8) | b);
+}
+
+//_____________________draw_minimap.c_________________________
+
+
+static void	set_minimap_color(t_game *g, int x, int y, int *color)
+{
+	char	cell;
+	
+	cell = g->map[y][x];
+	if (cell == '1')
+		*color = 0xFFFFFF; // Белый для стен
+	else if (cell == 'D')
+		*color = 0xFF0000; // Красный для закрытых дверей
+	else if (cell == 'O')
+		*color = 0x00FF00; // Зеленый для открытых дверей
+	else if (y == (int)g->pl.position_y && x == (int)g->pl.position_x)
+		*color = 0xFFFF00; // Жёлтый для игрока
+	else
+		*color = 0x000000; // Черный для пустых клеток
+}
+
 static void	set_minimap_params(t_game *g, t_rect_params *params, int x, int y)
 {
 	int	offset_x;
@@ -282,6 +245,33 @@ static void	set_minimap_params(t_game *g, t_rect_params *params, int x, int y)
 	params->dimensions.x = g->minimap_scale;
 	params->dimensions.y = g->minimap_scale;
 }
+
+
+
+static void	draw_rect(t_img *img, t_rect_params params, t_img *background_img)
+{
+	int	x;
+	int	y;
+	int	bg_color;
+	int	blended_color;
+
+	y = 0;
+	while (y < params.dimensions.y)
+	{
+		x = 0;
+		while (x < params.dimensions.x)
+		{
+			bg_color = get_pixel_color(background_img, 
+				params.position.x + x, params.position.y + y);
+			blended_color = blend_colors(params.color, bg_color, 0.6);
+			put_pixel(img, params.position.x + x, 
+				params.position.y + y, blended_color);
+			x++;
+		}
+		y++;
+	}
+}
+
 
 void	draw_minimap(t_game *g)
 {
