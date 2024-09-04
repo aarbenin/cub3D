@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   update_cub.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:33:07 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/29 08:03:33 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/03 06:19:25 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
-
 
 void	clear_image(t_img *img, int color)
 {
@@ -31,59 +30,11 @@ void	clear_image(t_img *img, int color)
 	}
 }
 
-/**
- * Updates the game state and redraws elements on the window.
- * 
- * @param param A pointer to a t_text_game structure that contains game state information.
- * @return 0 on success.
- * 
- * This function is called periodically by the MLX main loop. It checks if the current frame count
- * is a multiple of the update rate. If so, it redraws the game elements and updates the window.
- * The function also handles the cooldown for the player's door action.
- */
-// int cub_update(void *param)
-// {
-// 	t_text_game *g;
-
-// 	g = (t_text_game *)param;
-
-// 	if (!(g->nframes % g->rate))
-// 	{
-// 		if (!(g->nframes % (2 * g->rate)))
-// 			update_anim(g);
-// 		if (!(g->nframes % (10 * g->rate)))
-// 			g->pl.door_cooldown = 0;
-	
-// 		// Очистка экрана перед рендерингом
-// 		clear_image(&g->win_img, 0x000000); // Заполнение черным цветом
-
-// 	if (g->pl.keys.w_pressed || g->pl.keys.a_pressed || 
-// 		g->pl.keys.s_pressed || g->pl.keys.d_pressed ||
-// 		g->pl.keys.left_pressed || g->pl.keys.right_pressed)
-// 	{
-// 		move_player(g);
-// 		rotate_player(g);
-// 	};
-
-// 		draw_background(g);
-// 		// Выполняем Ray-Casting и рендерим сцену
-// 		cast_rays(g);
-// 		redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2 - g->scope->height / 2);
-
-// 		draw_minimap(g);
-// 		// Отображаем новое изображение
-// 		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
-// 	}
-// 	g->frame_count++;
-// 	return (0);
-// }
-
-int cub_update(void *param)
+int	cub_update(void *param)
 {
-	t_game *g;
+	t_game	*g;
 
 	g = (t_game *)param;
-
 	if (!(g->nframes % g->rate))
 	{
 		if (!(g->nframes % (2 * g->rate)))
@@ -92,9 +43,9 @@ int cub_update(void *param)
 			g->pl.door_cooldown = 0;
 		// Очистка перед рендерингом
 		clear_image(&g->win_img, 0x000000);
-		if (g->pl.keys.w_pressed || g->pl.keys.a_pressed || 
-			g->pl.keys.s_pressed || g->pl.keys.d_pressed ||
-			g->pl.keys.left_pressed || g->pl.keys.right_pressed)
+		if (g->pl.keys.w_pressed || g->pl.keys.a_pressed || g->pl.keys.s_pressed
+			|| g->pl.keys.d_pressed || g->pl.keys.left_pressed
+			|| g->pl.keys.right_pressed)
 		{
 			move_player(g);
 			rotate_player(g);
@@ -102,7 +53,8 @@ int cub_update(void *param)
 		draw_background(g);
 		// Выполняем Ray-Casting и рендерим сцену
 		cast_rays(g);
-		redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2 - g->scope->height / 2);
+		redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2
+			- g->scope->height / 2);
 		// Отрисовка основной сцены
 		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
 		// Отрисовка миникарты (в конце, чтобы она оставалась видимой)
@@ -115,14 +67,17 @@ int cub_update(void *param)
 
 /**
  * Redraws an image element onto the game window at specified coordinates.
- * 
- * @param g A pointer to a t_text_game structure that contains game state information.
+ *
+
+	* @param g A pointer to a t_text_game structure that contains game state information.
  * @param img The image to be drawn.
  * @param x The x-coordinate where the image should be placed.
  * @param y The y-coordinate where the image should be placed.
- * 
- * This function places the specified image onto the game window at the given coordinates,
- * combining it with the existing window image. It uses a blending color of 0xFF000000
+ *
+
+	* This function places the specified image onto the game window at the given coordinates,
+
+	* combining it with the existing window image. It uses a blending color of 0xFF000000
  * to ensure proper overlay.
  */
 void	redraw_elem(t_game *g, t_img img, int x, int y)

@@ -1,63 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ray_cast.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/14 08:29:11 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/29 15:43:05 by aarbenin         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../inc/cub3D.h"
-
-//________________________movement.c________________________
-static void	set_direction_north(t_player *pl)
-{
-	pl->dir_x = 0;
-	pl->dir_y = -1;
-	pl->plane_x = 0.66;
-	pl->plane_y = 0;
-}
-
-static void	set_direction_south(t_player *pl)
-{
-	pl->dir_x = 0;
-	pl->dir_y = 1;
-	pl->plane_x = -0.66;
-	pl->plane_y = 0;
-}
-
-static void	set_direction_east(t_player *pl)
-{
-	pl->dir_x = 1;
-	pl->dir_y = 0;
-	pl->plane_x = 0;
-	pl->plane_y = 0.66;
-}
-
-static void	set_direction_west(t_player *pl)
-{
-	pl->dir_x = -1;
-	pl->dir_y = 0;
-	pl->plane_x = 0;
-	pl->plane_y = -0.66;
-}
-
-static void	set_player_direction(t_player *pl, char dir)
-{
-	if (dir == 'N')
-		set_direction_north(pl);
-	else if (dir == 'S')
-		set_direction_south(pl);
-	else if (dir == 'E')
-		set_direction_east(pl);
-	else if (dir == 'W')
-		set_direction_west(pl);
-}
-
-//_______________________ray.c_________________________________________
 
 static void	set_ray_params(t_ray *ray)
 {
@@ -71,33 +13,28 @@ void	init_ray(t_game *g)
 {
 	set_player_direction(&g->pl, g->pl.dir);
 	set_ray_params(&g->ray);
-	printf("Initial Direction: dir_x = %f, dir_y = %f\n",
-		g->pl.dir_x, g->pl.dir_y);
-	printf("Initial Plane: plane_x = %f, plane_y = %f\n",
-		g->pl.plane_x, g->pl.plane_y);
+	printf("Initial Direction: dir_x = %f, dir_y = %f\n", g->pl.dir_x,
+		g->pl.dir_y);
+	printf("Initial Plane: plane_x = %f, plane_y = %f\n", g->pl.plane_x,
+		g->pl.plane_y);
 }
 
+// static void	init_ray_data(t_game *g, t_ray_data *ray, int x)
+// {
+// 	double	camera_x;
 
-static void	init_ray_data(t_game *g, t_ray_data *ray, int x)
-{
-	double	camera_x;
-
-	camera_x = 2 * x / (double)WIN_W - 1;
-	ray->ray_dir_x = g->pl.dir_x + g->pl.plane_x * camera_x;
-	ray->ray_dir_y = g->pl.dir_y + g->pl.plane_y * camera_x;
-	ray->map_x = (int)g->pl.position_x;
-	ray->map_y = (int)g->pl.position_y;
-}
+// 	camera_x = 2 * x / (double)WIN_W - 1;
+// 	ray->ray_dir_x = g->pl.dir_x + g->pl.plane_x * camera_x;
+// 	ray->ray_dir_y = g->pl.dir_y + g->pl.plane_y * camera_x;
+// 	ray->map_x = (int)g->pl.position_x;
+// 	ray->map_y = (int)g->pl.position_y;
+// }
 
 //____________________________raycast______________________________
 
-static void calculate_step_and_side_dist(t_game *g, t_ray_data *ray)
+static void	calculate_step_and_side_dist(t_game *g, t_ray_data *ray,
+		double delta_dist_x, double delta_dist_y)
 {
-	double delta_dist_x;
-	double delta_dist_y;
-	
-	delta_dist_x = fabs(1 / ray->ray_dir_x);
-	delta_dist_y = fabs(1 / ray->ray_dir_y);
 	if (ray->ray_dir_x < 0)
 	{
 		ray->step_x = -1;
@@ -120,15 +57,6 @@ static void calculate_step_and_side_dist(t_game *g, t_ray_data *ray)
 	}
 }
 
-static void	check_hit(t_game *g, t_ray_data *ray, int *hit)
-{
-	char	cell;
-
-	cell = g->map[ray->map_y][ray->map_x];
-	if (cell == '1' || cell == 'D' || cell == 'O')
-		*hit = 1;
-}
-
 static void	update_ray(t_ray_data *ray, double delta_x, double delta_y)
 {
 	if (ray->side_dist_x < ray->side_dist_y)
@@ -145,255 +73,71 @@ static void	update_ray(t_ray_data *ray, double delta_x, double delta_y)
 	}
 }
 
-static void	perform_dda(t_game *g, t_ray_data *ray)
-{
-	int		hit;
-	double	delta_x;
-	double	delta_y;
-
-	hit = 0;
-	delta_x = fabs(1 / ray->ray_dir_x);
-	delta_y = fabs(1 / ray->ray_dir_y);
-	while (!hit)
-	{
-		update_ray(ray, delta_x, delta_y);
-		check_hit(g, ray, &hit);
-	}
-}
-
-
-
-
-
-static void	calculate_perp_wall_dist(t_game *g, t_ray_data *ray)
-{
-	if (ray->side == 0)
-		ray->perp_wall_dist = (ray->map_x - g->pl.position_x 
-			+ (1 - ray->step_x) / 2) / ray->ray_dir_x;
-	else
-		ray->perp_wall_dist = (ray->map_y - g->pl.position_y 
-			+ (1 - ray->step_y) / 2) / ray->ray_dir_y;
-}
-
-
-//____________________________draw_texture.c_____________________________________
-// Вычисляет координату X на текстуре в зависимости от направления луча и стороны стены
-static int	calculate_tex_x(t_texture_params *tex_params)
-{
-	int	tex_x;
-
-	tex_x = (int)(tex_params->params->wall_x * (float)tex_params->texture->width);
-	if ((tex_params->ray->side == 0 && tex_params->ray->ray_dir_x > 0) ||
-		(tex_params->ray->side == 1 && tex_params->ray->ray_dir_y < 0))
-		tex_x = tex_params->texture->width - tex_x - 1;
-	return (tex_x);
-}
-
-// Отрисовывает вертикальную линию текстуры на экране
-static void	draw_vertical_texture_line(t_game *g, int x,
-					t_texture_params *tex_params, int tex_x)
-{
-	int		y;
-	int		tex_y;
-	int		color;
-	float	step;
-	float	tex_pos;
-
-	// Определяет шаг текстуры и начальную позицию на текстуре
-	step = 1.0 * tex_params->texture->height / tex_params->params->line_height;
-	tex_pos = (tex_params->params->draw_start - WIN_H / 2 +
-		tex_params->params->line_height / 2) * step;
-	y = tex_params->params->draw_start;
-	while (y < tex_params->params->draw_end)
-	{
-		tex_y = (int)tex_pos & (tex_params->texture->height - 1);
-		tex_pos += step;
-		color = get_pixel_color(tex_params->texture, tex_x, tex_y);
-		// Затемняет пиксель, если это боковая стена
-		if (tex_params->ray->side == 1)
-			color = (color >> 1) & 0x7F7F7F;
-		put_pixel(&g->win_img, x, y, color);
-		y++;
-	}
-}
-
-void	draw_texture_line(t_game *g, int x, t_img *texture,
-					t_draw_params *params, t_ray_data *ray)
-{
-	int					tex_x;
-	t_texture_params	tex_params;
-
-	tex_params.texture = texture;
-	tex_params.params = params;
-	tex_params.ray = ray;
-	tex_x = calculate_tex_x(&tex_params);
-	draw_vertical_texture_line(g, x, &tex_params, tex_x);
-}
-
-//________________________draw_wall.c________________________
-
-// Вычисляет высоту линии и границы рисования на экране
-static void	calculate_line_height(t_ray_data *ray, t_wall_params *wall_params)
-{
-	wall_params->params.line_height = (int)(WIN_H / ray->perp_wall_dist);
-	wall_params->params.draw_start = -wall_params->params.line_height / 2 + WIN_H / 2;
-	if (wall_params->params.draw_start < 0)
-		wall_params->params.draw_start = 0;
-	wall_params->params.draw_end = wall_params->params.line_height / 2 + WIN_H / 2;
-	if (wall_params->params.draw_end >= WIN_H)
-		wall_params->params.draw_end = WIN_H - 1;
-}
-
-static t_img	*select_texture(t_game *g, t_ray_data *ray)
+static inline int	check_hit(t_game *g, t_ray_data *ray)
 {
 	char	cell;
 
 	cell = g->map[ray->map_y][ray->map_x];
-	if (cell == 'D')
-		return (g->tex.door_closed);
-	else if (cell == 'O')
-		return (g->tex.door_open);
-	else if (ray->side == 0)
+	return (cell == '1' || cell == 'D' || cell == 'O');
+}
+
+static void	perform_dda(t_game *g, t_ray_data *ray)
+{
+	double	delta_x;
+	double	delta_y;
+
+	delta_x = fabs(1 / ray->ray_dir_x);
+	delta_y = fabs(1 / ray->ray_dir_y);
+	while (!check_hit(g, ray))
 	{
-		if (ray->ray_dir_x > 0)
-			return ((t_img *)g->tex.e->content);
-		else
-			return ((t_img *)g->tex.w->content);
-	}
-	else
-	{
-		if (ray->ray_dir_y > 0)
-			return ((t_img *)g->tex.s->content);
-		else
-			return ((t_img *)g->tex.n->content);
+		update_ray(ray, delta_x, delta_y);
 	}
 }
 
-
-// Вычисляет точную координату пересечения стены в текстуре
-static void	calculate_wall_hit_x(t_game *g, t_ray_data *ray, t_wall_params *wall_params)
+static void	calculate_perp_wall_dist(t_game *g, t_ray_data *ray)
 {
 	if (ray->side == 0)
-		wall_params->wall_x = g->pl.position_y + ray->perp_wall_dist * ray->ray_dir_y;
+		ray->perp_wall_dist = (ray->map_x - g->pl.position_x + (1 - ray->step_x)
+				/ 2) / ray->ray_dir_x;
 	else
-		wall_params->wall_x = g->pl.position_x + ray->perp_wall_dist * ray->ray_dir_x;
-	wall_params->wall_x -= floor(wall_params->wall_x); // Убираем целую часть
+		ray->perp_wall_dist = (ray->map_y - g->pl.position_y + (1 - ray->step_y)
+				/ 2) / ray->ray_dir_y;
 }
 
-void	draw_wall_line(t_game *g, int x, t_ray_data *ray)
+static void	calculate_delta_dist(t_ray_data *ray, double *delta_dist_x,
+		double *delta_dist_y)
 {
-	t_wall_params	wall_params;
-
-	calculate_line_height(ray, &wall_params);
-	wall_params.texture = select_texture(g, ray);
-	calculate_wall_hit_x(g, ray, &wall_params);
-	// Установка параметров рисования
-	wall_params.params.wall_x = wall_params.wall_x;
-	draw_texture_line(g, x, wall_params.texture, &wall_params.params, ray);
+	if (ray->ray_dir_x == 0)
+		*delta_dist_x = 1e30;
+	else
+		*delta_dist_x = fabs(1 / ray->ray_dir_x);
+	if (ray->ray_dir_y == 0)
+		*delta_dist_y = 1e30;
+	else
+		*delta_dist_y = fabs(1 / ray->ray_dir_y);
 }
 
-//_____________________ray_cast.c__________________________________________
-
-
-static void cast_single_ray(t_game *g, t_ray_data *ray, int x)
+void	cast_rays(t_game *g)
 {
-	init_ray_data(g, ray, x);
-	calculate_step_and_side_dist(g, ray);
-	perform_dda(g, ray);
-	calculate_perp_wall_dist(g, ray);
-	draw_wall_line(g, x, ray);
-}
-
-void cast_rays(t_game *g)
-{
-	t_ray_data ray;
-	int x;
+	t_ray_data	ray;
+	int			x;
+	double		camera_x;
+	double		delta_dist_x;
+	double		delta_dist_y;
 
 	x = 0;
 	while (x < WIN_W)
 	{
-		cast_single_ray(g, &ray, x);
+		camera_x = 2 * x / (double)WIN_W - 1;
+		ray.ray_dir_x = g->pl.dir_x + g->pl.plane_x * camera_x;
+		ray.ray_dir_y = g->pl.dir_y + g->pl.plane_y * camera_x;
+		ray.map_x = (int)g->pl.position_x;
+		ray.map_y = (int)g->pl.position_y;
+		calculate_delta_dist(&ray, &delta_dist_x, &delta_dist_y);
+		calculate_step_and_side_dist(g, &ray, delta_dist_x, delta_dist_y);
+		perform_dda(g, &ray);
+		calculate_perp_wall_dist(g, &ray);
+		draw_wall_line(g, x, &ray);
 		x++;
 	}
-}
-
-//_______________________scene.c_______________________________
-// void	draw_background(t_game *g)
-// {
-// 	int	x;
-// 	int	y;
-	
-// 	y = 0;
-// 	// Отрисовка потолка
-// 	while (y < WIN_H / 2)
-// 	{
-// 		x = 0;
-// 		while (x < WIN_W)
-// 		{
-// 			put_pixel(&g->win_img, x, y, g->tex.ceiling);
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// 	// Отрисовка пола
-// 	while (y < WIN_H)
-// 	{
-// 		x = 0;
-// 		while (x < WIN_W)
-// 		{
-// 			put_pixel(&g->win_img, x, y, g->tex.floor);
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// }
-
-// with gradient
-void	draw_background(t_game *g)
-{
-	int		x;
-	int		y;
-	int		ceiling_color;
-	int		floor_color;
-	double	distance_factor;
-
-	y = 0;
-	while (y < WIN_H / 2)
-	{
-		x = 0;
-		distance_factor = 0.5 + 0.5 * (1.0 - ((double)y / (WIN_H / 2)));
-		ceiling_color = adjust_brightness(g->tex.ceiling, 
-				(int)(distance_factor * 255));
-		while (x < WIN_W)
-		{
-			put_pixel(&g->win_img, x, y, ceiling_color);
-			x++;
-		}
-		y++;
-	}
-	while (y < WIN_H)
-	{
-		x = 0;
-		distance_factor = 0.5 + 0.5 * (((double)(y - WIN_H / 2)) / (WIN_H / 2));
-		floor_color = adjust_brightness(g->tex.floor, 
-				(int)(distance_factor * 255));
-		while (x < WIN_W)
-		{
-			put_pixel(&g->win_img, x, y, floor_color);
-			x++;
-		}
-		y++;
-	}
-}
-
-int	adjust_brightness(int color, int factor)
-{
-	int	r;
-	int	g;
-	int	b;
-
-	r = ((color >> 16) & 0xFF) * factor / 255;
-	g = ((color >> 8) & 0xFF) * factor / 255;
-	b = (color & 0xFF) * factor / 255;
-	return ((r << 16) | (g << 8) | b);
 }

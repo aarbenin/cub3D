@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 11:47:08 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/29 08:27:31 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/03 06:23:25 by alisa            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
-
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_game	g;
+	char	**updated_map;
 
 	// Проверка количества аргументов и расширения файла
 	check_file(ac, av);
@@ -23,7 +23,7 @@ int main(int ac, char **av)
 	validate_textures(&g);
 	validate_colors(&g);
 	// Преобразование карты и проверка карты
-	char **updated_map = alight_map_rows(&g);
+	updated_map = alight_map_rows(&g);
 	ft_free_matrix(&g.map);
 	g.map = updated_map;
 	check_map(&g);
