@@ -1,6 +1,5 @@
 #include "../inc/cub3D.h"
 
-
 // Вычисляет координату X на текстуре в зависимости от направления луча и стороны стены
 static int	calculate_tex_x(t_texture_params *tex_params)
 {
@@ -45,8 +44,8 @@ static void	draw_vertical_texture_line(t_game *g, int x,
 void	draw_texture_line(t_game *g, int x, t_img *texture,
 		t_draw_params *params, t_ray_data *ray)
 {
-	int					tex_x;
-	t_texture_params	tex_params;
+	int tex_x;
+	t_texture_params tex_params;
 
 	tex_params.texture = texture;
 	tex_params.params = params;

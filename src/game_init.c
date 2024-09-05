@@ -105,7 +105,6 @@ void	setup_game(t_game *g)
 	mlx_hook(g->win_ptr, 03, 1L << 1, cub_keyup, g);
 	mlx_hook(g->win_ptr, 17, 0, cub_exit, g);
 	mlx_hook(g->win_ptr, 6, 1L << 6, mouse_move, g);
-	// Центрируем курсор, передавая и указатель на контекст MiniLibX
 	mlx_mouse_move(g->mlx_ptr, g->win_ptr, WIN_W / 2, WIN_H / 2);
 	mlx_loop_hook(g->mlx_ptr, cub_update, g);
 	mlx_loop(g->mlx_ptr);

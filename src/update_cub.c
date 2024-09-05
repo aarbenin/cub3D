@@ -51,13 +51,10 @@ int	cub_update(void *param)
 			rotate_player(g);
 		}
 		draw_background(g);
-		// Выполняем Ray-Casting и рендерим сцену
 		cast_rays(g);
 		redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2
 			- g->scope->height / 2);
-		// Отрисовка основной сцены
 		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
-		// Отрисовка миникарты (в конце, чтобы она оставалась видимой)
 		draw_minimap(g);
 		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->minimap.i, 10, 10);
 	}

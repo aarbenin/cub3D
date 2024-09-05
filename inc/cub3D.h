@@ -174,6 +174,7 @@ typedef struct s_game
 	t_player pl;  // Игрок
 	float x;      // Координата X (не используется в коде)
 	float y;      // Координата Y (не используется в коде)
+	
 }					t_game;
 
 typedef struct s_draw_params

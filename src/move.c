@@ -30,7 +30,6 @@ void	move_player(t_game *g)
 		move_forward_backward(&g->pl, move_speed, 1, &move_data);
 	if (g->pl.keys.s_pressed) // Move backward
 		move_forward_backward(&g->pl, move_speed, -1, &move_data);
-	// Проверка на столкновение со стеной или закрытой дверью
 	if (g->map[(int)move_data.new_y][(int)move_data.new_x] != '1'
 		&& g->map[(int)move_data.new_y][(int)move_data.new_x] != 'D')
 	{

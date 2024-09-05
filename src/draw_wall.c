@@ -1,8 +1,5 @@
 #include "../inc/cub3D.h"
 
-//________________________draw_wall.c________________________
-
-// Вычисляет высоту линии и границы рисования на экране
 static void	calculate_line_height(t_ray_data *ray, t_wall_params *wall_params)
 {
 	wall_params->params.line_height = (int)(WIN_H / ray->perp_wall_dist);
@@ -41,7 +38,6 @@ static t_img	*select_texture(t_game *g, t_ray_data *ray)
 	}
 }
 
-// Вычисляет точную координату пересечения стены в текстуре
 static void	calculate_wall_hit_x(t_game *g, t_ray_data *ray,
 		t_wall_params *wall_params)
 {
@@ -51,7 +47,7 @@ static void	calculate_wall_hit_x(t_game *g, t_ray_data *ray,
 	else
 		wall_params->wall_x = g->pl.position_x + ray->perp_wall_dist
 			* ray->ray_dir_x;
-	wall_params->wall_x -= floor(wall_params->wall_x); // Убираем целую часть
+	wall_params->wall_x -= floor(wall_params->wall_x);
 }
 
 void	draw_wall_line(t_game *g, int x, t_ray_data *ray)
@@ -61,7 +57,6 @@ void	draw_wall_line(t_game *g, int x, t_ray_data *ray)
 	calculate_line_height(ray, &wall_params);
 	wall_params.texture = select_texture(g, ray);
 	calculate_wall_hit_x(g, ray, &wall_params);
-	// Установка параметров рисования
 	wall_params.params.wall_x = wall_params.wall_x;
 	draw_texture_line(g, x, wall_params.texture, &wall_params.params, ray);
 }
