@@ -23,6 +23,7 @@
 # include <mlx.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 
 # define WIN_H 600
 # define WIN_W 800
@@ -301,7 +302,7 @@ void				clear_image(t_img *img, int color);
 
 // ray_cast.c
 /*Initializes raycasting parameters based on the player's direction.*/
-void				init_ray(t_game *g);
+
 void				cast_rays(t_game *g);
 
 
@@ -310,6 +311,12 @@ void				move_player(t_game *g);
 
 void				draw_background(t_game *g);
 
+//ray_init.c
+void				init_ray(t_game *g);
+
+//ray_update.c
+void	perform_dda(t_game *g, t_ray_data *ray, double delta_x,
+		double delta_y);
 
 // tew_test
 void				draw_texture_line(t_game *g, int x, t_img *texture,
