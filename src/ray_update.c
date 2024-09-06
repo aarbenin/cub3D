@@ -16,7 +16,7 @@ static inline void	update_ray_pos(t_ray_data *ray, double delta_x,
 		ray->side = 1;
 	}
 }
-static inline bool	is_collision(t_game *g, t_ray_data *ray)
+static inline bool	check_hit(t_game *g, t_ray_data *ray)
 {
 	char	cell;
 
@@ -26,8 +26,12 @@ static inline bool	is_collision(t_game *g, t_ray_data *ray)
 
 void	perform_dda(t_game *g, t_ray_data *ray, double delta_x, double delta_y)
 {
-	while (!is_collision(g, ray))
+	int	hit;
+
+	hit = 0;
+	while (!hit)
 	{
 		update_ray_pos(ray, delta_x, delta_y);
+		hit = check_hit(g, ray);
 	}
 }
