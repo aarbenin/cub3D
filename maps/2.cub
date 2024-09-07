@@ -1,9 +1,12 @@
 NO textures/klown_&_wall_64.xpm
-SO textures/wall_2.xpm
-WE textures/txt_dark_3.xpm
-EA textures/torch/torch1_wall_3.xpm
-EA textures/torch/torch2_wall_3.xpm
-EA textures/torch/torch3_wall_3.xpm
+SO textures/torch/txt_torch_1.xpm
+SO textures/torch/txt_torch_2.xpm
+SO textures/torch/txt_torch_3.xpm
+SO textures/torch/txt_torch_4.xpm
+WE textures/txt_4.xpm
+EA textures/torch/torch1_wall_1.xpm
+EA textures/torch/torch2_wall_1.xpm
+EA textures/torch/torch3_wall_1.xpm
 DOOR_CLOSED textures/close_128.xpm
 DOOR_OPEN textures/open_3.xpm
 

@@ -37,7 +37,7 @@ int	cub_update(void *param)
 	g = (t_game *)param;
 	if (!(g->nframes % g->rate))
 	{
-		if (!(g->nframes % (2 * g->rate)))
+		if (!(g->nframes % (6 * g->rate))) //изначально было 2, увеличила для замедления анимации
 			update_anim(g);
 		if (!(g->nframes % (10 * g->rate)))
 			g->pl.door_cooldown = 0;
