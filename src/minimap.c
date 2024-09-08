@@ -33,23 +33,28 @@ static void	draw_corners(t_img *minimap, t_minimap_params params)
 {
 	int	i;
 	int	j;
+	int	color;
+	int	size;
 
 	i = 0;
-	while (i < params.size)
+	color = 0x911E1D;
+	size = params.size * 2;
+	while (i < size)
 	{
 		j = 0;
-		while (j < params.size)
+		while (j < size)
 		{
-			put_pixel(minimap, i, j, params.color);
-			put_pixel(minimap, params.width - 1 - i, j, params.color);
-			put_pixel(minimap, i, params.height - 1 - j, params.color);
+			put_pixel(minimap, i, j, color);
+			put_pixel(minimap, params.width - 1 - i, j, color);
+			put_pixel(minimap, i, params.height - 1 - j, color);
 			put_pixel(minimap, params.width - 1 - i, params.height - 1 - j,
-				params.color);
+				color);
 			j++;
 		}
 		i++;
 	}
 }
+
 
 static void	draw_minimap_border(t_game *g)
 {
