@@ -16,8 +16,8 @@
 // }
 void validate_textures(t_game *g)
 {
-    handle_error(ERR_INV_TEX, g, NULL, 
-        !g->tex.n || !g->tex.s || !g->tex.e || !g->tex.w);
+	handle_error(ERR_INV_TEX, g, NULL, 
+		!g->tex.n || !g->tex.s || !g->tex.e || !g->tex.w);
 }
 
 
@@ -31,7 +31,7 @@ void validate_textures(t_game *g)
  */
 void validate_colors(t_game *g)
 {
-    handle_error(ERR_INV_COLOR, g, NULL, g->tex.floor == -1 || g->tex.ceiling == -1);
+	handle_error(ERR_INV_COLOR, g, NULL, g->tex.floor == -1 || g->tex.ceiling == -1);
 }
 
 

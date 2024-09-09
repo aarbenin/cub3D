@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_checking.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: parallels <parallels@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 10:16:02 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/29 14:24:19 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/04 07:43:59 by parallels        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@
  */
 static void check_adjacent_walls(t_game *g, char **map, int i, int j)
 {
-    if (i - 1 >= 0 && i - 1 < (int)ft_strlen(map[j]))
-        handle_error(ERR_INV_WALL, g, NULL, map[j][i - 1] == '0');
-    if (i + 1 >= 0 && i + 1 < (int)ft_strlen(map[j]))
-        handle_error(ERR_INV_WALL, g, NULL, map[j][i + 1] == '0');
+	if (i - 1 >= 0 && i - 1 < (int)ft_strlen(map[j]))
+		handle_error(ERR_INV_WALL, g, NULL, map[j][i - 1] == '0');
+	if (i + 1 >= 0 && i + 1 < (int)ft_strlen(map[j]))
+		handle_error(ERR_INV_WALL, g, NULL, map[j][i + 1] == '0');
 }
 
 
@@ -41,19 +41,19 @@ static void check_adjacent_walls(t_game *g, char **map, int i, int j)
  */
 static void check_surrounding_walls(t_game *g, char **map, int i, int j)
 {
-    if (j - 1 >= 0 && j - 1 < g->height)
-    {
-        check_adjacent_walls(g, map, i, j - 1);
-        if (i >= 0 && i < (int)ft_strlen(map[j - 1]))
-            handle_error(ERR_INV_WALL, g, NULL, map[j - 1][i] == '0');
-    }
-    check_adjacent_walls(g, map, i, j);
-    if (j + 1 >= 0 && j + 1 < g->height)
-    {
-        check_adjacent_walls(g, map, i, j + 1);
-        if (i >= 0 && i < (int)ft_strlen(map[j + 1]))
-            handle_error(ERR_INV_WALL, g, NULL, map[j + 1][i] == '0');
-    }
+	if (j - 1 >= 0 && j - 1 < g->height)
+	{
+		check_adjacent_walls(g, map, i, j - 1);
+		if (i >= 0 && i < (int)ft_strlen(map[j - 1]))
+			handle_error(ERR_INV_WALL, g, NULL, map[j - 1][i] == '0');
+	}
+	check_adjacent_walls(g, map, i, j);
+	if (j + 1 >= 0 && j + 1 < g->height)
+	{
+		check_adjacent_walls(g, map, i, j + 1);
+		if (i >= 0 && i < (int)ft_strlen(map[j + 1]))
+			handle_error(ERR_INV_WALL, g, NULL, map[j + 1][i] == '0');
+	}
 }
 
 
@@ -70,7 +70,7 @@ static void check_surrounding_walls(t_game *g, char **map, int i, int j)
  */
 void check_walls(t_game *g, char **map, int i, int j)
 {
-    check_surrounding_walls(g, map, i, j);
+	check_surrounding_walls(g, map, i, j);
 }
 
 /**
@@ -84,16 +84,16 @@ void check_walls(t_game *g, char **map, int i, int j)
  */
 static void handle_player_direction(t_game *g, char character, int i, int j)
 {
-    if (!g->pl.dir)
-    {
-        g->pl.dir = character;
-        g->pl.position_x = (float)i;
-        g->pl.position_y = (float)j;
-    }
-    else
-    {
-        handle_error(ERR_INV_PLAYER, g, NULL, 1);
-    }
+	if (!g->pl.dir)
+	{
+		g->pl.dir = character;
+		g->pl.position_x = (float)i;
+		g->pl.position_y = (float)j;
+	}
+	else
+	{
+		handle_error(ERR_INV_PLAYER, g, NULL, 1);
+	}
 }
 
 
@@ -106,8 +106,8 @@ static void handle_player_direction(t_game *g, char character, int i, int j)
  */
 static void check_invalid_character(char character, t_game *g)
 {
-    if (!ft_strchr("01ocDO", character))
-        handle_error(ERR_INV_CHARAC, g, NULL, 1);
+	if (!ft_strchr("01ocDO", character))
+		handle_error(ERR_INV_CHARAC, g, NULL, 1);
 }
 
 
@@ -125,14 +125,14 @@ static void check_invalid_character(char character, t_game *g)
  */
 void check_characters(t_game *g, char **map, int i, int j)
 {
-    char character = map[j][i];
+	char character = map[j][i];
 
-    if (ft_strchr("NSWE", character))
-        handle_player_direction(g, character, i, j);
-    else
-        check_invalid_character(character, g);
-    if (j == g->height - 1 && !g->pl.dir)
-        handle_error(ERR_INV_PLAYER, g, NULL, 1);
+	if (ft_strchr("NSWE", character))
+		handle_player_direction(g, character, i, j);
+	else
+		check_invalid_character(character, g);
+	if (j == g->height - 1 && !g->pl.dir)
+		handle_error(ERR_INV_PLAYER, g, NULL, 1);
 }
 
 /**
@@ -145,18 +145,18 @@ void check_characters(t_game *g, char **map, int i, int j)
  */
 static void fill_row(char *dest, char *src, int width)
 {
-    int i = 0;
-    int src_len = ft_strlen(src);
+	int i = 0;
+	int src_len = ft_strlen(src);
 
-    while (i < width)
-    {
-        if (i >= src_len)
-            dest[i] = ' ';
-        else
-            dest[i] = src[i];
-        i++;
-    }
-    dest[i] = '\0';
+	while (i < width)
+	{
+		if (i >= src_len)
+			dest[i] = ' ';
+		else
+			dest[i] = src[i];
+		i++;
+	}
+	dest[i] = '\0';
 }
 
 
@@ -169,18 +169,18 @@ static void fill_row(char *dest, char *src, int width)
  */
 char **alight_map_rows(t_game *g)
 {
-    char **updated_map = malloc(sizeof(char *) * (g->height + 1));
-    int j = 0;
+	char **updated_map = malloc(sizeof(char *) * (g->height + 1));
+	int j = 0;
 
-    while (j < g->height)
-    {
-        updated_map[j] = malloc(sizeof(char) * (g->width + 1));
-        fill_row(updated_map[j], g->map[j], g->width);
-        j++;
-    }
-    updated_map[j] = NULL;
+	while (j < g->height)
+	{
+		updated_map[j] = malloc(sizeof(char) * (g->width + 1));
+		fill_row(updated_map[j], g->map[j], g->width);
+		j++;
+	}
+	updated_map[j] = NULL;
 
-    return updated_map;
+	return updated_map;
 }
 
 /**
@@ -191,21 +191,21 @@ char **alight_map_rows(t_game *g)
  */
 void check_elements(t_game *g)
 {
-    int i, j;
+	int i, j;
 
-    j = 0;
-    while (j < g->height)
-    {
-        i = 0;
-        while (i < g->width)
-        {
-            if (g->map[j][i] == ' ')
-                check_walls(g, g->map, i, j);
-            else
-                check_characters(g, g->map, i, j);
-            i++;
-        }
-        j++;
-    }
+	j = 0;
+	while (j < g->height)
+	{
+		i = 0;
+		while (i < g->width)
+		{
+			if (g->map[j][i] == ' ')
+				check_walls(g, g->map, i, j);
+			else
+				check_characters(g, g->map, i, j);
+			i++;
+		}
+		j++;
+	}
 }
 
