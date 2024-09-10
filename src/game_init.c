@@ -39,8 +39,21 @@ t_game	cub_init(void)
 	g.tex.door_closed = NULL;
 	g.tex.door_open = NULL;
 	ft_bzero(&g.pl.keys, sizeof(t_key)); // Обнуление структуры клавиш игрока
+	init_welcome_screen(&g);
 	return (g);                         
 		// Возвращает инициализированную структуру игры
+}
+
+void	init_welcome_screen(t_game *g)
+{
+	g->welcome_screen = load_img(g->mlx_ptr, "./textures/welcome_scr.xpm");
+	if (!g->welcome_screen)
+		handle_error(ERR_INV_PATH, g, NULL, 1);
+	g->scaled_welcome.i = NULL;
+	g->is_paused = 1;
+	g->was_paused = 0;
+	printf("debug: Welcome screen initialized: width = %d, height = %d\n",
+		g->welcome_screen->width, g->welcome_screen->height);
 }
 
 void	init_game(t_game *g, char *filename)
@@ -67,34 +80,37 @@ void	init_minimap(t_game *g)
 
 void	init_attr(t_game *g)
 {
-	g->win_ptr = mlx_new_window(g->mlx_ptr, WIN_W, WIN_H, "Cub3D");
-	g->win_img.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
+	g->window_width = WIN_W;
+	g->window_height = WIN_H;
+	g->win_ptr = mlx_new_window(g->mlx_ptr, g->window_width, g->window_height,
+			"Cub3D");
+	g->win_img.i = mlx_new_image(g->mlx_ptr, g->window_width, g->window_height);
 	g->win_img.addr = mlx_get_data_addr(g->win_img.i, &g->win_img.bpp,
 			&g->win_img.line_len, &g->win_img.endian);
-	printf("Main image initialized: width=%d, height=%d\n", WIN_W, WIN_H);
-	printf("Map size before minimap init: width=%d, height=%d\n", g->width,
-		g->height);
+
+	printf("debug: Main image initialized: width=%d, height=%d\n",
+		g->window_width, g->window_height);
 	init_minimap(g);
-	printf("Minimap initialized: width=%d, height=%d\n", g->minimap.width,
-		g->minimap.height);
+	printf("debug: Minimap initialized: width=%d, height=%d\n",
+		g->minimap.width, g->minimap.height);
 	g->miniview.i = mlx_new_image(g->mlx_ptr, 30 * SIZE, 15 * SIZE);
 	g->miniview.addr = mlx_get_data_addr(g->miniview.i, &g->miniview.bpp,
 			&g->miniview.line_len, &g->miniview.endian);
 	g->miniview.width = 30 * SIZE;
 	g->miniview.height = 15 * SIZE;
 	g->pl.speed = 0.02;
-	printf("Final map size: width=%d, height=%d\n", g->width, g->height);
-	printf("Final minimap size: width=%d, height=%d\n", g->minimap.width,
+	printf("debug: Final minimap size: width=%d, height=%d\n", g->minimap.width,
 		g->minimap.height);
-	printf("Final miniview size: width=%d, height=%d\n", g->miniview.width,
-		g->miniview.height);
+	printf("debug: Final miniview size: width=%d, height=%d\n",
+		g->miniview.width, g->miniview.height);
 }
+
 
 void	setup_game(t_game *g)
 {
 	init_attr(g);
 	init_ray(g);
-	//
+
 	mlx_hook(g->win_ptr, 02, 1L << 0, cub_keydown, g);
 	mlx_hook(g->win_ptr, 03, 1L << 1, cub_keyup, g);
 	mlx_hook(g->win_ptr, 17, 0, cub_exit, g);

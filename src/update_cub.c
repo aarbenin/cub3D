@@ -51,28 +51,48 @@ static void handle_player_input(t_game *g)
 	}
 }
 
-static void update_screen(t_game *g)
+static void	update_screen(t_game *g)
 {
 	clear_image(&g->win_img, 0x000000);
 	draw_background(g);
 	cast_rays(g);
-	redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2 - g->scope->height / 2);
+	redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2
+		- g->scope->height / 2);
 	mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
 	draw_minimap(g);
 	mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->minimap.i, 10, 10);
 }
 
-int cub_update(void *param)
+static void	check_pause_state(t_game *g)
 {
-	t_game *g = (t_game *)param;
+	if (g->is_paused)
+	{
+		if (g->was_paused != 1)
+		{
+			printf("debug: Game is paused, displaying pause screen.\n");
+			display_pause_screen(g);
+			g->was_paused = 1;
+		}
+	}
+	else
+	{
+		if (g->was_paused == 1)
+			g->was_paused = 0;
+	}
+}
 
-	if (!(g->nframes % g->rate))
+int	cub_update(void *param)
+{
+	t_game	*g;
+
+	g = (t_game *)param;
+	check_pause_state(g);
+	if (!(g->is_paused) && !(g->nframes % g->rate))
 	{
 		update_animations_and_timer(g);
 		handle_player_input(g);
 		update_screen(g);
 	}
-
 	g->frame_count++;
 	return (0);
 }
@@ -81,15 +101,13 @@ int cub_update(void *param)
  * Redraws an image element onto the game window at specified coordinates.
  *
 
-	* @param g A pointer to a t_text_game structure that contains game state information.
+ * @param g A pointer to a t_text_game structure that contains game state information.
  * @param img The image to be drawn.
  * @param x The x-coordinate where the image should be placed.
  * @param y The y-coordinate where the image should be placed.
  *
-
-	* This function places the specified image onto the game window at the given coordinates,
-
-	* combining it with the existing window image. It uses a blending color of 0xFF000000
+ * This function places the specified image onto the game window at the given coordinates,
+ * combining it with the existing window image. It uses a blending color of 0xFF000000
  * to ensure proper overlay.
  */
 void redraw_elem(t_game *g, t_img img, int x, int y)

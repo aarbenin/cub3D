@@ -91,6 +91,8 @@ int	mouse_move(int x, int y, t_game *g)
 	int		center_x;
 	double	rotation_speed_factor;
 
+	if (g->is_paused)
+		return (0);
 	(void)y;
 	center_x = WIN_W / 2;
 	rotation_speed_factor = 0.005;
@@ -101,7 +103,6 @@ int	mouse_move(int x, int y, t_game *g)
 			rotate_left(&g->pl, (center_x - x) * rotation_speed_factor);
 		else if (x > center_x)
 			rotate_right(&g->pl, (x - center_x) * rotation_speed_factor);
-		// Сбрасываем курсор в центр окна
 		mlx_mouse_move(g->mlx_ptr, g->win_ptr, center_x, WIN_H / 2);
 	}
 	return (0);
