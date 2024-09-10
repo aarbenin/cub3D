@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   end.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:35:56 by ogoman            #+#    #+#             */
-/*   Updated: 2024/08/29 08:03:33 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/10 08:38:48 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,6 @@ void	destroy_images(t_game *g)
 		mlx_destroy_image(g->mlx_ptr, g->win_img.i);
 	if (g->scope && g->scope->i)
 		mlx_destroy_image(g->mlx_ptr, g->scope->i);
-	if (g->win_g.i)
-		mlx_destroy_image(g->mlx_ptr, g->win_g.i);
-	if (g->win_r.i)
-		mlx_destroy_image(g->mlx_ptr, g->win_r.i);
 	if (g->win_ptr)
 		mlx_destroy_window(g->mlx_ptr, g->win_ptr);
 	if (g->minimap.i)

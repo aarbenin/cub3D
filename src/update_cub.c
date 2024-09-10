@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   update_cub.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alisa <alisa@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:33:07 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/03 06:19:25 by alisa            ###   ########.fr       */
+/*   Updated: 2024/09/10 09:37:28 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
-void	clear_image(t_img *img, int color)
+void clear_image(t_img *img, int color)
 {
-	int	y;
-	int	x;
+	int y;
+	int x;
 
 	y = 0;
 	while (y < WIN_H)
@@ -30,34 +30,49 @@ void	clear_image(t_img *img, int color)
 	}
 }
 
-int	cub_update(void *param)
+static void update_animations_and_timer(t_game *g)
 {
-	t_game	*g;
+	if (!(g->nframes % (6 * g->rate)))
+		update_anim(g);
+	if (!(g->nframes % (10 * g->rate)))
+		g->pl.door_cooldown = 0;
+}
 
-	g = (t_game *)param;
+static void handle_player_input(t_game *g)
+{
+	if (g->pl.keys.w_pressed || g->pl.keys.a_pressed
+		|| g->pl.keys.s_pressed
+		|| g->pl.keys.d_pressed
+		|| g->pl.keys.left_pressed
+		|| g->pl.keys.right_pressed)
+	{
+		move_player(g);
+		rotate_player(g);
+	}
+}
+
+static void update_screen(t_game *g)
+{
+	clear_image(&g->win_img, 0x000000);
+	draw_background(g);
+	cast_rays(g);
+	redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2 - g->scope->height / 2);
+	mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
+	draw_minimap(g);
+	mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->minimap.i, 10, 10);
+}
+
+int cub_update(void *param)
+{
+	t_game *g = (t_game *)param;
+
 	if (!(g->nframes % g->rate))
 	{
-		if (!(g->nframes % (6 * g->rate))) //изначально было 2, увеличила для замедления анимации
-			update_anim(g);
-		if (!(g->nframes % (10 * g->rate)))
-			g->pl.door_cooldown = 0;
-		// Очистка перед рендерингом
-		clear_image(&g->win_img, 0x000000);
-		if (g->pl.keys.w_pressed || g->pl.keys.a_pressed || g->pl.keys.s_pressed
-			|| g->pl.keys.d_pressed || g->pl.keys.left_pressed
-			|| g->pl.keys.right_pressed)
-		{
-			move_player(g);
-			rotate_player(g);
-		}
-		draw_background(g);
-		cast_rays(g);
-		redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2
-			- g->scope->height / 2);
-		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
-		draw_minimap(g);
-		mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->minimap.i, 10, 10);
+		update_animations_and_timer(g);
+		handle_player_input(g);
+		update_screen(g);
 	}
+
 	g->frame_count++;
 	return (0);
 }
@@ -77,10 +92,10 @@ int	cub_update(void *param)
 	* combining it with the existing window image. It uses a blending color of 0xFF000000
  * to ensure proper overlay.
  */
-void	redraw_elem(t_game *g, t_img img, int x, int y)
+void redraw_elem(t_game *g, t_img img, int x, int y)
 {
-	int		p[2];
-	t_img	images[2];
+	int p[2];
+	t_img images[2];
 
 	p[0] = x;
 	p[1] = y;

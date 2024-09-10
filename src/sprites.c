@@ -26,12 +26,10 @@ void init_sprites(t_game *g)
 	g->tex.e_bak = NULL;
 	g->tex.w = NULL;
 	g->tex.w_bak = NULL;
-    g->win_g.i = NULL;
-    g->win_r.i = NULL;
 
     // Функция load_img загружает изображения из файлов и возвращает указатели на них.
     g->tex.b = load_img(g->mlx_ptr, "textures/black.xpm"); // Загрузка текстуры черного цвета
-    g->scope = load_img(g->mlx_ptr, "textures/scope.xpm"); // Загрузка текстуры прицела
+    g->scope = load_img(g->mlx_ptr, "textures/saw.xpm"); // Загрузка текстуры прицела
 
     // Проверка успешности загрузки текстур.
     if (!g->tex.b || !g->tex.b->i || !g->scope || !g->scope->i)

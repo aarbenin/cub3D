@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: parallels <parallels@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/04 06:12:53 by parallels        ###   ########.fr       */
+/*   Updated: 2024/09/10 08:57:49 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,6 +285,12 @@ void				check_textures(char *trim, t_game *g, int (*n)[2]);
 
 /* Reads file with gnl */
 void				read_map(char *file, t_game *g);
+
+void process_line(char *line, t_game *g, int (*n)[2], int *texture_limit);
+
+void initialize_map(char *file, t_game *g);
+
+void load_side_textures(char **dir, t_game *g, int (*n)[2]);
 
 /* Check possible map errors */
 void				check_map(t_game *g);

@@ -77,12 +77,6 @@ void	init_attr(t_game *g)
 	init_minimap(g);
 	printf("Minimap initialized: width=%d, height=%d\n", g->minimap.width,
 		g->minimap.height);
-	g->win_g.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
-	g->win_g.addr = mlx_get_data_addr(g->win_g.i, &g->win_g.bpp,
-			&g->win_g.line_len, &g->win_g.endian);
-	g->win_r.i = mlx_new_image(g->mlx_ptr, WIN_W, WIN_H);
-	g->win_r.addr = mlx_get_data_addr(g->win_r.i, &g->win_r.bpp,
-			&g->win_r.line_len, &g->win_r.endian);
 	g->miniview.i = mlx_new_image(g->mlx_ptr, 30 * SIZE, 15 * SIZE);
 	g->miniview.addr = mlx_get_data_addr(g->miniview.i, &g->miniview.bpp,
 			&g->miniview.line_len, &g->miniview.endian);
