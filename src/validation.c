@@ -8,12 +8,7 @@
  * 
  * @param g Pointer to the game structure containing texture information.
  */
-// void validate_textures(t_game *g)
-// {
-//     handle_error(ERR_INV_TEX, g, NULL, 
-//         !g->tex.n || !g->tex.s || !g->tex.e || !g->tex.w ||
-//         !g->tex.door_closed || !g->tex.door_open);
-// }
+
 void validate_textures(t_game *g)
 {
 	handle_error(ERR_INV_TEX, g, NULL, 

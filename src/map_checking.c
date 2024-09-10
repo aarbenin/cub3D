@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_checking.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: parallels <parallels@student.42.fr>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 10:16:02 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/04 07:43:59 by parallels        ###   ########.fr       */
+/*   Updated: 2024/09/10 09:38:27 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,14 @@ static void handle_player_direction(t_game *g, char character, int i, int j)
 
 /**
  * Checks if a character in the map is valid.
- * Valid characters are '0', '1', 'o', and 'c'.
+ * Valid characters are '0', '1', 'O', and 'D'.
  * 
  * @param character The character to check.
  * @param g Pointer to the game structure for error reporting.
  */
 static void check_invalid_character(char character, t_game *g)
 {
-	if (!ft_strchr("01ocDO", character))
+	if (!ft_strchr("01DO", character))
 		handle_error(ERR_INV_CHARAC, g, NULL, 1);
 }
 
