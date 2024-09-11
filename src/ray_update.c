@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ray_update.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/11 11:36:27 by aarbenin          #+#    #+#             */
+/*   Updated: 2024/09/11 11:36:33 by aarbenin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/cub3D.h"
 
 static inline void	update_ray_pos(t_ray_data *ray, double delta_x,
@@ -21,6 +33,7 @@ static inline bool	check_hit(t_game *g, t_ray_data *ray)
 	char	cell;
 
 	cell = g->map[ray->map_y][ray->map_x];
+	//return (cell == '1' || cell == 'D' || cell == 'O');
 	return (cell == '1' || cell == 'D');
 }
 

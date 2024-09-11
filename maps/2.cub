@@ -8,7 +8,7 @@ EA textures/torch/torch1_wall_1.xpm
 EA textures/torch/torch2_wall_1.xpm
 EA textures/torch/torch3_wall_1.xpm
 DOOR_CLOSED textures/close_128.xpm
-DOOR_OPEN textures/open_3.xpm
+DOOR_OPEN textures/open_128.xpm
 
 
 C 124,112,106
