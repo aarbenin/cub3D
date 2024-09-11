@@ -27,7 +27,7 @@ void	action_door(t_game *g)
 	int		door_x;
 	int		door_y;
 
-	check_distance = 4.5;
+	check_distance = 2.5; // prervious 4.5
 	step = 0.2;
 	current_distance = 0.0;
 	while (current_distance <= check_distance)

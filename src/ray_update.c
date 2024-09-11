@@ -21,7 +21,7 @@ static inline bool	check_hit(t_game *g, t_ray_data *ray)
 	char	cell;
 
 	cell = g->map[ray->map_y][ray->map_x];
-	return (cell == '1' || cell == 'D' || cell == 'O');
+	return (cell == '1' || cell == 'D');
 }
 
 void	perform_dda(t_game *g, t_ray_data *ray, double delta_x, double delta_y)

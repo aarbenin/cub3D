@@ -23,6 +23,7 @@
 # define KEY_E 101     // 'E' key open/close
 # define KEY_Q 113     // 'Q' key exit
 # define KEY_ESC 65307 // Escape key exit
+# define KEY_SPACE 32  // space
 
 // Arrow keys
 # define KEY_UP 65362    // Up arrow key

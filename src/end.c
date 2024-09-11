@@ -58,6 +58,10 @@ void	destroy_images(t_game *g)
 		mlx_destroy_image(g->mlx_ptr, g->minimap.i);
 	if (g->miniview.i)
 		mlx_destroy_image(g->mlx_ptr, g->miniview.i);
+	if (g->welcome_screen && g->welcome_screen->i)
+		mlx_destroy_image(g->mlx_ptr, g->welcome_screen->i);
+	if (g->scaled_welcome.i)
+		mlx_destroy_image(g->mlx_ptr, g->scaled_welcome.i);
 	free(g->tex.b);
 	free(g->scope);
 }

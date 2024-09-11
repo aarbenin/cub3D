@@ -172,9 +172,12 @@ typedef struct s_game
 	t_tex tex;    // Текстуры для игры
 	t_ray ray;    // Данные для лучей
 	t_player pl;  // Игрок
-	float x;      // Координата X (не используется в коде)
-	float y;      // Координата Y (не используется в коде)
-	
+	t_img			*welcome_screen; // Изображение приветственного экрана
+	t_img			scaled_welcome;
+	int				is_paused;      // Флаг паузы (0 - игра идет, 1 - игра на паузе/ожидании начала)
+	int				was_paused;
+	int				window_width;   // Ширина окна
+	int				window_height;  // Высота окна
 }					t_game;
 
 typedef struct s_draw_params
@@ -204,6 +207,22 @@ typedef struct s_wall_params
 	t_img			*texture;
 	float			wall_x;
 }					t_wall_params;
+
+typedef struct s_scale_params
+{
+	int		scaled_width;
+	int		scaled_height;
+	double	ratio;
+	int		x_offset;
+	int		y_offset;
+}			t_scale_params;
+
+typedef struct s_window_params
+{
+	int		window_width;
+	int		window_height;
+	int		background_color;
+}			t_window_params;
 
 // colors.c
 /*Converts t_color components to ARGB integer value.*/
@@ -253,6 +272,7 @@ void				action_door(t_game *g);
 void				update_anim(t_game *g);
 t_game				cub_init(void);
 void				init_game(t_game *g, char *filename);
+void				init_welcome_screen(t_game *g);
 
 // key_events.c
 /*Handles the event when a key is released.*/
@@ -353,5 +373,9 @@ void				action_door(t_game *g);
 
 // player_movement.c
 void	set_player_direction(t_player *pl, char dir);
+
+// pause_screen.c
+void	display_pause_screen(t_game *g);
+
 
 #endif
