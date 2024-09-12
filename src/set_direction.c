@@ -3,15 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   set_direction.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:37:13 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 11:37:16 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/12 06:58:28 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
+/**
+ * @brief Sets the player's direction and view plane based on the given
+ * direction character.
+ * 
+ * This function updates the player's direction vector and view plane vector
+ * depending on the specified direction character ('N', 'S', 'E', 'W').
+ * 
+ * @param pl Pointer to the player structure that will be updated.
+ * @param dir Character indicating the desired direction
+ * ('N' for North, 'S' for South, 'E' for East, 'W' for West).
+ */
 static void	set_direction_north(t_player *pl)
 {
 	pl->dir_x = 0;

@@ -3,15 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   draw_background.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:41:28 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 11:41:29 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/11 13:00:15 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
+/**
+ * @brief Fills a row in the image with a specified color.
+ *
+ * @param img Pointer to the image structure.
+ * @param color Color to fill the row with.
+ * @param y The y-coordinate of the row to fill.
+ */
 static void	fill_row(t_img *img, int color, int y)
 {
 	int	x;
@@ -24,6 +31,13 @@ static void	fill_row(t_img *img, int color, int y)
 	}
 }
 
+/**
+ * @brief Adjusts the brightness of a given color.
+ *
+ * @param color The original color.
+ * @param factor Brightness adjustment factor (0-255).
+ * @return Adjusted color with modified brightness.
+ */
 static int	adjust_brightness(int color, int factor)
 {
 	int	r;
@@ -36,6 +50,15 @@ static int	adjust_brightness(int color, int factor)
 	return ((r << 16) | (g << 8) | b);
 }
 
+/**
+ * @brief Calculates a color gradient based on distance from the horizon.
+ *
+ * @param base_color The base color to apply the gradient to.
+ * @param y The y-coordinate (row) being processed.
+ * @param height The total height of the screen.
+ * @param is_ceiling Boolean indicating whether the row is part of the ceiling.
+ * @return Color adjusted with gradient effect.
+ */
 static int	calculate_gradient(int base_color, int y, int height,
 		int is_ceiling)
 {
@@ -49,6 +72,12 @@ static int	calculate_gradient(int base_color, int y, int height,
 	return (adjust_brightness(base_color, (int)(distance_factor * 255)));
 }
 
+/**
+ * @brief Draws the background by filling the ceiling and floor with
+ * gradient colors.
+ *
+ * @param g Pointer to the game structure containing textures and window data.
+ */
 void	draw_background(t_game *g)
 {
 	int	ceiling_color;

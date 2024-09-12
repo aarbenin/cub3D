@@ -3,15 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   pause_screen.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:38:04 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 11:38:05 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/12 06:57:19 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
+//_____________________image_scaling.c_________________________
+
+/**
+ * @brief Calculates the scaling factors and scaled dimensions for an image.
+ * 
+ * This function computes the scaling ratio needed to fit the source image
+ * within the window dimensions while maintaining the aspect ratio. It also
+ * calculates the scaled width and height of the image.
+ * 
+ * @param src_img Pointer to the source image structure.
+ * @param win_params Pointer to the window parameters structure.
+ * @param params Pointer to the scale parameters structure to store the
+ * results.
+ */
 static void	calculate_scaling(t_img *src_img, t_window_params *win_params,
 		t_scale_params *params)
 {
@@ -20,11 +34,27 @@ static void	calculate_scaling(t_img *src_img, t_window_params *win_params,
 
 	scale_x = (double)win_params->window_width / src_img->width;
 	scale_y = (double)win_params->window_height / src_img->height;
-	params->ratio = scale_x < scale_y ? scale_x : scale_y;
+	if (scale_x < scale_y)
+		params->ratio = scale_x;
+	else
+		params->ratio = scale_y;
 	params->scaled_width = src_img->width * params->ratio;
 	params->scaled_height = src_img->height * params->ratio;
 }
 
+/**
+ * @brief Calculates the offsets required to center the scaled image
+ * in the window.
+ * 
+ * This function computes the offsets to position the scaled image
+ * in the center
+ * of the window, ensuring that the image is centered horizontally
+ * and vertically.
+ * 
+ * @param win_params Pointer to the window parameters structure.
+ * @param params Pointer to the scale parameters structure containing
+ * the scaled dimensions.
+ */
 static void	calculate_offsets(t_window_params *win_params,
 		t_scale_params *params)
 {
@@ -32,6 +62,19 @@ static void	calculate_offsets(t_window_params *win_params,
 	params->y_offset = (win_params->window_height - params->scaled_height) / 2;
 }
 
+/**
+ * @brief Copies and scales pixels from the source image to
+ * the destination image.
+ * 
+ * This function scales the source image and copies its pixels
+ * to the destination
+ * image according to the scaling ratio and calculated offsets.
+ * 
+ * @param src_img Pointer to the source image structure.
+ * @param dst_img Pointer to the destination image structure.
+ * @param params Pointer to the scale parameters structure containing
+ * scaling details.
+ */
 static void	copy_pixels(t_img *src_img, t_img *dst_img, t_scale_params *params)
 {
 	int	x;
@@ -55,7 +98,21 @@ static void	copy_pixels(t_img *src_img, t_img *dst_img, t_scale_params *params)
 	}
 }
 
-static void	scale_image(t_img *src_img, t_img *dst_img, t_window_params *win_params)
+/**
+ * @brief Scales the source image and copies it to the destination image.
+ * 
+ * This function performs the entire image scaling
+ * process, including calculating
+ * scaling factors, offsets, clearing the destination
+ * image, and copying scaled
+ * pixels from the source image.
+ * 
+ * @param src_img Pointer to the source image structure.
+ * @param dst_img Pointer to the destination image structure.
+ * @param win_params Pointer to the window parameters structure.
+ */
+static void	scale_image(t_img *src_img, t_img *dst_img,
+	t_window_params *win_params)
 {
 	t_scale_params	params;
 
@@ -65,6 +122,19 @@ static void	scale_image(t_img *src_img, t_img *dst_img, t_window_params *win_par
 	copy_pixels(src_img, dst_img, &params);
 }
 
+/**
+ * @brief Displays the pause screen by scaling the welcome
+ * image to fit the window.
+ * 
+ * This function creates a new scaled image for the pause
+ * screen, clears any
+ * existing scaled welcome image, and then displays the scaled
+ * image in the
+ * window. The image is centered and scaled according to
+ * the window dimensions.
+ * 
+ * @param g Pointer to the game structure.
+ */
 void	display_pause_screen(t_game *g)
 {
 	int				window_width;

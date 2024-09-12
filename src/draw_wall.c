@@ -3,15 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   draw_wall.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:41:05 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 11:41:06 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/12 10:13:13 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
+/**
+ * @brief Calculates the height of the wall line to be drawn based on ray
+ * distance.
+ *
+ * @param ray Pointer to the ray data structure containing raycasting
+ * information.
+ * @param wall_params Pointer to the wall parameters structure to store the
+ * result.
+ */
 static void	calculate_line_height(t_ray_data *ray, t_wall_params *wall_params)
 {
 	wall_params->params.line_height = (int)(WIN_H / ray->perp_wall_dist);
@@ -25,6 +34,14 @@ static void	calculate_line_height(t_ray_data *ray, t_wall_params *wall_params)
 		wall_params->params.draw_end = WIN_H - 1;
 }
 
+/**
+ * @brief Selects the correct texture based on the map cell and ray direction.
+ *
+ * @param g Pointer to the game structure containing textures and map data.
+ * @param ray Pointer to the ray data structure containing raycasting
+ * information.
+ * @return A pointer to the selected texture image.
+ */
 static t_img	*select_texture(t_game *g, t_ray_data *ray)
 {
 	char	cell;
@@ -50,6 +67,15 @@ static t_img	*select_texture(t_game *g, t_ray_data *ray)
 	}
 }
 
+/**
+ * @brief Calculates the x-coordinate of the wall hit position on the texture.
+ *
+ * @param g Pointer to the game structure containing player data.
+ * @param ray Pointer to the ray data structure containing raycasting
+ * information.
+ * @param wall_params Pointer to the wall parameters structure to store
+ * the result.
+ */
 static void	calculate_wall_hit_x(t_game *g, t_ray_data *ray,
 		t_wall_params *wall_params)
 {
@@ -62,6 +88,16 @@ static void	calculate_wall_hit_x(t_game *g, t_ray_data *ray,
 	wall_params->wall_x -= floor(wall_params->wall_x);
 }
 
+/**
+ * @brief Draws a vertical line representing a wall segment with the
+ * selected texture.
+ *
+ * @param g Pointer to the game structure containing textures and window
+ * data.
+ * @param x The x-coordinate on the screen where the line should be drawn.
+ * @param ray Pointer to the ray data structure containing raycasting
+ * information.
+ */
 void	draw_wall_line(t_game *g, int x, t_ray_data *ray)
 {
 	t_wall_params	wall_params;

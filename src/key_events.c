@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_events.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:40:48 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 11:40:49 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:09:21 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ int	cub_keydown(int keycode, t_game *g)
 	}
 	return (0);
 }
-
 
 int	cub_keyup(int k, t_game *g)
 {

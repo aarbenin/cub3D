@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:40:24 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 11:40:30 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/12 06:46:30 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,17 @@ typedef struct s_fov_params
 	double			angle_end;
 }					t_fov_params;
 
-//_________________minimap_border.c_____________________
+//_________________minimap_border.c_____________________//
+/**
+ * @brief Draws the corners of the minimap border.
+ * 
+ * This function draws colored squares at each corner of the minimap
+ * to create a visual border effect. It uses double the size of the 
+ * minimap's defined border size for a thicker corner.
+ * 
+ * @param minimap Pointer to the minimap image.
+ * @param params Parameters defining the minimap's size and color.
+ */
 static void	draw_corners(t_img *minimap, t_minimap_params params)
 {
 	int	i;
@@ -66,7 +76,15 @@ static void	draw_corners(t_img *minimap, t_minimap_params params)
 		i++;
 	}
 }
-
+/**
+ * @brief Draws the border around the minimap.
+ * 
+ * This function draws a rectangular border along the edges of the minimap.
+ * After drawing the border, it calls `draw_corners` to handle the corner
+ * decorations.
+ * 
+ * @param g Pointer to the game structure containing minimap details.
+ */
 
 static void	draw_minimap_border(t_game *g)
 {
@@ -98,7 +116,16 @@ static void	draw_minimap_border(t_game *g)
 }
 
 //_________to game_mlx.c_______________________
-
+/**
+ * @brief Initializes Bresenham's line drawing algorithm parameters.
+ * 
+ * This function calculates the differences in x and y coordinates
+ * and sets the direction of line drawing based on the start and end points.
+ * 
+ * @param start Starting point of the line.
+ * @param end Ending point of the line.
+ * @return Initialized Bresenham parameters.
+ */
 static t_bresenham	init_bresenham(t_point start, t_point end)
 {
 	t_bresenham	b;
@@ -117,6 +144,16 @@ static t_bresenham	init_bresenham(t_point start, t_point end)
 	return (b);
 }
 
+/**
+ * @brief Draws a line between two points using Bresenham's algorithm.
+ * 
+ * This function uses Bresenham's line drawing algorithm to efficiently
+ * draw a line from the starting point to the ending point, pixel by pixel.
+ * 
+ * @param img Pointer to the image where the line will be drawn.
+ * @param start The starting point of the line.
+ * @param end The ending point of the line.
+ */
 static void	mlx_draw_line(t_img *img, t_point start, t_point end)
 {
 	t_bresenham	b;
@@ -128,7 +165,7 @@ static void	mlx_draw_line(t_img *img, t_point start, t_point end)
 		put_pixel(img, start.x, start.y, start.color);
 		if (start.x == end.x && start.y == end.y)
 			break ;
-		e2 = b.err << 1; //вместо умножения на 2, пытаюсь экономить ресурсы
+		e2 = b.err << 1;
 		if (e2 >= b.dy)
 		{
 			b.err += b.dy;
@@ -143,7 +180,15 @@ static void	mlx_draw_line(t_img *img, t_point start, t_point end)
 }
 
 //___________________minimap_fov.c________________________
-
+/**
+ * @brief Initializes field of view (FOV) parameters for minimap rendering.
+ * 
+ * This function calculates the starting angle, ending angle, and other
+ * necessary parameters to represent the player's FOV on the minimap.
+ * 
+ * @param g Pointer to the game structure containing player and map info.
+ * @return Initialized FOV parameters.
+ */
 static t_fov_params	init_fov_params(t_game *g)
 {
 	t_fov_params	params;
@@ -164,6 +209,19 @@ static t_fov_params	init_fov_params(t_game *g)
 	return (params);
 }
 
+/**
+ * @brief Draws a single line representing part of the FOV.
+ * 
+ * This function draws a line starting from the player's position
+ * and extending
+ * outward in the given direction (angle). The line stops if it
+ * hits a wall or a door.
+ * 
+ * @param g Pointer to the game structure.
+ * @param params FOV parameters.
+ * @param start Starting point (player's position).
+ * @param angle The angle of the FOV line.
+ */
 static void	draw_fov_line(t_game *g, t_fov_params params, t_point start,
 		double angle)
 {
@@ -177,9 +235,9 @@ static void	draw_fov_line(t_game *g, t_fov_params params, t_point start,
 		end.y = params.center_y + (int)(sin(angle) * length);
 		if (end.x < 0 || end.y < 0 || end.x >= g->minimap.width
 			|| end.y >= g->minimap.height || g->map[end.y
-			/ params.minimap_scale][end.x / params.minimap_scale] == '1'
+				/ params.minimap_scale][end.x / params.minimap_scale] == '1'
 			|| g->map[end.y / params.minimap_scale][end.x
-			/ params.minimap_scale] == 'D')
+				/ params.minimap_scale] == 'D')
 			break ;
 		end.color = params.color;
 		mlx_draw_line(&g->minimap, start, end);
@@ -187,6 +245,15 @@ static void	draw_fov_line(t_game *g, t_fov_params params, t_point start,
 	}
 }
 
+/**
+ * @brief Draws the field of view (FOV) on the minimap.
+ * 
+ * This function draws the player's FOV by iterating over the
+ * FOV angle range
+ * and rendering lines from the player's position outward.
+ * 
+ * @param g Pointer to the game structure.
+ */
 static void	draw_fov(t_game *g)
 {
 	t_fov_params	params;
@@ -206,7 +273,17 @@ static void	draw_fov(t_game *g)
 }
 
 //_____________________color.c_________________________
-
+/**
+ * @brief Blends two colors based on a given alpha value.
+ * 
+ * This function takes two RGB colors and blends them using
+ * a floating-point alpha, resulting in a smooth transition between the two.
+ * 
+ * @param color1 First color.
+ * @param color2 Second color.
+ * @param alpha Blend factor (0.0 to 1.0).
+ * @return Blended color.
+ */
 int	blend_colors(int color1, int color2, float alpha)
 {
 	int	r;
@@ -222,24 +299,46 @@ int	blend_colors(int color1, int color2, float alpha)
 }
 
 //_____________________draw_minimap.c_________________________
-
+/**
+ * @brief Sets the color of a minimap cell based on the map data.
+ * 
+ * This function determines the color of a cell on the minimap based
+ * on its type,
+ * such as walls, doors, or the player's position.
+ * 
+ * @param g Pointer to the game structure.
+ * @param x X-coordinate of the cell.
+ * @param y Y-coordinate of the cell.
+ * @param color Pointer to the color value that will be set.
+ */
 static void	set_minimap_color(t_game *g, int x, int y, int *color)
 {
 	char	cell;
 
 	cell = g->map[y][x];
 	if (cell == '1')
-		*color = 0xFFFFFF; // Белый для стен
+		*color = 0xFFFFFF;
 	else if (cell == 'D')
-		*color = 0xFF0000; // Красный для закрытых дверей
+		*color = 0xFF0000;
 	else if (cell == 'O')
-		*color = 0x00FF00; // Зеленый для открытых дверей
+		*color = 0x00FF00;
 	else if (y == (int)g->pl.position_y && x == (int)g->pl.position_x)
-		*color = 0xFFFF00; // Жёлтый для игрока
+		*color = 0xFFFF00;
 	else
-		*color = 0x000000; // Черный для пустых клеток
+		*color = 0x000000;
 }
 
+/**
+ * @brief Sets the parameters for drawing a rectangle on the minimap.
+ * 
+ * This function calculates the position and size of each cell (rectangle)
+ * on the minimap based on the minimap's scale and offsets.
+ * 
+ * @param g Pointer to the game structure.
+ * @param params Pointer to the rectangle parameters.
+ * @param x X-coordinate of the map cell.
+ * @param y Y-coordinate of the map cell.
+ */
 static void	set_minimap_params(t_game *g, t_rect_params *params, int x, int y)
 {
 	int	offset_x;
@@ -253,6 +352,17 @@ static void	set_minimap_params(t_game *g, t_rect_params *params, int x, int y)
 	params->dimensions.y = g->minimap_scale;
 }
 
+/**
+ * @brief Draws a filled rectangle on the minimap with blended colors.
+ * 
+ * This function fills a rectangle (representing a minimap cell) with a 
+ * color, blending it with the background image for a smooth effect.
+ * 
+ * @param img Pointer to the minimap image.
+ * @param params Parameters defining the position, dimensions, and
+ * color of the rectangle.
+ * @param background_img Pointer to the background image for color blending.
+ */
 static void	draw_rect(t_img *img, t_rect_params params, t_img *background_img)
 {
 	int	x;
@@ -277,6 +387,16 @@ static void	draw_rect(t_img *img, t_rect_params params, t_img *background_img)
 	}
 }
 
+/**
+ * @brief Draws the entire minimap, including FOV and borders.
+ * 
+ * This function iterates over the map data to draw each cell of the minimap,
+ * sets the colors for walls, doors, and player position, and finally
+ * draws the 
+ * player's field of view (FOV) and the border around the minimap.
+ * 
+ * @param g Pointer to the game structure.
+ */
 void	draw_minimap(t_game *g)
 {
 	int				x;

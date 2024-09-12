@@ -3,15 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   doors.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:41:45 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 11:41:51 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/11 12:59:48 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
+/**
+ * Checks and toggles the state of a door at the given coordinates.
+ * 
+ * If the door is found in the closed state ('D'), it is opened ('O'). If it is 
+ * found in the open state ('O'), it is closed ('D').
+ *
+ * @param g The game structure containing the map and game state.
+ * @param door_x The x-coordinate of the door on the map.
+ * @param door_y The y-coordinate of the door on the map.
+ * @return 1 if a door was toggled, 0 otherwise.
+ */
 static int	check_door(t_game *g, int door_x, int door_y)
 {
 	if (door_x >= 0 && door_x < g->width && door_y >= 0 && door_y < g->height)
@@ -29,6 +40,14 @@ static int	check_door(t_game *g, int door_x, int door_y)
 	}
 	return (0);
 }
+/**
+ * Attempts to find and toggle the nearest door in front of the player.
+ * 
+ * This function checks in the direction the player is facing for a door within
+ * a certain distance. If a door is found, it toggles its state (open/closed).
+ *
+ * @param g The game structure containing the player and map data.
+ */
 
 void	action_door(t_game *g)
 {
@@ -38,7 +57,7 @@ void	action_door(t_game *g)
 	int		door_x;
 	int		door_y;
 
-	check_distance = 2.5; // prervious 4.5
+	check_distance = 2.5;
 	step = 0.2;
 	current_distance = 0.0;
 	while (current_distance <= check_distance)

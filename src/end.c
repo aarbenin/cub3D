@@ -6,16 +6,18 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:35:56 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/10 08:38:48 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/11 13:01:09 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
 /**
- * Frees the memory allocated for a linked list of animations and their associated images.
+ * Frees the memory allocated for a linked list of animations and their
+ * associated images.
  * 
- * @param g A pointer to the game structure, used to access the MiniLibX context.
+ * @param g A pointer to the game structure, used to access the MiniLibX
+ * context.
  * @param start A pointer to the head of the linked list of animations.
  */
 void	free_animation(t_game *g, t_list *start)
@@ -35,9 +37,11 @@ void	free_animation(t_game *g, t_list *start)
 }
 
 /**
- * Destroys all images and other graphical resources associated with the game.
+ * Destroys all images and other graphical resources associated with the
+ * game.
  * 
- * @param g A pointer to the game structure, used to access the MiniLibX context and graphical resources.
+ * @param g A pointer to the game structure, used to access the MiniLibX
+ * context and graphical resources.
  */
 
 void	destroy_images(t_game *g)
@@ -69,7 +73,8 @@ void	destroy_images(t_game *g)
 /**
  * Cleans up all game resources and closes the game.
  * 
- * @param g A pointer to the game structure, used to access and free various resources.
+ * @param g A pointer to the game structure, used to access and free
+ * various resources.
  */
 void	cleanup_game(t_game *g)
 {
