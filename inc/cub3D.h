@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/12 10:13:18 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/12 10:34:02 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include "../libft/libft.h"
 # include "game_mlx.h"
 # include "keycodes.h"
-# include "ray_cast.h"
 # include <math.h>
 # include <mlx.h>
 # include <stdio.h>
