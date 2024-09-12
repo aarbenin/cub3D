@@ -1,10 +1,10 @@
-NO textures/wall.xpm
-SO textures/wall.xpm
-WE textures/wall.xpm
-EA textures/wall.xpm
+NO textures/bookshelf.xpm
+SO textures/bricks.xpm
+WE textures/bookshelf.xpm
+EA textures/bricks.xpm
 
-F 184,113,39
-C 51,198,227
+C 124,112,106
+F 124,31,19
 
 11111111111111111111111111111
 10000000000000000000000000001

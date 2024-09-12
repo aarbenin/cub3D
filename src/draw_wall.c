@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:41:05 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/12 10:13:13 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/12 11:18:41 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,10 @@ void	draw_wall_line(t_game *g, int x, t_ray_data *ray)
 	t_wall_params	wall_params;
 
 	calculate_line_height(ray, &wall_params);
-	wall_params.texture = select_texture(g, ray);
+	g->additional.texture = select_texture(g, ray);
 	calculate_wall_hit_x(g, ray, &wall_params);
-	wall_params.params.wall_x = wall_params.wall_x;
-	draw_texture_line(g, x, wall_params.texture, &wall_params.params, ray);
+	g->additional.params = &wall_params.params;
+	g->additional.ray = ray;
+	g->additional.params->wall_x = wall_params.wall_x;
+	draw_texture_line(g, x);
 }

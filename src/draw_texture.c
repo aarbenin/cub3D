@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:41:20 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/12 10:13:05 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/12 11:19:09 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,14 @@ static void	draw_vertical_texture_line(t_game *g, int x,
  * @param ray Pointer to the ray data (e.g., direction, side hit).
  */
 
-void	draw_texture_line(t_game *g, int x, t_img *texture,
-		t_draw_params *params, t_ray_data *ray)
+void	draw_texture_line(t_game *g, int x)
 {
 	int					tex_x;
 	t_texture_params	tex_params;
 
-	tex_params.texture = texture;
-	tex_params.params = params;
-	tex_params.ray = ray;
+	tex_params.texture = g->additional.texture;
+	tex_params.params = g->additional.params;
+	tex_params.ray = g->additional.ray;
 	tex_x = calculate_tex_x(&tex_params);
 	draw_vertical_texture_line(g, x, &tex_params, tex_x);
 }

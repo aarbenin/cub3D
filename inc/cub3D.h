@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/12 10:13:18 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/12 11:23:03 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,62 @@
 
 # define M_PI 3.14159265358979323846
 # define M_PI_2 1.57079632679489661923
+
+/**
+ * @brief Structure for drawing parameters.
+ * 
+ * This structure contains parameters used for drawing on the screen including
+ * start and end coordinates of the drawing, the wall position, and the line
+ * height.
+ * typedef struct s_draw_params
+{
+	int draw_start;  // Start coordinate for drawing
+	int draw_end;    // End coordinate for drawing
+	float wall_x;    // Exact position of ray hitting the wall
+	int line_height; // Height of the line on the screen
+}					t_draw_params;
+ */
+typedef struct s_draw_params
+{
+	int				draw_start;
+	int				draw_end;
+	int				line_height;
+	float			wall_x;
+}					t_draw_params;
+
+/**
+ * @brief Structure for storing raycasting data.
+ * 
+ * This structure contains detailed data for a single
+ * ray including its direction,
+ * map coordinates, side distances, and step values.
+ * typedef struct s_ray_data
+{
+	double	ray_dir_x;       // X direction of the ray
+	double	ray_dir_y;       // Y direction of the ray
+	int		map_x;           // X coordinate in the map
+	int		map_y;           // Y coordinate in the map
+	double	side_dist_x;    // Distance to the next x-side
+	double	side_dist_y;    // Distance to the next y-side
+	int		step_x;          // Step in the x direction
+	int		step_y;          // Step in the y direction
+	int		side;            // Side of the wall hit
+	double	perp_wall_dist; // Perpendicular distance to the wall
+}			t_ray_data;
+ */
+typedef struct s_ray_data
+{
+	double			ray_dir_x;
+	double			ray_dir_y;
+	int				map_x;
+	int				map_y;
+	double			side_dist_x;
+	double			side_dist_y;
+	int				step_x;
+	int				step_y;
+	int				side;
+	double			perp_wall_dist;
+}			t_ray_data;
 
 /**
  * @brief Enumeration for various error types in the program.
@@ -70,6 +126,13 @@ typedef enum e_cub_err
 	ERR_INV_TEX,
 	ERR_INV_PATH
 }					t_cub_err;
+
+typedef struct s_additional
+{
+	t_img				*texture;
+	t_draw_params		*params;
+	t_ray_data			*ray;
+}				t_additional;
 
 /**
  * @brief Structure for storing color with transparency.
@@ -266,40 +329,6 @@ typedef struct s_ray
 }			t_ray;
 
 /**
- * @brief Structure for storing raycasting data.
- * 
- * This structure contains detailed data for a single
- * ray including its direction,
- * map coordinates, side distances, and step values.
- * typedef struct s_ray_data
-{
-	double	ray_dir_x;       // X direction of the ray
-	double	ray_dir_y;       // Y direction of the ray
-	int		map_x;           // X coordinate in the map
-	int		map_y;           // Y coordinate in the map
-	double	side_dist_x;    // Distance to the next x-side
-	double	side_dist_y;    // Distance to the next y-side
-	int		step_x;          // Step in the x direction
-	int		step_y;          // Step in the y direction
-	int		side;            // Side of the wall hit
-	double	perp_wall_dist; // Perpendicular distance to the wall
-}			t_ray_data;
- */
-typedef struct s_ray_data
-{
-	double			ray_dir_x;
-	double			ray_dir_y;
-	int				map_x;
-	int				map_y;
-	double			side_dist_x;
-	double			side_dist_y;
-	int				step_x;
-	int				step_y;
-	int				side;
-	double			perp_wall_dist;
-}			t_ray_data;
-
-/**
  * @brief Structure for storing the game state.
  * 
  * This structure holds all necessary data for the game including map
@@ -338,6 +367,7 @@ typedef struct s_ray_data
  */
 typedef struct s_game
 {
+	t_additional	additional;
 	t_img			win_img;
 	t_img			minimap;
 	t_img			miniview;
@@ -364,28 +394,6 @@ typedef struct s_game
 	void			*mlx_ptr;
 	void			*win_ptr;
 }					t_game;
-
-/**
- * @brief Structure for drawing parameters.
- * 
- * This structure contains parameters used for drawing on the screen including
- * start and end coordinates of the drawing, the wall position, and the line
- * height.
- * typedef struct s_draw_params
-{
-	int draw_start;  // Start coordinate for drawing
-	int draw_end;    // End coordinate for drawing
-	float wall_x;    // Exact position of ray hitting the wall
-	int line_height; // Height of the line on the screen
-}					t_draw_params;
- */
-typedef struct s_draw_params
-{
-	int				draw_start;
-	int				draw_end;
-	int				line_height;
-	float			wall_x;
-}					t_draw_params;
 
 /**
  * @brief Structure for storing movement data.
@@ -613,8 +621,7 @@ void				perform_dda(t_game *g, t_ray_data *ray, double delta_x,
 
 // tew_test
 /*Draws a textured vertical line on the screen.*/
-void				draw_texture_line(t_game *g, int x, t_img *texture,
-						t_draw_params *params, t_ray_data *ray);
+void				draw_texture_line(t_game *g, int x);
 
 /*Draws a vertical line representing a wall segment with the 
 selected texture.*/
