@@ -3,40 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   update_cub.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:33:07 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/12 07:52:19 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/12 13:20:36 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
-
-/**
- * @brief Clears the given image with a solid color.
- * 
- * This function sets every pixel in the image to the specified color.
- * 
- * @param img Pointer to the image structure to be cleared.
- * @param color Color value to fill the image with.
- */
-void	clear_image(t_img *img, int color)
-{
-	int	y;
-	int	x;
-
-	y = 0;
-	while (y < WIN_H)
-	{
-		x = 0;
-		while (x < WIN_W)
-		{
-			put_pixel(img, x, y, color);
-			x++;
-		}
-		y++;
-	}
-}
 
 /**
  * @brief Updates animations and timers based on the current frame.
@@ -50,27 +24,6 @@ static void	update_animations_and_timer(t_game *g)
 {
 	if (!(g->nframes % (6 * g->rate)))
 		update_anim(g);
-}
-
-/**
- * @brief Handles player input for movement and rotation.
- * 
- * This function checks if any movement or rotation keys are pressed and
- * updates the player's position and orientation accordingly.
- * 
- * @param g Pointer to the game structure.
- */
-static void	handle_player_input(t_game *g)
-{
-	if (g->pl.keys.w_pressed || g->pl.keys.a_pressed
-		|| g->pl.keys.s_pressed
-		|| g->pl.keys.d_pressed
-		|| g->pl.keys.left_pressed
-		|| g->pl.keys.right_pressed)
-	{
-		move_player(g);
-		rotate_player(g);
-	}
 }
 
 /**
@@ -132,21 +85,6 @@ static void	check_pause_state(t_game *g)
  * @param param Pointer to the game structure.
  * @return Returns 0 to indicate successful execution.
  */
-int	cub_update(void *param)
-{
-	t_game	*g;
-
-	g = (t_game *)param;
-	check_pause_state(g);
-	if (!(g->is_paused) && !(g->nframes % g->rate))
-	{
-		update_animations_and_timer(g);
-		handle_player_input(g);
-		update_screen(g);
-	}
-	g->frame_count++;
-	return (0);
-}
 
 /**
  * Redraws an image element onto the game window at specified coordinates.
@@ -174,4 +112,20 @@ void	redraw_elem(t_game *g, t_img img, int x, int y)
 	images[0] = img;
 	images[1] = g->win_img;
 	mlx_img_to_img(p, images, 0xFF000000);
+}
+
+int	update_cub(void *param)
+{
+	t_game	*g;
+
+	g = (t_game *)param;
+	check_pause_state(g);
+	if (!(g->is_paused) && !(g->nframes % g->rate))
+	{
+		update_animations_and_timer(g);
+		keyboard_input(g);
+		update_screen(g);
+	}
+	g->frame_count++;
+	return (0);
 }

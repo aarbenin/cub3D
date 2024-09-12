@@ -1,16 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mouse.c                                            :+:      :+:    :+:   */
+/*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/12 11:36:59 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/12 11:37:23 by aarbenin         ###   ########.fr       */
+/*   Created: 2024/09/12 13:09:56 by aarbenin          #+#    #+#             */
+/*   Updated: 2024/09/12 13:31:40 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
+
+/**
+ * @brief Handles player input for movement and rotation.
+ * 
+ * This function checks if any movement or rotation keys are pressed and
+ * updates the player's position and orientation accordingly.
+ * 
+ * @param g Pointer to the game structure.
+ */
+void	keyboard_input(t_game *g)
+{
+	if (g->pl.keys.w_pressed || g->pl.keys.a_pressed
+		|| g->pl.keys.s_pressed
+		|| g->pl.keys.d_pressed
+		|| g->pl.keys.left_pressed
+		|| g->pl.keys.right_pressed)
+	{
+		move_player(g);
+		rotate_player(g);
+	}
+}
 
 /**
  * @brief Handles mouse movement to rotate the player view.
@@ -24,7 +45,7 @@
  * @param g Pointer to the game structure.
  * @return 0 on success.
  */
-int	mouse_move(int x, int y, t_game *g)
+int	mouse_input(int x, int y, t_game *g)
 {
 	int		center_x;
 	double	rotation_speed_factor;
@@ -33,7 +54,7 @@ int	mouse_move(int x, int y, t_game *g)
 		return (0);
 	(void)y;
 	center_x = WIN_W / 2;
-	rotation_speed_factor = 0.005;
+	rotation_speed_factor = 0.0025;
 	if (abs(center_x - x) > 1)
 	{
 		if (x < center_x)

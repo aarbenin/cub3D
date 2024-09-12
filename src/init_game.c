@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 11:43:23 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/12 08:46:05 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/12 13:02:06 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,21 +64,6 @@ void	init_welcome_screen(t_game *g)
 }
 
 /**
- * @brief Initializes the game structure and loads the map.
- *
- * This function sets up the game by initializing the `t_game` structure 
- * and then reads the map from the specified file to populate the game state.
- *
- * @param g Pointer to the `t_game` structure to be initialized.
- * @param filename Name of the file containing the map data.
- */
-void	init_game(t_game *g, char *filename)
-{
-	*g = cub_init();
-	read_map(filename, g);
-}
-
-/**
  * @brief Initializes the minimap based on game map dimensions.
  *
  * @param g Pointer to the game structure.
@@ -130,49 +115,18 @@ void	init_attr(t_game *g)
 	printf("deb: Final miniview size: width=%d, height=%d\n",
 		g->miniview.width, g->miniview.height);
 }
-/**
- * @brief Sets up game attributes, raycasting, and hooks for handling input
- * events.
- *
- * @param g Pointer to the game structure.
- */
-
-void	setup_game(t_game *g)
-{
-	init_attr(g);
-	init_ray(g);
-	mlx_hook(g->win_ptr, 02, 1L << 0, cub_keydown, g);
-	mlx_hook(g->win_ptr, 03, 1L << 1, cub_keyup, g);
-	mlx_hook(g->win_ptr, 17, 0, cub_exit, g);
-	mlx_hook(g->win_ptr, 6, 1L << 6, mouse_move, g);
-	mlx_mouse_move(g->mlx_ptr, g->win_ptr, WIN_W / 2, WIN_H / 2);
-	mlx_loop_hook(g->mlx_ptr, cub_update, g);
-	mlx_loop(g->mlx_ptr);
-}
 
 /**
- * Updates the textures for the game's animations.
-
-	* This function cycles through the available textures for each wall
-	direction (N,
-	S, E, W),
- * allowing for animated wall textures in the game.
+ * @brief Initializes the game structure and loads the map.
  *
- * @param g A pointer to the game state containing the textures.
+ * This function sets up the game by initializing the `t_game` structure 
+ * and then reads the map from the specified file to populate the game state.
+ *
+ * @param g Pointer to the `t_game` structure to be initialized.
+ * @param filename Name of the file containing the map data.
  */
-
-void	update_anim(t_game *g)
+void	init_game(t_game *g, char *filename)
 {
-	g->tex.n = g->tex.n->next;
-	if (!g->tex.n)
-		g->tex.n = g->tex.n_bak;
-	g->tex.s = g->tex.s->next;
-	if (!g->tex.s)
-		g->tex.s = g->tex.s_bak;
-	g->tex.e = g->tex.e->next;
-	if (!g->tex.e)
-		g->tex.e = g->tex.e_bak;
-	g->tex.w = g->tex.w->next;
-	if (!g->tex.w)
-		g->tex.w = g->tex.w_bak;
+	*g = cub_init();
+	read_map(filename, g);
 }

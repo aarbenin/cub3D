@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/12 11:49:23 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:53:38 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -509,7 +509,6 @@ typedef struct s_fov_params
 	double			angle_end;
 }					t_fov_params;
 
-
 // color.c
 /*Converts t_color components to ARGB integer value.*/
 int					argb_from_color(t_color color);
@@ -548,14 +547,10 @@ void				show_usage(int errno);
 /* Function called by mlx when exiting */
 int					cub_exit(void *param);
 
-// setup_game.c
+// init_game.c
 
 /*Initializes attributes and settings for the game.*/
 void				init_attr(t_game *g);
-/* Initializes game */
-void				setup_game(t_game *g);
-/*door action*/
-void				action_door(t_game *g);
 
 /*Updates the textures for the game's animations.*/
 void				update_anim(t_game *g);
@@ -565,6 +560,7 @@ t_game				cub_init(void);
 
 /*Initializes the game structure and loads the map.*/
 void				init_game(t_game *g, char *filename);
+void				init_minimap(t_game *g);
 
 /*Loads and initializes the welcome screen image.*/
 void				init_welcome_screen(t_game *g);
@@ -621,13 +617,10 @@ int					parse_color_value(const char *nptr, long *value);
 
 // update_cub.c
 /*Updates the game state and redraws elements on the window.*/
-int					cub_update(void *param);
+int					update_cub(void *param);
 
 /*Redraws an image element onto the game window at specified coordinates.*/
 void				redraw_elem(t_game *g, t_img img, int x, int y);
-
-/*Clears the given image with a solid color.*/
-void				clear_image(t_img *img, int color);
 
 // ray_cast.c
 /*Initializes raycasting parameters based on the player's direction.*/
@@ -656,10 +649,6 @@ void				draw_texture_line(t_game *g, int x);
 /*Draws a vertical line representing a wall segment with the 
 selected texture.*/
 void				draw_wall_line(t_game *g, int x, t_ray_data *ray);
-
-// move
-/*Handles mouse movement to rotate the player view.*/
-int					mouse_move(int x, int y, t_game *g);
 
 // player_rotate.c
 void				rotate_player(t_game *g);
@@ -699,12 +688,40 @@ void				set_player_direction(t_player *pl, char dir);
 void				display_pause_screen(t_game *g);
 
 // minimap_border.c
-void	draw_minimap_border(t_game *g);
+void				draw_minimap_border(t_game *g);
 
 // drawing_utils.c
-void	mlx_draw_line(t_img *img, t_point start, t_point end);
+void				mlx_draw_line(t_img *img, t_point start, t_point end);
+/*Clears the given image with a solid color.*/
+void				clear_image(t_img *img, int color);
 
 // minimap_fov.c
-void	draw_fov(t_game *g);
+void				draw_fov(t_game *g);
+
+//image_utils.c
+t_img				*load_img(void *mlx_ptr, char *file_path);
+int					load_image_from_file(void *mlx_ptr, char *file_path,
+						t_img *image);
+t_img				*create_image_structure(void);
+int					is_valid_image_path(const char *file_path);
+
+//map_utils.c
+void				handle_player_direction(t_game *g, char character,
+						int i, int j);
+void				check_invalid_character(char character, t_game *g);
+char				**alight_map_rows(t_game *g);
+
+//animation.c
+void				update_anim(t_game *g);
+
+//setup_game.c
+void				setup_game(t_game *g);
+
+//doors.c
+void				action_door(t_game *g);
+
+//input.c
+void				keyboard_input(t_game *g);
+int					mouse_input(int x, int y, t_game *g);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:39:03 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/12 11:38:59 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:26:52 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,6 @@ void	move_player(t_game *g)
 		g->pl.position_x = move_data.new_x;
 		g->pl.position_y = move_data.new_y;
 	}
-	printf("New position: x = %f, y = %f\n", g->pl.position_x,
-		g->pl.position_y);
+	// printf("New position: x = %f, y = %f\n", g->pl.position_x,
+	// 	g->pl.position_y);
 }

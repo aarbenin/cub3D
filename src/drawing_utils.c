@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/12 11:11:54 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/12 11:11:56 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:17:52 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,31 @@ void	mlx_draw_line(t_img *img, t_point start, t_point end)
 			b.err += b.dx;
 			start.y += b.sy;
 		}
+	}
+}
+
+/**
+ * @brief Clears the given image with a solid color.
+ * 
+ * This function sets every pixel in the image to the specified color.
+ * 
+ * @param img Pointer to the image structure to be cleared.
+ * @param color Color value to fill the image with.
+ */
+void	clear_image(t_img *img, int color)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < WIN_H)
+	{
+		x = 0;
+		while (x < WIN_W)
+		{
+			put_pixel(img, x, y, color);
+			x++;
+		}
+		y++;
 	}
 }

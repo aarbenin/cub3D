@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:36:40 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 11:36:41 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:25:46 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,4 @@ void	init_ray(t_game *g)
 {
 	set_player_direction(&g->pl, g->pl.dir);
 	set_ray_params(&g->ray);
-	printf("Initial Direction: dir_x = %f, dir_y = %f\n", g->pl.dir_x,
-		g->pl.dir_y);
-	printf("Initial Plane: plane_x = %f, plane_y = %f\n", g->pl.plane_x,
-		g->pl.plane_y);
 }

@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:36:27 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 11:36:33 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/12 12:24:55 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ static inline void	update_ray_pos(t_ray_data *ray, double delta_x,
 		ray->side = 1;
 	}
 }
+
 static inline bool	check_hit(t_game *g, t_ray_data *ray)
 {
 	char	cell;
 
 	cell = g->map[ray->map_y][ray->map_x];
-	//return (cell == '1' || cell == 'D' || cell == 'O');
 	return (cell == '1' || cell == 'D');
 }
 

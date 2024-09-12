@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pause_screen.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:38:04 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/12 06:57:19 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/12 13:20:06 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
-
-//_____________________image_scaling.c_________________________
 
 /**
  * @brief Calculates the scaling factors and scaled dimensions for an image.
