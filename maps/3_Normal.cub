@@ -1,15 +1,15 @@
-NO textures/wall.xpm
-NO textures/wall.xpm
-NO textures/wall.xpm
-SO textures/wall_grey.xpm
-SO textures/wall_grey.xpm
-SO textures/wall_grey.xpm
-WE textures/wall_brown.xpm
-WE textures/wall_brown.xpm
-WE textures/wall_brown.xpm
-EA textures/wall.xpm
-EA textures/wall.xpm
-EA textures/wall.xpm
+NO textures/horor.xpm
+NO textures/horor.xpm
+NO textures/horor.xpm
+SO textures/horor.xpm
+SO textures/horor.xpm
+SO textures/horor.xpm
+WE textures/horor.xpm
+WE textures/horor.xpm
+WE textures/horor.xpm
+EA textures/horor.xpm
+EA textures/horor.xpm
+EA textures/horor.xpm
 
 C 124,112,106
 F 124,31,19
@@ -19,11 +19,11 @@ F 124,31,19
         1011000001110000000000001
         1001000000000000000000001
 111111111011000001110000000000001
-100000000011000001110111111111111
+100000000011000001110110111111111
 11110111111111011100000010001
 11110111111111011101010010001
-11000000110101011100000010001
-10000000000000001100000010001
+11000000110101011100000000001
+10000000000000000000000010001
 10000000000000001101010010001
 11000001110101011111011110N0111
 11110111 1110101 101111010001
