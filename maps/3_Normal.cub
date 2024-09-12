@@ -1,18 +1,18 @@
-NO textures/torch/torch1_wall_1.xpm
-NO textures/torch/torch2_wall_1.xpm
-NO textures/torch/torch3_wall_1.xpm
-SO textures/torch/torch2_wall_2.xpm
-SO textures/torch/torch3_wall_2.xpm
-SO textures/torch/torch1_wall_2.xpm
-WE textures/torch/torch3_wall_3.xpm
-WE textures/torch/torch1_wall_3.xpm
-WE textures/torch/torch2_wall_3.xpm
-EA textures/torch/torch1_wall_3.xpm
-EA textures/torch/torch2_wall_3.xpm
-EA textures/torch/torch3_wall_3.xpm
+NO textures/wall.xpm
+NO textures/wall.xpm
+NO textures/wall.xpm
+SO textures/wall_grey.xpm
+SO textures/wall_grey.xpm
+SO textures/wall_grey.xpm
+WE textures/wall_brown.xpm
+WE textures/wall_brown.xpm
+WE textures/wall_brown.xpm
+EA textures/wall.xpm
+EA textures/wall.xpm
+EA textures/wall.xpm
 
-F 184,113,39
-C 51,198,227
+C 124,112,106
+F 124,31,19
 
 11111111111111111111111111111
 10000000001100000000000000001
