@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/12 10:34:02 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/12 11:30:31 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -473,6 +473,35 @@ typedef struct s_window_params
 	int				background_color;
 }					t_window_params;
 
+typedef struct s_minimap_params
+{
+	int				width;
+	int				height;
+	int				color;
+	int				size;
+}					t_minimap_params;
+
+typedef struct s_rect_params
+{
+	t_vector		position;
+	t_vector		dimensions;
+	int				color;
+}					t_rect_params;
+
+typedef struct s_fov_params
+{
+	int				fov_length;
+	int				fov_angle;
+	int				minimap_scale;
+	int				player_size;
+	int				center_x;
+	int				center_y;
+	int				color;
+	double			angle_start;
+	double			angle_end;
+}					t_fov_params;
+
+
 // color.c
 /*Converts t_color components to ARGB integer value.*/
 int					argb_from_color(t_color color);
@@ -488,6 +517,8 @@ void				cub_invert_color(t_game *g);
 
 /* Fills color int for floor and ceiling */
 void				get_cf_color(char **dir, t_game *g);
+
+int					blend_colors(int color1, int color2, float alpha);
 
 // end.c
 /*Frees allocated memory for animations starting from `start`.*/
@@ -623,6 +654,11 @@ void				draw_wall_line(t_game *g, int x, t_ray_data *ray);
 /*Handles mouse movement to rotate the player view.*/
 int					mouse_move(int x, int y, t_game *g);
 
+// player_rotate.c
+void				rotate_player(t_game *g);
+void				rotate_left(t_player *pl, double rotation_speed);
+void				rotate_right(t_player *pl, double rotation_speed);
+
 // minimap.c
 /*Draws the entire minimap, including FOV and borders.*/
 void				draw_minimap(t_game *g);
@@ -654,5 +690,14 @@ void				set_player_direction(t_player *pl, char dir);
 // pause_screen.c
 /*Displays the pause screen by scaling the welcome image to fit the window.*/
 void				display_pause_screen(t_game *g);
+
+// minimap_border.c
+void	draw_minimap_border(t_game *g);
+
+// drawing_utils.c
+void	mlx_draw_line(t_img *img, t_point start, t_point end);
+
+// minimap_fov.c
+void	draw_fov(t_game *g);
 
 #endif

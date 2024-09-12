@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 12:05:05 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/12 07:56:05 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/12 11:15:52 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,29 @@ int	parse_color_value(const char *nptr, long *value)
 	if (*nptr)
 		return (-1);
 	return (0);
+}
+
+/**
+ * @brief Blends two colors based on a given alpha value.
+ * 
+ * This function takes two RGB colors and blends them using
+ * a floating-point alpha, resulting in a smooth transition between the two.
+ * 
+ * @param color1 First color.
+ * @param color2 Second color.
+ * @param alpha Blend factor (0.0 to 1.0).
+ * @return Blended color.
+ */
+int	blend_colors(int color1, int color2, float alpha)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = (int)(((color1 >> 16) & 0xFF) * alpha + ((color2 >> 16) & 0xFF) * (1.0
+				- alpha));
+	g = (int)(((color1 >> 8) & 0xFF) * alpha + ((color2 >> 8) & 0xFF) * (1.0
+				- alpha));
+	b = (int)((color1 & 0xFF) * alpha + (color2 & 0xFF) * (1.0 - alpha));
+	return ((r << 16) | (g << 8) | b);
 }
