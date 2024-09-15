@@ -40,8 +40,7 @@ static void	update_screen(t_game *g)
 	clear_image(&g->win_img, 0x000000);
 	draw_background(g);
 	cast_rays(g);
-	redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H / 2
-		- g->scope->height / 2);
+	redraw_elem(g, *g->scope, WIN_W / 2 - g->scope->width / 2, WIN_H - g->scope->height);
 	mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->win_img.i, 0, 0);
 	draw_minimap(g);
 	mlx_put_image_to_window(g->mlx_ptr, g->win_ptr, g->minimap.i, 10, 10);

@@ -39,7 +39,7 @@ void	init_sprites(t_game *g)
 	g->tex.w = NULL;
 	g->tex.w_bak = NULL;
 	g->tex.b = load_img(g->mlx_ptr, "textures/black.xpm");
-	g->scope = load_img(g->mlx_ptr, "textures/saw.xpm");
+	g->scope = load_img(g->mlx_ptr, "textures/banana1-1.xpm");
 	if (!g->tex.b || !g->tex.b->i || !g->scope || !g->scope->i)
 		handle_error(ERR_INV_PATH, g, NULL, 1);
 }
