@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprites.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:37:32 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/12 07:00:25 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/16 09:01:13 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	init_sprites(t_game *g)
 	g->tex.w = NULL;
 	g->tex.w_bak = NULL;
 	g->tex.b = load_img(g->mlx_ptr, "textures/black.xpm");
-	g->scope = load_img(g->mlx_ptr, "textures/saw.xpm");
+	g->scope = load_img(g->mlx_ptr, "textures/banana1-1.xpm");
 	if (!g->tex.b || !g->tex.b->i || !g->scope || !g->scope->i)
 		handle_error(ERR_INV_PATH, g, NULL, 1);
 }

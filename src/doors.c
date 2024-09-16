@@ -3,30 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   doors.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:41:45 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 12:59:48 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/16 10:47:36 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
-/**
- * Checks and toggles the state of a door at the given coordinates.
- * 
- * If the door is found in the closed state ('D'), it is opened ('O'). If it is 
- * found in the open state ('O'), it is closed ('D').
- *
- * @param g The game structure containing the map and game state.
- * @param door_x The x-coordinate of the door on the map.
- * @param door_y The y-coordinate of the door on the map.
- * @return 1 if a door was toggled, 0 otherwise.
- */
+static bool	is_player_in_doorway(t_game *g)
+{
+	int	player_x;
+	int	player_y;
+
+	player_x = (int)g->pl.position_x;
+	player_y = (int)g->pl.position_y;
+	if (g->map[player_y][player_x] == 'O')
+	{
+		return (true);
+	}
+	return (false);
+}
+
 static int	check_door(t_game *g, int door_x, int door_y)
 {
 	if (door_x >= 0 && door_x < g->width && door_y >= 0 && door_y < g->height)
 	{
+		if (g->map[door_y][door_x] == 'O' && is_player_in_doorway(g))
+		{
+			printf("\nDumb ways to die... You closed the door on\
+				 yourself! Game over.\n\n");
+			cleanup_game(g);
+			exit(0);
+		}
 		if (g->map[door_y][door_x] == 'D')
 		{
 			g->map[door_y][door_x] = 'O';

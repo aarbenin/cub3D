@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/12 13:53:38 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/16 10:57:33 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -509,219 +509,200 @@ typedef struct s_fov_params
 	double			angle_end;
 }					t_fov_params;
 
-// color.c
-/*Converts t_color components to ARGB integer value.*/
-int					argb_from_color(t_color color);
-
-/*Extracts ARGB components from an integer value into t_color structure.*/
-t_color				color_from_argb(int color_value);
-
-/* Drecreases RGB value of color as object gets further */
-int					get_dist_color(int color, float ds, int tr);
-
-/* Inverts color of window-sized image */
-void				cub_invert_color(t_game *g);
-
-/* Fills color int for floor and ceiling */
-void				get_cf_color(char **dir, t_game *g);
-
-int					blend_colors(int color1, int color2, float alpha);
-
-// end.c
-/*Frees allocated memory for animations starting from `start`.*/
-void				free_animation(t_game *g, t_list *start);
-
-/*Frees and destroys all images used in the game.*/
-void				destroy_images(t_game *g);
-
-/*Performs cleanup and frees all resources associated with the game.*/
-void				cleanup_game(t_game *g);
-
-// errors.c
-/* Prints appropriate error message and exits, freeing everything */
-int					handle_error(t_cub_err err, t_game *g, char *param, int c);
-
-/* Prints usage for the cub3D program */
-void				show_usage(int errno);
-
-/* Function called by mlx when exiting */
-int					cub_exit(void *param);
-
-// init_game.c
-
-/*Initializes attributes and settings for the game.*/
-void				init_attr(t_game *g);
-
-/*Updates the textures for the game's animations.*/
+// *****************************************************************************
+// *                              animation.c                                  *
+// *****************************************************************************
 void				update_anim(t_game *g);
 
-/*Initializes the game structure with default values and resources.*/
-t_game				cub_init(void);
+// *****************************************************************************
+// *                                  color.c                                  *
+// *****************************************************************************
+int					argb_from_color(t_color color);
+t_color				color_from_argb(int color_value);
+int					get_dist_color(int color, float ds, int tr);
+void				cub_invert_color(t_game *g);
+void				get_cf_color(char **dir, t_game *g);
 
-/*Initializes the game structure and loads the map.*/
-void				init_game(t_game *g, char *filename);
-void				init_minimap(t_game *g);
-
-/*Loads and initializes the welcome screen image.*/
-void				init_welcome_screen(t_game *g);
-
-// key_events.c
-/*Handles the event when a key is released.*/
-int					cub_keyup(int k, t_game *g);
-
-/*Handles the event when a key is pressed.*/
-int					cub_keydown(int k, t_game *g);
-
-// main.c
-/*The entry point of the cub3D program.*/
-int					main(int ac, char **av);
-
-// map_checking.c
-/* Check every element of the map: spaces + characters */
-void				check_elements(t_game *g);
-
-/* Adds spaces to end of all lines to ensure all lines have the same width */
-char				**alight_map_rows(t_game *g);
-
-/*Checks for valid characters in the map and assigns player information.*/
-void				check_characters(t_game *g, char **map, int i, int j);
-
-/*Checks the adjacent cells around the current position in the map for '0'
-characters.*/
-void				check_walls(t_game *g, char **map, int i, int j);
-
-// map.c
-/*Adds an image to the animation list and manages image count.*/
-t_list				*get_anim(t_img *img, t_list **anim, int (*n)[2]);
-
-/*Processes texture definitions and assigns them to the game structure.*/
-void				check_textures(char *trim, t_game *g, int (*n)[2]);
-
-/* Reads file with gnl */
-void				read_map(char *file, t_game *g);
-
-/*Processes each line of the map file to either load textures or
- * build the map matrix.*/
-void				process_line(char *line, t_game *g, int (*n)[2],
-						int *texture_limit);
-
-/*Initializes the map by reading the map file and processing its content.*/
-void				initialize_map(char *file, t_game *g);
-
-/* Check possible map errors */
-void				check_map(t_game *g);
-
-// utils.c
-/* Atoi for colors (more restrictive than original) */
+// *****************************************************************************
+// *                               color_utils.c                               *
+// *****************************************************************************
+int					blend_colors(int color1, int color2, float alpha);
 int					parse_color_value(const char *nptr, long *value);
 
-// update_cub.c
-/*Updates the game state and redraws elements on the window.*/
-int					update_cub(void *param);
-
-/*Redraws an image element onto the game window at specified coordinates.*/
-void				redraw_elem(t_game *g, t_img img, int x, int y);
-
-// ray_cast.c
-/*Initializes raycasting parameters based on the player's direction.*/
-void				cast_rays(t_game *g);
-
-/*Rotates the player based on the pressed keys for left and right rotation.*/
-void				rotate_player(t_game *g);
-
-/*Moves the player based on the pressed keys and updates the position.*/
-void				move_player(t_game *g);
-
-/*Draws the background*/
-void				draw_background(t_game *g);
-
-//ray_init.c
-void				init_ray(t_game *g);
-
-//ray_update.c
-void				perform_dda(t_game *g, t_ray_data *ray, double delta_x,
-						double delta_y);
-
-// tew_test
-/*Draws a textured vertical line on the screen.*/
-void				draw_texture_line(t_game *g, int x);
-
-/*Draws a vertical line representing a wall segment with the 
-selected texture.*/
-void				draw_wall_line(t_game *g, int x, t_ray_data *ray);
-
-// player_rotate.c
-void				rotate_player(t_game *g);
-void				rotate_left(t_player *pl, double rotation_speed);
-void				rotate_right(t_player *pl, double rotation_speed);
-
-// minimap.c
-/*Draws the entire minimap, including FOV and borders.*/
-void				draw_minimap(t_game *g);
-
-// validations.c
-/*Validates the presence of all required textures in the game structure.*/
-void				validate_textures(t_game *g);
-
-/*Validates the presence of floor and ceiling colors in the game structure.*/
-void				validate_colors(t_game *g);
-
-/*Validates the command-line arguments and checks the file extension 
-and existence.*/
-void				check_file(int ac, char **av);
-
-// sprites.c
-/*Initializes the pointers to various sprite images and loads texture images.*/
-void				init_sprites(t_game *g);
-
-// doors.c
-/*Attempts to find and toggle the nearest door in front of the player.*/
+// *****************************************************************************
+// *                                doors.c                                    *
+// *****************************************************************************
 void				action_door(t_game *g);
 
-// player_movement.c
-/*Sets the player's direction and view plane based on the given direction
-character.*/
-void				set_player_direction(t_player *pl, char dir);
-
-// pause_screen.c
-/*Displays the pause screen by scaling the welcome image to fit the window.*/
-void				display_pause_screen(t_game *g);
-
-// minimap_border.c
-void				draw_minimap_border(t_game *g);
-
-// drawing_utils.c
+// *****************************************************************************
+// *                               drawing_utils.c                             *
+// *****************************************************************************
 void				mlx_draw_line(t_img *img, t_point start, t_point end);
-/*Clears the given image with a solid color.*/
 void				clear_image(t_img *img, int color);
 
-// minimap_fov.c
-void				draw_fov(t_game *g);
+// *****************************************************************************
+// *                                   end.c                                   *
+// *****************************************************************************
+void				free_animation(t_game *g, t_list *start);
+void				destroy_images(t_game *g);
+void				cleanup_game(t_game *g);
 
-//image_utils.c
+// *****************************************************************************
+// *                                 errors.c                                  *
+// *****************************************************************************
+int					handle_error(t_cub_err err, t_game *g, char *param, int c);
+void				show_usage(int errno);
+int					cub_exit(void *param);
+
+// *****************************************************************************
+// *                              image_utils.c                                *
+// *****************************************************************************
 t_img				*load_img(void *mlx_ptr, char *file_path);
 int					load_image_from_file(void *mlx_ptr, char *file_path,
 						t_img *image);
 t_img				*create_image_structure(void);
 int					is_valid_image_path(const char *file_path);
 
-//map_utils.c
-void				handle_player_direction(t_game *g, char character,
-						int i, int j);
+// *****************************************************************************
+// *                               init_game.c                                 *
+// *****************************************************************************
+void				init_attr(t_game *g);
+t_game				cub_init(void);
+void				init_game(t_game *g, char *filename);
+void				init_minimap(t_game *g);
+void				init_welcome_screen(t_game *g);
+
+// *****************************************************************************
+// *                                input.c                                    *
+// *****************************************************************************
+void				keyboard_input(t_game *g);
+int					mouse_input(int x, int y, t_game *g);
+
+// *****************************************************************************
+// *                               key_events.c                                *
+// *****************************************************************************
+int					cub_keyup(int k, t_game *g);
+int					cub_keydown(int k, t_game *g);
+
+// *****************************************************************************
+// *                                  main.c                                   *
+// *****************************************************************************
+int					main(int ac, char **av);
+
+// *****************************************************************************
+// *                                  map.c                                    *
+// *****************************************************************************
+void				check_textures(char *trim, t_game *g, int (*n)[2]);
+void				read_map(char *file, t_game *g);
+void				initialize_map(char *file, t_game *g);
+void				check_map(t_game *g);
+
+// *****************************************************************************
+// *                              map_graphics.c                               *
+// *****************************************************************************
+t_list				*get_anim(t_img *img, t_list **anim, int (*n)[2]);
+void				check_textures(char *trim, t_game *g, int (*n)[2]);
+
+// *****************************************************************************
+// *                             map_checking.c                                *
+// *****************************************************************************
+void				check_elements(t_game *g);
+char				**alight_map_rows(t_game *g);
+void				check_characters(t_game *g, char **map, int i, int j);
+void				check_walls(t_game *g, char **map, int i, int j);
+
+// *****************************************************************************
+// *                               map_utils.c                                 *
+// *****************************************************************************
+void				handle_player_direction(t_game *g, char character, int i,
+						int j);
 void				check_invalid_character(char character, t_game *g);
 char				**alight_map_rows(t_game *g);
 
-//animation.c
-void				update_anim(t_game *g);
+// *****************************************************************************
+// *                                minimap.c                                  *
+// *****************************************************************************
+void				draw_minimap(t_game *g);
 
-//setup_game.c
+// *****************************************************************************
+// *                           minimap_border.c                                *
+// *****************************************************************************
+void				draw_minimap_border(t_game *g);
+
+// *****************************************************************************
+// *                            minimap_fov.c                                  *
+// *****************************************************************************
+void				draw_fov(t_game *g);
+
+// *****************************************************************************
+// *                             pause_screen.c                                *
+// *****************************************************************************
+void				display_pause_screen(t_game *g);
+
+// *****************************************************************************
+// *                           player_movement.c                               *
+// *****************************************************************************
+void				set_player_direction(t_player *pl, char dir);
+
+// *****************************************************************************
+// *                            player_rotate.c                                *
+// *****************************************************************************
+void				rotate_player(t_game *g);
+void				rotate_left(t_player *pl, double rotation_speed);
+void				rotate_right(t_player *pl, double rotation_speed);
+
+// *****************************************************************************
+// *                               ray_cast.c                                  *
+// *****************************************************************************
+void				cast_rays(t_game *g);
+void				rotate_player(t_game *g);
+void				move_player(t_game *g);
+void				draw_background(t_game *g);
+
+// *****************************************************************************
+// *                               ray_init.c                                  *
+// *****************************************************************************
+void				init_ray(t_game *g);
+
+// *****************************************************************************
+// *                              ray_update.c                                 *
+// *****************************************************************************
+void				perform_dda(t_game *g, t_ray_data *ray, double delta_x,
+						double delta_y);
+
+// *****************************************************************************
+// *                             setup_game.c                                  *
+// *****************************************************************************
 void				setup_game(t_game *g);
 
-//doors.c
-void				action_door(t_game *g);
+// *****************************************************************************
+// *                                sprites.c                                  *
+// *****************************************************************************
+void				init_sprites(t_game *g);
 
-//input.c
-void				keyboard_input(t_game *g);
-int					mouse_input(int x, int y, t_game *g);
+// *****************************************************************************
+// *                               tew_test.c                                  *
+// *****************************************************************************
+void				draw_texture_line(t_game *g, int x);
+void				draw_wall_line(t_game *g, int x, t_ray_data *ray);
+
+// *****************************************************************************
+// *                                 utils.c                                   *
+// *****************************************************************************
+int					parse_color_value(const char *nptr, long *value);
+
+// *****************************************************************************
+// *                             update_cub.c                                  *
+// *****************************************************************************
+void				redraw_elem(t_game *g, t_img img, int x, int y);
+void				update_anim(t_game *g);
+int					update_cub(void *param);
+
+// *****************************************************************************
+// *                             validations.c                                 *
+// *****************************************************************************
+void				validate_textures(t_game *g);
+void				validate_colors(t_game *g);
+void				check_file(int ac, char **av);
 
 #endif
