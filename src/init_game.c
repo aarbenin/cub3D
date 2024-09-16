@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 11:43:23 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/16 09:35:32 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:16:34 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ void	init_welcome_screen(t_game *g)
 	g->scaled_welcome.i = NULL;
 	g->is_paused = 1;
 	g->was_paused = 0;
-	printf("debug: Welcome screen initialized: width = %d, height = %d\n",
-		g->welcome_screen->width, g->welcome_screen->height);
 }
 
 /**
@@ -99,21 +97,13 @@ void	init_attr(t_game *g)
 	g->win_img.i = mlx_new_image(g->mlx_ptr, g->window_width, g->window_height);
 	g->win_img.addr = mlx_get_data_addr(g->win_img.i, &g->win_img.bpp,
 			&g->win_img.line_len, &g->win_img.endian);
-	printf("debug: Main image initialized: width=%d, height=%d\n",
-		g->window_width, g->window_height);
 	init_minimap(g);
-	printf("debug: Minimap initialized: width=%d, height=%d\n",
-		g->minimap.width, g->minimap.height);
 	g->miniview.i = mlx_new_image(g->mlx_ptr, 30 * SIZE, 15 * SIZE);
 	g->miniview.addr = mlx_get_data_addr(g->miniview.i, &g->miniview.bpp,
 			&g->miniview.line_len, &g->miniview.endian);
 	g->miniview.width = 30 * SIZE;
 	g->miniview.height = 15 * SIZE;
 	g->pl.speed = 0.02;
-	printf("deb: Final minimap size: width=%d, height=%d\n", g->minimap.width,
-		g->minimap.height);
-	printf("deb: Final miniview size: width=%d, height=%d\n",
-		g->miniview.width, g->miniview.height);
 }
 
 /**

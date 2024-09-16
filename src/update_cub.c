@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 12:33:07 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/16 09:47:19 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:16:44 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static void	check_pause_state(t_game *g)
 	{
 		if (g->was_paused != 1)
 		{
-			printf("debug: Game is paused, displaying pause screen.\n");
 			display_pause_screen(g);
 			g->was_paused = 1;
 		}

@@ -6,7 +6,7 @@
 /*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:35:56 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/16 11:55:41 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/16 13:09:05 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,13 @@ void	destroy_images(t_game *g)
 	free_animation(g, g->tex.s_bak);
 	free_animation(g, g->tex.e_bak);
 	free_animation(g, g->tex.w_bak);
+	if (g->tex.door_closed && g->tex.door_closed->i)
+	{
+		mlx_destroy_image(g->mlx_ptr, g->tex.door_closed->i);
+		free(g->tex.door_closed);
+	}
+	if (g->tex.door_open && g->tex.door_open->i)
+		mlx_destroy_image(g->mlx_ptr, g->tex.door_open->i);
 	if (g->tex.b && g->tex.b->i)
 		mlx_destroy_image(g->mlx_ptr, g->tex.b->i);
 	if (g->win_img.i)
@@ -63,7 +70,10 @@ void	destroy_images(t_game *g)
 	if (g->miniview.i)
 		mlx_destroy_image(g->mlx_ptr, g->miniview.i);
 	if (g->welcome_screen && g->welcome_screen->i)
+	{
 		mlx_destroy_image(g->mlx_ptr, g->welcome_screen->i);
+		free(g->welcome_screen);
+	}	
 	if (g->scaled_welcome.i)
 		mlx_destroy_image(g->mlx_ptr, g->scaled_welcome.i);
 	free(g->tex.b);
