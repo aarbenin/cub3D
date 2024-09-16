@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doors.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:41:45 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 12:59:48 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/16 10:47:36 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ static int	check_door(t_game *g, int door_x, int door_y)
 	{
 		if (g->map[door_y][door_x] == 'O' && is_player_in_doorway(g))
 		{
-			printf("\nDumb ways to die... You closed the door on yourself! Game over.\n\n");
+			printf("\nDumb ways to die... You closed the door on\
+				 yourself! Game over.\n\n");
+			cleanup_game(g);
 			exit(0);
 		}
 		if (g->map[door_y][door_x] == 'D')
