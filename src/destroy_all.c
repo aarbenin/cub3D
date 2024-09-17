@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   end.c                                              :+:      :+:    :+:   */
+/*   destroy_all.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/30 07:35:56 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/17 06:37:30 by ogoman           ###   ########.fr       */
+/*   Created: 2024/09/17 08:14:34 by aarbenin          #+#    #+#             */
+/*   Updated: 2024/09/17 08:14:40 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,68 +34,6 @@ void	free_animation(t_game *g, t_list *start)
 		free(temp->content);
 		free(temp);
 	}
-}
-
-/**
- * Destroys all images and other graphical resources associated with the
- * game.
- * 
- * @param g A pointer to the game structure, used to access the MiniLibX
- * context and graphical resources.
- */
-
-// void	destroy_images(t_game *g)
-// {
-// 	free_animation(g, g->tex.n_bak);
-// 	free_animation(g, g->tex.s_bak);
-// 	free_animation(g, g->tex.e_bak);
-// 	free_animation(g, g->tex.w_bak);
-// 	if (g->tex.door_closed && g->tex.door_closed->i)
-// 	{
-// 		mlx_destroy_image(g->mlx_ptr, g->tex.door_closed->i);
-// 		free(g->tex.door_closed);
-// 	}
-// 	if (g->tex.door_open && g->tex.door_open->i)
-// 		mlx_destroy_image(g->mlx_ptr, g->tex.door_open->i);
-// 	if (g->tex.b && g->tex.b->i)
-// 		mlx_destroy_image(g->mlx_ptr, g->tex.b->i);
-// 	if (g->win_img.i)
-// 		mlx_destroy_image(g->mlx_ptr, g->win_img.i);
-// 	if (g->scope && g->scope->i)
-// 		mlx_destroy_image(g->mlx_ptr, g->scope->i);
-// 	if (g->win_ptr)
-// 		mlx_destroy_window(g->mlx_ptr, g->win_ptr);
-// 	if (g->minimap.i)
-// 		mlx_destroy_image(g->mlx_ptr, g->minimap.i);
-// 	if (g->miniview.i)
-// 		mlx_destroy_image(g->mlx_ptr, g->miniview.i);
-// 	if (g->welcome_screen && g->welcome_screen->i)
-// 	{
-// 		mlx_destroy_image(g->mlx_ptr, g->welcome_screen->i);
-// 		free(g->welcome_screen);
-// 	}	
-// 	if (g->scaled_welcome.i)
-// 		mlx_destroy_image(g->mlx_ptr, g->scaled_welcome.i);
-// 	free(g->tex.b);
-// 	free(g->scope);
-// }
-
-/**
- * Cleans up all game resources and closes the game.
- * 
- * @param g A pointer to the game structure, used to access and free
- * various resources.
- */
-void	cleanup_game(t_game *g)
-{
-	if (!g)
-		return ;
-	ft_free_matrix(&g->map);
-	if (g->fd > 0)
-		close(g->fd);
-	destroy_images(g);
-	mlx_destroy_display(g->mlx_ptr);
-	free(g->mlx_ptr);
 }
 
 /**
@@ -138,7 +76,7 @@ void	destroy_textures(t_game *g)
  * @param g Pointer to the game structure that holds image 
  * information.
  */
-void	destroy_images_helper(t_game *g)
+static void	destroy_images_helper(t_game *g)
 {
 	if (g->win_img.i)
 		mlx_destroy_image(g->mlx_ptr, g->win_img.i);
