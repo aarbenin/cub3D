@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_wall.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:41:05 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/12 11:18:41 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/17 09:06:22 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,10 @@ void	draw_wall_line(t_game *g, int x, t_ray_data *ray)
 	t_wall_params	wall_params;
 
 	calculate_line_height(ray, &wall_params);
-	g->additional.texture = select_texture(g, ray);
+	g->data.texture = select_texture(g, ray);
 	calculate_wall_hit_x(g, ray, &wall_params);
-	g->additional.params = &wall_params.params;
-	g->additional.ray = ray;
-	g->additional.params->wall_x = wall_params.wall_x;
+	g->data.params = &wall_params.params;
+	g->data.ray = ray;
+	g->data.params->wall_x = wall_params.wall_x;
 	draw_texture_line(g, x);
 }
