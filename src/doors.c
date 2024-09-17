@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:41:45 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/17 08:24:50 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/17 08:30:41 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ static int	check_door(t_game *g, int door_x, int door_y)
 	{
 		if (g->map[door_y][door_x] == 'O' && is_player_in_doorway(g))
 		{
-			printf("Dumb ways to die... You closed the door on"
-				 "yourself! Game over.\n");
+			printf("\nDumb ways to die... "
+				"You closed the door on yourself! Game over.\n\n");
 			cleanup_game(g);
 			exit(0);
 		}

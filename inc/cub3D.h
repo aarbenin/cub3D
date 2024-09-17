@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/17 08:17:55 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/17 08:32:41 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -537,11 +537,17 @@ void				mlx_draw_line(t_img *img, t_point start, t_point end);
 void				clear_image(t_img *img, int color);
 
 // *****************************************************************************
-// *                                   end.c                                   *
+// *                              cleanup_game.c                               *
+// *****************************************************************************
+void				cleanup_game(t_game *g);
+
+// *****************************************************************************
+// *                  .           destroy_all.c         .                      *
 // *****************************************************************************
 void				free_animation(t_game *g, t_list *start);
 void				destroy_images(t_game *g);
-void				cleanup_game(t_game *g);
+void				destroy_textures(t_game *g);
+void				destroy_window(t_game *g);
 
 // *****************************************************************************
 // *                                 errors.c                                  *
