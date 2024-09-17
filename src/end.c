@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/30 07:35:56 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/17 06:37:30 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/17 08:17:42 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,6 @@ void	destroy_textures(t_game *g)
 	}
 	if (g->tex.door_open && g->tex.door_open->i)
 		mlx_destroy_image(g->mlx_ptr, g->tex.door_open->i);
-	if (g->tex.b && g->tex.b->i)
-		mlx_destroy_image(g->mlx_ptr, g->tex.b->i);
-	free(g->tex.b);
 }
 
 /**

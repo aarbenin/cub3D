@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/17 06:38:38 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/17 08:17:55 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,6 @@ typedef struct s_tex
 	t_list			*s;
 	t_list			*w;
 	t_list			*e;
-	t_img			*b;
 	t_img			*door_closed;
 	t_img			*door_open;
 }					t_tex;

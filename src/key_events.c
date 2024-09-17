@@ -6,12 +6,25 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:40:48 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/11 15:09:21 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/17 08:04:55 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
 
+/**
+ * @brief Handles key press events for the game.
+ * 
+ * This function processes keyboard inputs when a key is pressed. It 
+ * checks for specific keycodes, such as 'Q' or 'Esc' to exit the game, 
+ * 'Space' to pause/unpause the game, and directional keys (W, A, S, D, 
+ * Left, Right) for player movement. If the game is paused, movement keys 
+ * are ignored. Additionally, the 'E' key triggers the door interaction.
+ * 
+ * @param keycode The keycode of the pressed key.
+ * @param g Pointer to the game structure.
+ * @return Always returns 0.
+ */
 int	cub_keydown(int keycode, t_game *g)
 {
 	if (keycode == KEY_Q || keycode == KEY_ESC)
@@ -40,6 +53,18 @@ int	cub_keydown(int keycode, t_game *g)
 	return (0);
 }
 
+/**
+ * @brief Handles key release events for the game.
+ * 
+ * This function processes keyboard inputs when a key is released. It 
+ * resets the corresponding key state for movement keys (W, A, S, D, Left, 
+ * Right) to indicate that the player has stopped moving in the respective 
+ * direction.
+ * 
+ * @param k The keycode of the released key.
+ * @param g Pointer to the game structure.
+ * @return Always returns 0.
+ */
 int	cub_keyup(int k, t_game *g)
 {
 	if (k == KEY_LEFT)

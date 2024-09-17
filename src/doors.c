@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   doors.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:41:45 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/16 10:47:36 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/17 08:24:50 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3D.h"
+
+/**
+ * @brief Checks if the player is standing in a doorway.
+ * 
+ * This function checks the player's current position on the map
+ * and determines whether the player is in a doorway by comparing
+ * the player's coordinates to the map grid. 
+ * 
+ * @param g Pointer to the game structure.
+ * @return true if the player is in a doorway ('O'), false otherwise.
+ */
 
 static bool	is_player_in_doorway(t_game *g)
 {
@@ -25,6 +36,19 @@ static bool	is_player_in_doorway(t_game *g)
 	}
 	return (false);
 }
+/**
+ * @brief Toggles the state of a door and checks for player collision.
+ * 
+ * This function checks the position of a door on the map and toggles 
+ * its state between open ('O') and closed ('D'). It also checks if 
+ * the player is inside the doorway when closing the door, triggering 
+ * a game over if the player is caught inside the door.
+ * 
+ * @param g Pointer to the game structure.
+ * @param door_x X-coordinate of the door.
+ * @param door_y Y-coordinate of the door.
+ * @return 1 if the door state was changed, 0 otherwise.
+ */
 
 static int	check_door(t_game *g, int door_x, int door_y)
 {
@@ -32,8 +56,8 @@ static int	check_door(t_game *g, int door_x, int door_y)
 	{
 		if (g->map[door_y][door_x] == 'O' && is_player_in_doorway(g))
 		{
-			printf("\nDumb ways to die... You closed the door on\
-				 yourself! Game over.\n\n");
+			printf("Dumb ways to die... You closed the door on"
+				 "yourself! Game over.\n");
 			cleanup_game(g);
 			exit(0);
 		}

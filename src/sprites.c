@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:37:32 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/17 06:36:27 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/17 08:17:57 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,7 @@ void	init_sprites(t_game *g)
 	g->tex.e_bak = NULL;
 	g->tex.w = NULL;
 	g->tex.w_bak = NULL;
-	g->tex.b = load_img(g->mlx_ptr, "textures/black.xpm");
 	g->scope = load_img(g->mlx_ptr, "textures/banana1-1.xpm");
-	if (!g->tex.b || !g->tex.b->i || !g->scope || !g->scope->i)
+	if (!g->scope || !g->scope->i)
 		handle_error(ERR_INV_PATH, g, NULL, 1);
 }
