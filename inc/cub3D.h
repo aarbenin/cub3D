@@ -6,7 +6,7 @@
 /*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/17 08:32:41 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/17 08:43:17 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,12 @@ typedef enum e_cub_err
 	ERR_INV_PATH
 }					t_cub_err;
 
+/**
+ * @brief Contains additional data needed for rendering and raycasting.
+ * @brief Pointer to the texture image used for rendering.
+ * @brief Pointer to the drawing parameters used in rendering operations.
+ * @brief Pointer to the ray data used for raycasting calculations.
+ */
 typedef struct s_additional
 {
 	t_img				*texture;
