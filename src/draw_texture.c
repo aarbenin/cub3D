@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_texture.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:41:20 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/12 11:19:09 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/17 09:06:22 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ void	draw_texture_line(t_game *g, int x)
 	int					tex_x;
 	t_texture_params	tex_params;
 
-	tex_params.texture = g->additional.texture;
-	tex_params.params = g->additional.params;
-	tex_params.ray = g->additional.ray;
+	tex_params.texture = g->data.texture;
+	tex_params.params = g->data.params;
+	tex_params.ray = g->data.ray;
 	tex_x = calculate_tex_x(&tex_params);
 	draw_vertical_texture_line(g, x, &tex_params, tex_x);
 }

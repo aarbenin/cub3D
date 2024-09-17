@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/17 08:43:17 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/17 09:06:24 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,12 +131,12 @@ typedef enum e_cub_err
  * @brief Pointer to the drawing parameters used in rendering operations.
  * @brief Pointer to the ray data used for raycasting calculations.
  */
-typedef struct s_additional
+typedef struct s_render_data
 {
 	t_img				*texture;
 	t_draw_params		*params;
 	t_ray_data			*ray;
-}				t_additional;
+}				t_render_data;
 
 /**
  * @brief Structure for storing color with transparency.
@@ -369,7 +369,7 @@ typedef struct s_ray
  */
 typedef struct s_game
 {
-	t_additional	additional;
+	t_render_data	data;
 	t_img			win_img;
 	t_img			minimap;
 	t_img			win_g;
