@@ -1,4 +1,3 @@
-
 # librari name
 NAME = libft.a
 

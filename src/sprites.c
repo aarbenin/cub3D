@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprites.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 11:37:32 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/16 09:01:13 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/17 06:36:27 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	init_sprites(t_game *g)
 {
 	g->win_img.i = NULL;
 	g->minimap.i = NULL;
-	g->miniview.i = NULL;
 	g->tex.n = NULL;
 	g->tex.n_bak = NULL;
 	g->tex.s = NULL;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 09:40:40 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/16 10:57:33 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/17 06:38:38 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@
 
 # define WIN_H 600
 # define WIN_W 800
-# define SIZE 7
 
 # define M_PI 3.14159265358979323846
 # define M_PI_2 1.57079632679489661923
@@ -347,7 +346,6 @@ typedef struct s_ray
 	void *win_ptr;     // Pointer to the window
 	t_img win_img;     // Window image
 	t_img minimap;     // Minimap image
-	t_img miniview;    // Mini-view image
 	int minimap_scale; // Scale of a single map element in pixels
 	t_img win_g;       // Additional image for game (e.g., game graphics)
 	t_img win_r;       // Additional image for game (e.g., rendering)
@@ -369,7 +367,6 @@ typedef struct s_game
 	t_additional	additional;
 	t_img			win_img;
 	t_img			minimap;
-	t_img			miniview;
 	t_img			win_g;
 	t_img			win_r;
 	t_img			*scope;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_game.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/06 11:43:23 by ogoman            #+#    #+#             */
-/*   Updated: 2024/09/16 12:16:34 by aarbenin         ###   ########.fr       */
+/*   Updated: 2024/09/17 06:37:09 by ogoman           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,6 @@ void	init_attr(t_game *g)
 	g->win_img.addr = mlx_get_data_addr(g->win_img.i, &g->win_img.bpp,
 			&g->win_img.line_len, &g->win_img.endian);
 	init_minimap(g);
-	g->miniview.i = mlx_new_image(g->mlx_ptr, 30 * SIZE, 15 * SIZE);
-	g->miniview.addr = mlx_get_data_addr(g->miniview.i, &g->miniview.bpp,
-			&g->miniview.line_len, &g->miniview.endian);
-	g->miniview.width = 30 * SIZE;
-	g->miniview.height = 15 * SIZE;
 	g->pl.speed = 0.02;
 }
 
