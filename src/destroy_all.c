@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   destroy_all.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogoman <ogoman@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: aarbenin <aarbenin@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 08:14:34 by aarbenin          #+#    #+#             */
-/*   Updated: 2024/09/17 08:31:02 by ogoman           ###   ########.fr       */
+/*   Updated: 2024/09/17 10:57:00 by aarbenin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ void	destroy_textures(t_game *g)
 		free(g->tex.door_closed);
 	}
 	if (g->tex.door_open && g->tex.door_open->i)
+	{
 		mlx_destroy_image(g->mlx_ptr, g->tex.door_open->i);
+		free(g->tex.door_open);
+	}
 }
 
 /**

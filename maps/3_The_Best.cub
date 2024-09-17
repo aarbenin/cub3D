@@ -4,11 +4,9 @@ SO textures/torch/txt_torch_2.xpm
 SO textures/torch/txt_torch_3.xpm
 SO textures/torch/txt_torch_4.xpm
 WE textures/txt_4.xpm
-EA textures/torch/torch1_wall_1.xpm
-EA textures/torch/torch2_wall_1.xpm
-EA textures/torch/torch3_wall_1.xpm
-DOOR_CLOSED textures/clown2.xpm
-DOOR_OPEN textures/open_128.xpm
+EA textures/wall_1.xpm
+DOOR_CLOSED textures/clown_door.xpm
+DOOR_OPEN textures/black.xpm
 
 C 124,112,106
 F 124,31,19
