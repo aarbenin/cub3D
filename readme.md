@@ -42,5 +42,5 @@ The game was built using **minilibX-linux** and **Ray-Casting** techniques. Key 
 
 ### 🎪 **The Maze Creators** 🎪
 
-- **Alisa Arbenina**
-- **Oleg Goman**
+- [**Alisa Arbenina**](https://github.com/aarbenin)
+- [**Oleg Goman**](https://github.com/OleGoman85)
