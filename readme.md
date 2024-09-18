@@ -3,7 +3,7 @@
 
 Welcome to **cub3D**, a 3D maze exploration game inspired by classic titles like Wolfenstein 3D. Built using the **Ray-Casting** technique, this project offers a first-person perspective of a maze, rendered using **minilibX-linux**. The game simulates the experience of navigating through a maze with the ability to open doors, view a minimap, and use different controls for movement and interaction.
 
-![Screenshot of cub3D](./img/screenshot.png)
+![Screenshot of cub3D](./img/screen.gif)
 
 ### Features
 - **Realistic 3D Maze**: Navigate through a maze in a first-person view.
